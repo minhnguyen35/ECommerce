@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="7"
+    android:orientation="vertical"
+    >
+
+    <ImageView
+        android:layout_weight="5"
+        android:id="@+id/itemImage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:id="@+id/itemDetail"
+        android:weightSum="3"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_weight="2"
+            android:id="@+id/itemName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:text="Name"
+            android:textSize="20sp"
+            android:maxWidth="150dp"
+            />
+
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/itemPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="Price"
+            android:textSize="20sp"
+            android:textAlignment="textEnd"
+            android:maxWidth="70dp"
+            />
+    </LinearLayout>
+
+</LinearLayout>
