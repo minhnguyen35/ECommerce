@@ -14,7 +14,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Already Has Account?"
+        android:text="@string/login_reg"
         android:id="@+id/login_in_reg"
         />
     <EditText
@@ -28,7 +28,7 @@
         android:id="@+id/pass_reg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"/>
+        android:auhint="Password"/>
     <EditText
         android:inputType="textPassword"
         android:id="@+id/pass_again"

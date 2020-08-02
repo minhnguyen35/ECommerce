@@ -3,4 +3,5 @@
     <string name="login">Login</string>
     <string name="register">Register</string>
     <string name="password">Password</string>
+    <string name="login_reg">Already Has Account?</string>
 </resources>
