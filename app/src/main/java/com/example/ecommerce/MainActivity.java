@@ -18,10 +18,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_categories);
-        initItemView();
+        setContentView(R.layout.activity_main);
+
+
+        Intent intent = new Intent (MainActivity.this, MainScreenActivity.class);
+        startActivity(intent);
 
         //setUpLander();
+        //setContentView(R.layout.list_item_display);
+        //initItemView();
+
+
     }
 
     private void setUpLander() {
@@ -45,16 +52,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void initItemView(){
 
-        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
+        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recyclerViewListItem);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
         recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setHasFixedSize(true);
+
         ArrayList<Item> itemArrayList = new ArrayList<>();
-        itemArrayList.add(new Item(R.drawable.vietnam,"VietNam Flag",6.3));
-        itemArrayList.add(new Item(R.drawable.usa,"USA Flag",5.1));
-        itemArrayList.add(new Item(R.drawable.eur,"Europe Flag",2.7));
-        itemArrayList.add(new Item(R.drawable.uk,"UK Flag",4));
-        itemArrayList.add(new Item(R.drawable.japan,"Japan Flag",3));
+//        itemArrayList.add(new Item(R.drawable.vietnam,"VietNam Flag",6.3));
+//        itemArrayList.add(new Item(R.drawable.usa,"USA Flag",5.1));
+//        itemArrayList.add(new Item(R.drawable.eur,"Europe Flag",2.7));
+//        itemArrayList.add(new Item(R.drawable.uk,"UK Flag",4));
+//        itemArrayList.add(new Item(R.drawable.japan,"Japan Flag",3));
 
         ItemAdapter itemAdapter = new ItemAdapter(itemArrayList,this);
         recyclerView.setAdapter(itemAdapter);
