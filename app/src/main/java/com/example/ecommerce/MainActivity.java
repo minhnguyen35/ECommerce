@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 //        itemArrayList.add(new Item(R.drawable.uk,"UK Flag",4));
 //        itemArrayList.add(new Item(R.drawable.japan,"Japan Flag",3));
 
-        ItemAdapter itemAdapter = new ItemAdapter(itemArrayList,this);
+        ItemAdapter itemAdapter = new ItemAdapter(this, itemArrayList);
         recyclerView.setAdapter(itemAdapter);
     }
 
