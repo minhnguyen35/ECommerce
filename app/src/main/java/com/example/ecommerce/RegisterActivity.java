@@ -3,7 +3,7 @@ package com.example.ecommerce;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ProgressDialog;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -20,12 +20,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
     private Button login_reg;
     private Button join;
-    private EditText username, password, phone;
+    private EditText username, password, passwordAgain, phone;
 
     private ProgressBar create;
     @Override
@@ -49,7 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
         username = (EditText)findViewById(R.id.user_reg);
         password = (EditText)findViewById(R.id.pass_reg);
         phone = (EditText)findViewById(R.id.user_number);
-
+        passwordAgain = findViewById(R.id.pass_again);
         join = (Button)findViewById(R.id.join);
         join.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +73,7 @@ public class RegisterActivity extends AppCompatActivity {
         final String u = username.getText().toString();
         final String p = password.getText().toString();
         final String pnum = phone.getText().toString();
+        final String passAgain = passwordAgain.getText().toString();
 
         if(u.isEmpty())
         {
@@ -84,13 +90,19 @@ public class RegisterActivity extends AppCompatActivity {
             CharSequence x = "Empty Phone Number";
             notify(x);
         }
+        else if(!p.equals(passAgain))
+        {
+            CharSequence x = "Password are not matched";
+            notify(x);
+        }
         else
         {
-//            ProgressBar loading;
-//            loading.se
-//            loading.dismiss();
+
             final DatabaseReference db;
-            final UserAccount user = new UserAccount(u,p,pnum);
+            long ts = System.currentTimeMillis();
+            String ts1 = String.valueOf(ts);
+            final UserAccount user = new UserAccount(u, p, pnum, ts1);
+
             db = FirebaseDatabase.getInstance().getReference();
             ValueEventListener valueEventListener = new ValueEventListener() {
                 @Override
@@ -98,10 +110,6 @@ public class RegisterActivity extends AppCompatActivity {
                     boolean isExists = checkExists(snapshot, u, pnum);
                     if(isExists == false)
                     {
-                        HashMap<String, Object> userList = new HashMap<>();
-                        userList.put("Username", u);
-                        userList.put("Password", p);
-                        userList.put("Phone", pnum);
                         db.child("Users").child(u).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -109,7 +117,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 {
                                     CharSequence x = "Register Successfully!";
                                     Toast toast = Toast.makeText(RegisterActivity.this, x, Toast.LENGTH_SHORT);
-
+                                    toast.show();
                                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                     startActivity(intent);
                                 }
@@ -131,15 +139,22 @@ public class RegisterActivity extends AppCompatActivity {
     private boolean checkExists(DataSnapshot snapshot, String user, String pnum) {
         if(snapshot.child("Users").child(user).exists())
         {
+            CharSequence y = snapshot.child("Users").child(user).child("phoneNumber").toString();
             CharSequence x = "Username already exists!";
-            notify(x);
+            notify(x + " " + y);
             return true;
         }
-        else if(snapshot.child("Users").child(pnum).exists())
+        else
         {
-            CharSequence x = "Phone Number already registered";
-            notify(x);
-            return true;
+            for(DataSnapshot traverse: snapshot.child("Users").getChildren())
+            {
+                if(Objects.equals(traverse.child("phoneNumber").getValue(), pnum))
+                {
+                    CharSequence x = "Phone Number already registered";
+                    notify(x);
+                    return true;
+                }
+            }
         }
         return false;
     }

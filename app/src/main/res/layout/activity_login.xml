@@ -12,26 +12,16 @@
         android:layout_height="200dp"
         android:src="@drawable/logo"
         />
-    <TextView
-        android:layout_margin="3dp"
-        android:id="@+id/id_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Username"
-        android:textSize="25sp"/>
     <EditText
+        android:layout_marginTop="5dp"
         android:hint="Username"
         android:layout_margin="3dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/input_user"/>
-    <TextView
-        android:id="@+id/pass_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/password"
-        android:textSize="25sp"/>
+
     <EditText
+
         android:inputType="textPassword"
         android:layout_margin="3dp"
         android:layout_width="match_parent"
@@ -39,6 +29,8 @@
         android:id="@+id/input_pass"
         android:hint="Password" />
     <LinearLayout
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
         android:layout_margin="3dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -46,6 +38,7 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="rememberLogin"
             android:id="@+id/remember"/>
         <TextView
             android:id="@+id/text_remember"

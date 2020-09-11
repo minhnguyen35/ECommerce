@@ -11,6 +11,14 @@
         android:layout_height="400dp"
         android:id="@+id/logoApp"
         android:src="@drawable/logo"/>
+    <TextView
+        android:id="@+id/time"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Current Time"
+        />
     <Button
         android:id="@+id/main_login"
         android:padding="3dp"
