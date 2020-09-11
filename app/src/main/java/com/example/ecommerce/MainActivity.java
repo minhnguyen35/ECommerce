@@ -11,10 +11,7 @@ import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
@@ -27,9 +24,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //setContentView(R.layout.list_categories);
         //initItemView();
+
         setUpLander();
         checkRemember();
     }
@@ -68,22 +64,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-//    public void initItemView(){
-//
-//        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
-//        recyclerView.setHasFixedSize(true);
-//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
-//        recyclerView.setLayoutManager(linearLayoutManager);
-//        ArrayList<Item> itemArrayList = new ArrayList<>();
-//        itemArrayList.add(new Item(R.drawable.vietnam,"VietNam Flag",6.3));
-//        itemArrayList.add(new Item(R.drawable.usa,"USA Flag",5.1));
-//        itemArrayList.add(new Item(R.drawable.eur,"Europe Flag",2.7));
-//        itemArrayList.add(new Item(R.drawable.uk,"UK Flag",4));
-//        itemArrayList.add(new Item(R.drawable.japan,"Japan Flag",3));
-//
-//        ItemAdapter itemAdapter = new ItemAdapter(itemArrayList,this);
-//        recyclerView.setAdapter(itemAdapter);
-//    }
+
 
 
 }
