@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         String isCheck = sharedPreferences.getString("remember", "");
         if(isCheck.equals("true"))
         {
-            Intent intent = new Intent(MainActivity.this, Dummy.class);
+            Intent intent = new Intent(MainActivity.this, MainScreenActivity.class);
             startActivity(intent);
         }
     }

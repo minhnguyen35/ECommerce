@@ -110,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
                         CharSequence x = "Login Successfully!";
                         Toast toast = Toast.makeText(LoginActivity.this, x, Toast.LENGTH_SHORT);
                         toast.show();
-                        Intent intent = new Intent(LoginActivity.this, Dummy.class);
+                        Intent intent = new Intent(LoginActivity.this, MainScreenActivity.class);
                         startActivity(intent);
                         //isValid[0] = true;
                     }
