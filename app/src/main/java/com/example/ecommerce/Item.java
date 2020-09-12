@@ -1,9 +1,10 @@
 package com.example.ecommerce;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Item {
+public class Item implements Serializable {
     private String ID="";
     private int CategoryID;
     private String Name="";

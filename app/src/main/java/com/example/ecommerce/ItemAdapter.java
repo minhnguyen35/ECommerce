@@ -1,7 +1,7 @@
 package com.example.ecommerce;
 
 import android.content.Context;
-import android.text.Layout;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +16,13 @@ import java.util.ArrayList;
 
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
-    ArrayList<Item> itemArrayList;
-    Context context;
 
-    public ItemAdapter(ArrayList<Item> itemArrayList, Context context) {
-        this.itemArrayList = itemArrayList;
+    Context context;
+    ArrayList<Item> itemArrayList;
+
+    public ItemAdapter(Context context, ArrayList<Item> itemArrayList) {
         this.context = context;
+        this.itemArrayList = itemArrayList;
     }
 
     @NonNull
@@ -34,14 +35,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        holder.imageView.setImageResource(itemArrayList.get(position).getImageArrayList().get(0));
+        holder.imageView.setImageResource(itemArrayList.get(position).getImageArrayList().get(position));
         holder.txtName.setText(itemArrayList.get(position).getName());
         holder.txtPrice.setText(String.valueOf(itemArrayList.get(position).getPrice()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, String.valueOf(position),Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context,ItemInfoActivity.class);
+                intent.putExtra("item",itemArrayList.get(position));
+                context.startActivity(intent);
             }
         });
 
@@ -60,7 +63,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = (ImageView)itemView.findViewById(R.id.itemImage);
-            txtName = (TextView)itemView.findViewById(R.id.itemName);
+            txtName = (TextView)itemView.findViewById(R.id.textViewItemName);
             txtPrice = (TextView)itemView.findViewById(R.id.itemPrice);
 
         }

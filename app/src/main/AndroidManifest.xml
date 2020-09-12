@@ -9,6 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ItemInfoActivity"
+            android:parentActivityName=".MainScreenActivity">
+        </activity>
+        <activity
+            android:name=".MainScreenActivity"
+            android:parentActivityName=".MainActivity">
+        </activity>
         <activity android:name=".Dummy"></activity>
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
