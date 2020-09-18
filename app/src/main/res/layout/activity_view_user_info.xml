@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ViewUserInfo">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:src="@drawable/logo"
+        android:id="@+id/background"
+        />
+
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="110dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/userImage"
+        />
+
+    <TextView
+        android:id="@+id/Uname"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/userImage"
+        android:text="Customer:"
+        />
+
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/userImage"
+        android:layout_toRightOf="@id/Uname"
+        android:text="user name"
+        android:gravity="right"
+        />
+
+    <TextView
+        android:id="@+id/Upass"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/Uname"
+        android:text="Password:"
+        />
+
+    <TextView
+        android:id="@+id/userPass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/userName"
+        android:layout_toRightOf="@id/Upass"
+        android:text="***********"
+        android:gravity="right"
+        />
+
+    <TextView
+        android:id="@+id/Uphone"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/Upass"
+        android:text="Phone number:"
+        />
+
+    <TextView
+        android:id="@+id/userPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/userPass"
+        android:layout_toRightOf="@id/Uphone"
+        android:text="user phone number"
+        android:gravity="right"
+        />
+
+    <TextView
+        android:id="@+id/Umail"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/Uphone"
+        android:text="Email:"
+        />
+
+    <TextView
+        android:id="@+id/userMail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/userPhone"
+        android:layout_toRightOf="@id/Umail"
+        android:text="user email"
+        android:gravity="right"
+        />
+
+    <TextView
+        android:id="@+id/Ubank"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/Umail"
+        android:text="Bank account:"
+        />
+
+    <TextView
+        android:id="@+id/userBank"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/userMail"
+        android:layout_toRightOf="@id/Ubank"
+        android:text="user bank number"
+        android:gravity="right"
+        />
+
+    <TextView
+        android:id="@+id/Uaddress"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/Ubank"
+        android:text="Address:"
+        />
+
+    <TextView
+        android:id="@+id/userAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/userBank"
+        android:layout_toRightOf="@id/Uaddress"
+        android:text="user address"
+        android:gravity="right"
+        />
+
+
+
+    <Button
+        android:id="@+id/btn_edit_info"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:text="Edit"
+        android:textColor="#EEFF41"
+        android:background="@color/colorPrimary"
+        />
+
+</RelativeLayout>
