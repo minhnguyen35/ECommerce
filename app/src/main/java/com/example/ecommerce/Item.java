@@ -1,6 +1,8 @@
 package com.example.ecommerce;
 
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -9,11 +11,11 @@ public class Item implements Serializable {
     private int CategoryID;
     private String Name="";
     private double Price;
-    private ArrayList<Integer> ImageArrayList = new ArrayList<>();
+    private ArrayList<Bitmap> ImageArrayList = new ArrayList<>();
     private int Quantity;
     private String Description="";
 
-    public Item(String ID, int categoryID, String name, double price, ArrayList<Integer> imageArrayList, int quantity, String description) {
+    public Item(String ID, int categoryID, String name, double price, ArrayList<Bitmap> imageArrayList, int quantity, String description) {
         this.ID = ID;
         CategoryID = categoryID;
         Name = name;
@@ -57,11 +59,11 @@ public class Item implements Serializable {
         Price = price;
     }
 
-    public ArrayList<Integer> getImageArrayList() {
+    public ArrayList<Bitmap> getImageArrayList() {
         return ImageArrayList;
     }
 
-    public void setImageArrayList(ArrayList<Integer> imageArrayList) {
+    public void setImageArrayList(ArrayList<Bitmap> imageArrayList) {
         ImageArrayList = imageArrayList;
     }
 

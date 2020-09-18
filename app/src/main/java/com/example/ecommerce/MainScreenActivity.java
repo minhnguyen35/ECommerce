@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,12 +53,13 @@ public class MainScreenActivity extends AppCompatActivity {
     private ArrayList<Item> ThisIsDraft(){
 
         ArrayList<Item> itemArrayList = new ArrayList<>();
-        ArrayList<Integer> imageList = new ArrayList<>();
-        imageList.add(R.drawable.vietnam);
-        imageList.add(R.drawable.usa);
-        imageList.add(R.drawable.uk);
-        imageList.add(R.drawable.japan);
-        imageList.add(R.drawable.eur);
+        ArrayList<Bitmap> imageList = new ArrayList<>();
+
+        imageList.add((Bitmap)BitmapFactory.decodeResource(getResources(),R.drawable.vietnam));
+        imageList.add((Bitmap)BitmapFactory.decodeResource(getResources(),R.drawable.usa));
+        imageList.add((Bitmap)BitmapFactory.decodeResource(getResources(),R.drawable.uk));
+        imageList.add((Bitmap)BitmapFactory.decodeResource(getResources(),R.drawable.japan));
+        imageList.add((Bitmap)BitmapFactory.decodeResource(getResources(),R.drawable.eur));
 
         itemArrayList.add(new Item("1",2,"VN",10000,imageList,100,"vietnamese flag"));
         itemArrayList.add(new Item("2",2,"USA Flag",5.1,imageList,51,"nothing"));
