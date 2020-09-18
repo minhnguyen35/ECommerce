@@ -29,6 +29,11 @@ public class User_Order {
         this.itemArrayList = itemArrayList;
     }
 
+
+    public void addItem(Order_Item newItem){
+        itemArrayList.add(newItem);
+    }
+
     public String getSuperMarketLogo() {
         return superMarketLogo;
     }
