@@ -9,11 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ViewUserInfo"></activity>
+        <activity android:name=".EditUserInfo"></activity>
+        <activity android:name=".ViewUserInfo" />
         <activity android:name=".ItemInfoActivity" />
         <activity
             android:name=".MainScreenActivity"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".Dummy" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />

@@ -9,7 +9,7 @@ public class User_Order {
     private String date;
     private int checkOutType; /* 1 for COD, 2 for Bank */
     private int shipType; /* 1 for take over, 2 for delivery */
-    private float total;
+    private long total;
     private boolean status;
 
     private ArrayList<Order_Item> itemArrayList;
@@ -17,7 +17,7 @@ public class User_Order {
     /****************************************************************************************/
 
 
-    public User_Order(String superMarketLogo, String id, String superMarketName, String date, int checkOutType, int shipType, float total, boolean status, ArrayList<Order_Item> itemArrayList) {
+    public User_Order(String superMarketLogo, String id, String superMarketName, String date, int checkOutType, int shipType, long total, boolean status, ArrayList<Order_Item> itemArrayList) {
         this.superMarketLogo = superMarketLogo;
         this.id = id;
         this.superMarketName = superMarketName;
@@ -82,11 +82,11 @@ public class User_Order {
         this.shipType = shipType;
     }
 
-    public float getTotal() {
+    public long getTotal() {
         return total;
     }
 
-    public void setTotal(float total) {
+    public void setTotal(long total) {
         this.total = total;
     }
 

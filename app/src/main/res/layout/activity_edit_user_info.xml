@@ -26,121 +26,126 @@
     <TextView
         android:id="@+id/Uname"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginTop="15dp"
         android:layout_below="@id/userImage"
         android:text="Customer:"
         />
 
-    <TextView
+    <EditText
         android:id="@+id/userName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginTop="15dp"
         android:layout_below="@id/userImage"
         android:layout_toRightOf="@id/Uname"
-        android:text="user name"
+        android:hint="user name"
         android:gravity="right"
+        android:textSize="15sp"
         />
 
     <TextView
         android:id="@+id/Upass"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginTop="10dp"
         android:layout_below="@id/Uname"
         android:text="Password:"
         />
 
-    <TextView
+    <EditText
         android:id="@+id/userPass"
+        android:textSize="15sp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginTop="10dp"
         android:layout_below="@id/userName"
         android:layout_toRightOf="@id/Upass"
-        android:text="***********"
         android:gravity="right"
         />
 
     <TextView
         android:id="@+id/Uphone"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginTop="10dp"
         android:layout_below="@id/Upass"
         android:text="Phone number:"
         />
 
-    <TextView
+    <EditText
         android:id="@+id/userPhone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginTop="10dp"
         android:layout_below="@id/userPass"
         android:layout_toRightOf="@id/Uphone"
-        android:text="user phone number"
+        android:hint="phone number"
         android:gravity="right"
+        android:textSize="15sp"
         />
 
     <TextView
         android:id="@+id/Umail"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginTop="10dp"
         android:layout_below="@id/Uphone"
         android:text="Email:"
         />
 
-    <TextView
+    <EditText
         android:id="@+id/userMail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginTop="10dp"
         android:layout_below="@id/userPhone"
         android:layout_toRightOf="@id/Umail"
-        android:text="user email"
+        android:hint="bmn@goshop.com"
         android:gravity="right"
+        android:textSize="15sp"
         />
 
     <TextView
         android:id="@+id/Ubank"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginTop="10dp"
         android:layout_below="@id/Umail"
         android:text="Bank account:"
         />
 
-    <TextView
+    <EditText
         android:id="@+id/userBank"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginTop="10dp"
         android:layout_below="@id/userMail"
         android:layout_toRightOf="@id/Ubank"
-        android:text="user bank number"
+        android:hint="Bank account number"
         android:gravity="right"
+        android:textSize="15sp"
         />
 
     <TextView
         android:id="@+id/Uaddress"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginTop="10dp"
         android:layout_below="@id/Ubank"
         android:text="Address:"
         />
 
-    <TextView
+    <EditText
         android:id="@+id/userAddress"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginTop="10dp"
         android:layout_below="@id/userBank"
         android:layout_toRightOf="@id/Uaddress"
-        android:text="user address"
+        android:hint="user address"
         android:gravity="right"
+        android:textSize="15sp"
         />
 
 
@@ -152,7 +157,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="25dp"
-        android:text="Edit"
+        android:text="SAVE"
         android:textColor="#EEFF41"
         android:background="@color/colorPrimary"
         />
