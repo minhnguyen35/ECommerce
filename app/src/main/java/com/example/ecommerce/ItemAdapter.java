@@ -2,15 +2,18 @@ package com.example.ecommerce;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -35,7 +38,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        holder.imageView.setImageResource(itemArrayList.get(position).getImageArrayList().get(position));
+        if(itemArrayList.get(position).getImageArrayList()!=null)
+            Picasso.get().load(Uri.parse(itemArrayList.get(position).getImageArrayList().get(0))).into(holder.imageView);
         holder.txtName.setText(itemArrayList.get(position).getName());
         holder.txtPrice.setText(String.valueOf(itemArrayList.get(position).getPrice()));
 
@@ -65,7 +69,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
             imageView = (ImageView)itemView.findViewById(R.id.itemImage);
             txtName = (TextView)itemView.findViewById(R.id.textViewItemName);
             txtPrice = (TextView)itemView.findViewById(R.id.itemPrice);
-
         }
     }
 }

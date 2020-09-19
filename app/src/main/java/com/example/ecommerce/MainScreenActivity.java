@@ -1,19 +1,13 @@
 package com.example.ecommerce;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
@@ -47,14 +41,14 @@ public class MainScreenActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
         adapter=new CategoryAdapter(this,categoryArrayList);
         recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        //adapter.notifyDataSetChanged();
     }
 
     private ArrayList<Item> ThisIsDraft(){
 
         ArrayList<Item> itemArrayList = new ArrayList<>();
-        ArrayList<Bitmap> imageList = new ArrayList<>();
-
+        ArrayList<String> imageList = new ArrayList<>();
+/*
         imageList.add((Bitmap)BitmapFactory.decodeResource(getResources(),R.drawable.vietnam));
         imageList.add((Bitmap)BitmapFactory.decodeResource(getResources(),R.drawable.usa));
         imageList.add((Bitmap)BitmapFactory.decodeResource(getResources(),R.drawable.uk));
@@ -66,7 +60,7 @@ public class MainScreenActivity extends AppCompatActivity {
         itemArrayList.add(new Item("3",2,"uk",10000,imageList,100,"uk flag ne"));
         itemArrayList.add(new Item("4",2,"jp",10000,imageList,100,"japan fffff"));
         itemArrayList.add(new Item("5",2,"eur",10000,imageList,100,"heheheheh"));
-
+*/
         return itemArrayList;
     }
 

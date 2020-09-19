@@ -58,7 +58,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         ItemAdapter itemAdapter = new ItemAdapter(context, categoryArrayList.get(position).getItemArrayList());
         holder.listItem.setAdapter(itemAdapter);
-        itemAdapter.notifyDataSetChanged();
+        //itemAdapter.notifyDataSetChanged();
 
         holder.btnMore.setOnClickListener(new View.OnClickListener() {
             @Override

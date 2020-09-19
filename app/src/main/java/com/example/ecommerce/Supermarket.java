@@ -1,16 +1,13 @@
 package com.example.ecommerce;
 
-import android.graphics.Bitmap;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class Supermarket implements Serializable {
     private int supermarketID;
     private String name;
-    private Bitmap logo;
+    private String logo;
 
-    public Supermarket(int id, String name, Bitmap logo) {
+    public Supermarket(int id, String name, String logo) {
         this.supermarketID = id;
         this.name = name;
         this.logo = logo;
@@ -38,11 +35,11 @@ public class Supermarket implements Serializable {
         this.name = name;
     }
 
-    public Bitmap getLogo() {
+    public String getLogo() {
         return logo;
     }
 
-    public void setLogo(Bitmap logo) {
+    public void setLogo(String logo) {
         this.logo = logo;
     }
 

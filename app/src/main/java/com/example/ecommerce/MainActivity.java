@@ -1,8 +1,6 @@
 package com.example.ecommerce;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -26,9 +23,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //initItemView();
 
-        setUpLander();
-        checkRemember();
+
+        Intent intent = new Intent(this, MainMenuActivity.class);
+        startActivity(intent);
+
+        //setUpLander();
+        //checkRemember();
     }
+
+
     private void checkRemember()
     {
         SharedPreferences sharedPreferences = getSharedPreferences("checkbox", MODE_PRIVATE);

@@ -1,6 +1,6 @@
 package com.example.ecommerce;
 
-import android.graphics.Bitmap;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,28 +8,25 @@ import java.util.ArrayList;
 public class Branch extends Supermarket implements Serializable {
     private int branchID;
     private String address;
+    private double[] latLng;
     private ArrayList<Category> categoryArrayList;
 
-    public Branch(int id, String name,  Bitmap logo, int branchID, String address, ArrayList<Category> categoryArrayList) {
+    public Branch(int id, String name, String logo, int branchID, String address, double[] latLng, ArrayList<Category> categoryArrayList) {
         super(id, name, logo);
         this.branchID = branchID;
         this.address = address;
+        this.latLng = latLng;
         this.categoryArrayList = categoryArrayList;
     }
 
-    public Branch(Supermarket supermarket, int branchID, String address, ArrayList<Category> categoryArrayList) {
+    public Branch(Supermarket supermarket, int branchID, String address, double[] latLng, ArrayList<Category> categoryArrayList) {
         super(supermarket);
         this.branchID = branchID;
         this.address = address;
+        this.latLng = latLng;
         this.categoryArrayList = categoryArrayList;
     }
 
-    public Branch(Branch branch){
-        super(branch.getSupermarketID(),branch.getName(),branch.getLogo());
-        this.branchID = branch.branchID;
-        this.address = branch.address;
-        this.categoryArrayList = branch.categoryArrayList;
-    }
 
     public int getBranchID() {
         return branchID;
@@ -45,6 +42,14 @@ public class Branch extends Supermarket implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public double[] getLatLng() {
+        return latLng;
+    }
+
+    public void setLatLng(double[] latLng) {
+        this.latLng = latLng;
     }
 
     public ArrayList<Category> getCategoryArrayList() {
