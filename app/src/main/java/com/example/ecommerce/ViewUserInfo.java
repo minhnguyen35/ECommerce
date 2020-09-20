@@ -70,6 +70,10 @@ public class ViewUserInfo extends AppCompatActivity {
         super.onResume();
         //final String id = "anotheradmin";
 
+        getDataFromDB();
+    }
+
+    private void getDataFromDB() {
         user = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -97,6 +101,9 @@ public class ViewUserInfo extends AppCompatActivity {
         db.removeEventListener(user);
     }
 
+
+
+
     private void adaptInfo() {
         Picasso.get().load(userInfo.getUserImage()).fit().into(userImage);
         username.setText(userInfo.getUsername());
@@ -113,19 +120,20 @@ public class ViewUserInfo extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent2 = new Intent(ViewUserInfo.this, EditUserInfo.class);
                 intent2.putExtra("userID", userID);
-
-                startActivityForResult(intent2, 1);
+                intent2.putExtra("userInfoCurrent", userInfo);
+                startActivity(intent2);
+                //startActivityForResult(intent2, 1);
             }
         });
     }
 
 
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK && requestCode == 1) {
-           /* User_Info tmp = (User_Info) data.getSerializableExtra("newUserInfo");
+           /User_Info tmp = (User_Info) data.getSerializableExtra("newUserInfo");
             userInfo.setUsername(tmp.getUsername());
             userInfo.setPassword(tmp.getPassword());
             userInfo.setPhone(tmp.getPhone());
@@ -133,7 +141,8 @@ public class ViewUserInfo extends AppCompatActivity {
             userInfo.setBankNumber(tmp.getBankNumber());
             userInfo.setAddress(tmp.getAddress());
 
-            adaptInfo();*/
+            adaptInfo();
         }
-    }
+    }*/
+
 }
