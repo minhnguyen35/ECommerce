@@ -37,7 +37,7 @@ public class ItemInfoActivity extends AppCompatActivity {
     private void catchIntent() {
         Intent intent = getIntent();
         item = (Item) intent.getSerializableExtra("item");
-        category = categoryArrayList.get(item.getCategoryID()-1);
+        category = categoryArrayList.get((Integer.valueOf(item.getCategoryID()) - 1));
     }
 
     private void mapping(){
@@ -55,13 +55,13 @@ public class ItemInfoActivity extends AppCompatActivity {
     private void init(){
         recyclerViewArrayImage.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         recyclerViewArrayImage.setHasFixedSize(true);
-        imageAdapter = new ImageAdapter(this,item.getImageArrayList());
+        imageAdapter = new ImageAdapter(this,item.getImageArray());
         recyclerViewArrayImage.setAdapter(imageAdapter);
         imageAdapter.notifyDataSetChanged();
 
         recyclerViewArraySuggestion.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
         recyclerViewArraySuggestion.setHasFixedSize(true);
-        suggestionAdapter = new ItemAdapter(this, category.getItemArrayList());
+        //suggestionAdapter = new ItemAdapter(this, category.getItemArrayList());
         recyclerViewArraySuggestion.setAdapter(suggestionAdapter);
         suggestionAdapter.notifyDataSetChanged();
 

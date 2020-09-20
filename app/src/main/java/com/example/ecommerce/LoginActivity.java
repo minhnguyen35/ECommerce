@@ -7,10 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +29,10 @@ public class LoginActivity extends AppCompatActivity {
     private EditText pass, user;
     private Button register;
     private boolean remember = false;
+    private TextView adminText, userText;
+
+    private String getData = "Users";
+
     private static String remember_user, remember_pass;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +40,10 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         //checkRemember();
         setView();
+        setCheckedTextView();
         checkLogin();
         registerClick();
-
+        setCheckedTextView();
     }
 
     private void checkLogin() {
@@ -46,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 setView();
+                setCheckedTextView();
                 final String u = user.getText().toString();
                 final String p = pass.getText().toString();
                 boolean isValid = false;
@@ -92,11 +102,11 @@ public class LoginActivity extends AppCompatActivity {
         db.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                if(snapshot.child("Users").child(user).exists())
+                String supID;
+                if(snapshot.child(getData).child(user).exists())
                 {
-                    String user_db = snapshot.child("Users").child(user).child("password").getValue().toString();
-
+                    String user_db = snapshot.child(getData).child(user).child("password").getValue().toString();
+                    supID = snapshot.child(getData).child(user).child("supermarketID").getValue().toString();
                     if(user_db.equals(pass))
                     {
 //                        CharSequence x = "Login Successfully!";
@@ -110,9 +120,15 @@ public class LoginActivity extends AppCompatActivity {
                         CharSequence x = "Login Successfully!";
                         Toast toast = Toast.makeText(LoginActivity.this, x, Toast.LENGTH_SHORT);
                         toast.show();
-                        Intent intent = new Intent(LoginActivity.this, MainScreenActivity.class);
+                        Intent intent;
+                        if(getData == "Users")
+                            intent = new Intent(LoginActivity.this, MainScreenActivity.class);
+                        else
+                        {
+                            intent = new Intent(LoginActivity.this, AdminActivity.class);
+                            intent.putExtra("supID", supID);
+                        }
                         startActivity(intent);
-                        //isValid[0] = true;
                     }
                     else{
                         CharSequence x = "Login Failed! Please Check Password Again!";
@@ -131,14 +147,34 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-        //return  isValid[0];
+
     }
     private void setView() {
         user = (EditText)findViewById(R.id.input_user);
         pass = (EditText)findViewById(R.id.input_pass);
         register = findViewById(R.id.register_login);
+        adminText = findViewById(R.id.admin);
+        userText = findViewById(R.id.not_admin);
     }
-
+    private void setCheckedTextView()
+    {
+        adminText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adminText.setVisibility(View.INVISIBLE);
+                getData = "Admins";
+                userText.setVisibility(View.VISIBLE);
+            }
+        });
+        userText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userText.setVisibility(View.INVISIBLE);
+                getData = "Users";
+                adminText.setVisibility(View.VISIBLE);
+            }
+        });
+    }
     public void rememberLogin(View view) {
         boolean checkRemember = ((CheckBox) view).isChecked();
         if(view.getId() == R.id.remember)
@@ -146,9 +182,7 @@ public class LoginActivity extends AppCompatActivity {
             if(checkRemember)
             {
                 remember = true;
-
             }
-
         }
     }
 }

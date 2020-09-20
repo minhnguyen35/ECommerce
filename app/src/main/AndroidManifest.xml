@@ -9,23 +9,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ItemInfoActivity"/>
+        <activity android:name=".AdminActivity"></activity>
         <activity
-            android:name=".MainScreenActivity"
-            android:parentActivityName=".MainActivity">
-        </activity>
-        <activity android:name=".Dummy"/>
+            android:name=".ItemInfoActivity"
+            android:parentActivityName=".MainScreenActivity" />
+        <activity android:name=".MainScreenActivity"></activity>
+        <activity android:name=".Dummy" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
 
         </activity>
-        <activity android:name=".LauncherActivity">
+        <activity
+            android:name=".LauncherActivity"
+            android:theme="@style/SplashscreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

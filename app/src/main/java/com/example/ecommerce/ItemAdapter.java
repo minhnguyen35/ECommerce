@@ -35,7 +35,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        holder.imageView.setImageResource(itemArrayList.get(position).getImageArrayList().get(position));
+        holder.imageView.setImageResource(itemArrayList.get(position).getImageArray().get(position));
         holder.txtName.setText(itemArrayList.get(position).getName());
         holder.txtPrice.setText(String.valueOf(itemArrayList.get(position).getPrice()));
 

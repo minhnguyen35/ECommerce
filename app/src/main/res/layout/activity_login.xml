@@ -59,4 +59,25 @@
         android:layout_height="wrap_content"
         android:text="Register Here!"
         />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <TextView
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Admin Click Here!"
+        android:textSize="20sp"
+        android:id="@+id/admin"/>
+    <TextView
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:textSize="20sp"
+        android:id="@+id/not_admin"
+        android:text="User Click Here!"/>
+</LinearLayout>
 </LinearLayout>

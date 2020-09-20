@@ -6,14 +6,14 @@ import java.util.ArrayList;
 
 public class Item implements Serializable {
     private String ID="";
-    private int CategoryID;
+    private String CategoryID;
     private String Name="";
-    private double Price;
-    private ArrayList<Integer> ImageArrayList = new ArrayList<>();
+    private long Price;
+    private ArrayList<String> ImageArrayList = new ArrayList<>();
     private int Quantity;
     private String Description="";
-
-    public Item(String ID, int categoryID, String name, double price, ArrayList<Integer> imageArrayList, int quantity, String description) {
+    private ArrayList<Integer> ImageArray = new ArrayList<>();
+    public Item(String ID, String categoryID, String name, long price, ArrayList<String> imageArrayList, int quantity, String description) {
         this.ID = ID;
         CategoryID = categoryID;
         Name = name;
@@ -24,7 +24,10 @@ public class Item implements Serializable {
     }
 
 
-
+    public ArrayList<Integer> getImageArray()
+    {
+        return ImageArray;
+    }
     public String getID() {
         return ID;
     }
@@ -33,11 +36,11 @@ public class Item implements Serializable {
         this.ID = ID;
     }
 
-    public int getCategoryID() {
+    public String getCategoryID() {
         return CategoryID;
     }
 
-    public void setCategoryID(int categoryID) {
+    public void setCategoryID(String categoryID) {
         CategoryID = categoryID;
     }
 
@@ -53,15 +56,15 @@ public class Item implements Serializable {
         return Price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(long price) {
         Price = price;
     }
 
-    public ArrayList<Integer> getImageArrayList() {
+    public ArrayList<String> getImageArrayList() {
         return ImageArrayList;
     }
 
-    public void setImageArrayList(ArrayList<Integer> imageArrayList) {
+    public void setImageArrayList(ArrayList<String> imageArrayList) {
         ImageArrayList = imageArrayList;
     }
 
