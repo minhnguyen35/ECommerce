@@ -9,13 +9,15 @@ public class User_Order {
     private String date;
     private int checkOutType; /* 1 for COD, 2 for Bank */
     private int shipType; /* 1 for take over, 2 for delivery */
-    private double total;
+    private long total;
     private boolean status;
-    public User_Order()
-    {
 
-    }
-    public User_Order(String superMarketLogo, String id, String superMarketName, String date, int checkOutType, int shipType, double total, boolean status, ArrayList<Order_Item> itemArrayList) {
+    private ArrayList<Order_Item> itemArrayList;
+
+    /****************************************************************************************/
+
+
+    public User_Order(String superMarketLogo, String id, String superMarketName, String date, int checkOutType, int shipType, long total, boolean status, ArrayList<Order_Item> itemArrayList) {
         this.superMarketLogo = superMarketLogo;
         this.id = id;
         this.superMarketName = superMarketName;
@@ -25,81 +27,82 @@ public class User_Order {
         this.total = total;
         this.status = status;
         this.itemArrayList = itemArrayList;
+    }
+
+
+    public void addItem(Order_Item newItem){
+        itemArrayList.add(newItem);
     }
 
     public String getSuperMarketLogo() {
         return superMarketLogo;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getSuperMarketName() {
-        return superMarketName;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public int getCheckOutType() {
-        return checkOutType;
-    }
-
-    public int getShipType() {
-        return shipType;
-    }
-
-    public double getTotal() {
-        return total;
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public ArrayList<Order_Item> getItemArrayList() {
-        return itemArrayList;
-    }
-
     public void setSuperMarketLogo(String superMarketLogo) {
         this.superMarketLogo = superMarketLogo;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public void setId(String id) {
         this.id = id;
     }
 
+    public String getSuperMarketName() {
+        return superMarketName;
+    }
+
     public void setSuperMarketName(String superMarketName) {
         this.superMarketName = superMarketName;
+    }
+
+    public String getDate() {
+        return date;
     }
 
     public void setDate(String date) {
         this.date = date;
     }
 
+    public int getCheckOutType() {
+        return checkOutType;
+    }
+
     public void setCheckOutType(int checkOutType) {
         this.checkOutType = checkOutType;
+    }
+
+    public int getShipType() {
+        return shipType;
     }
 
     public void setShipType(int shipType) {
         this.shipType = shipType;
     }
 
-    public void setTotal(double total) {
+    public long getTotal() {
+        return total;
+    }
+
+    public void setTotal(long total) {
         this.total = total;
+    }
+
+    public boolean isStatus() {
+        return status;
     }
 
     public void setStatus(boolean status) {
         this.status = status;
     }
 
+    public ArrayList<Order_Item> getItemArrayList() {
+        return itemArrayList;
+    }
+
     public void setItemArrayList(ArrayList<Order_Item> itemArrayList) {
         this.itemArrayList = itemArrayList;
     }
-
-
-
-    private ArrayList<Order_Item> itemArrayList;
 }
