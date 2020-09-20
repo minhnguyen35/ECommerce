@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ViewUserOrder"></activity>
+        <activity android:name=".ViewUserOrderItem"></activity>
+        <activity android:name=".ViewUserOrder" />
         <activity android:name=".EditUserInfo" />
         <activity android:name=".ViewUserInfo" />
         <activity android:name=".ItemInfoActivity" />

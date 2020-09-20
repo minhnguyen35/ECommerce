@@ -50,15 +50,25 @@ public class EditUserInfo extends AppCompatActivity {
 
         getData();
         initBtn();
+        adaptHint();
         clickImage();
         clickSave();
     }
 
+    private void adaptHint() {
+        username.setHint(userInfo.getUsername());
+        password.setHint(userInfo.getPassword());
+        phone.setHint(userInfo.getPhone());
+        mail.setHint(userInfo.getMail());
+        bankNumber.setHint(userInfo.getBankNumber());
+        address.setHint(userInfo.getAddress());
+    }
 
 
     private void getData() {
         Intent intent = getIntent();
         userID = intent.getStringExtra("userID");
+        userInfo = (User_Info) intent.getSerializableExtra("userInfoCurrent");
     }
 
     private void initBtn() {
@@ -123,6 +133,7 @@ public class EditUserInfo extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 updateUser(userID);
+                finish();
             }
         });
     }

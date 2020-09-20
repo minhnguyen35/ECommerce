@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/diid"
+        android:layout_width="70dp"
+        android:layout_height="35dp"
+        android:text="Item ID:"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="5dp"
+        />
+
+    <TextView
+        android:id="@+id/iid"
+        android:layout_toRightOf="@id/diid"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:text="2009115191"
+        android:gravity="center_vertical"
+        />
+
+    <ImageView
+        android:id="@+id/itemLogo"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_below="@id/diid"
+        android:src="@mipmap/ic_launcher"
+        />
+
+    <TextView
+        android:id="@+id/itemName"
+        android:layout_below="@id/diid"
+        android:layout_toRightOf="@id/itemLogo"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:text="Name of item"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        />
+
+    <TextView
+        android:id="@+id/diquantity"
+        android:layout_below="@id/itemName"
+        android:layout_toRightOf="@id/itemLogo"
+        android:layout_width="70dp"
+        android:layout_height="35dp"
+        android:text="Quantity: "
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        />
+
+    <TextView
+        android:id="@+id/diprice"
+        android:layout_width="70dp"
+        android:layout_height="35dp"
+        android:layout_below="@id/diquantity"
+        android:layout_toRightOf="@id/itemLogo"
+        android:text="Price: "
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        />
+
+    <TextView
+        android:id="@+id/diitotal"
+        android:layout_below="@id/diprice"
+        android:layout_width="70dp"
+        android:layout_height="35dp"
+        android:layout_toRightOf="@id/itemLogo"
+        android:text="Total:"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        />
+
+    <TextView
+        android:id="@+id/quantity"
+        android:layout_below="@id/itemName"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_toRightOf="@id/diquantity"
+        android:text="9"
+        android:gravity="center_vertical"
+        />
+
+    <TextView
+        android:id="@+id/iprice"
+        android:layout_width="150dp"
+        android:layout_height="35dp"
+        android:layout_below="@id/diquantity"
+        android:layout_toRightOf="@id/diprice"
+        android:text="99 999"
+
+        android:gravity="center_vertical"
+        />
+
+    <TextView
+        android:id="@+id/itotal"
+        android:layout_below="@id/diprice"
+        android:layout_width="150dp"
+        android:layout_height="35dp"
+        android:layout_toRightOf="@id/diitotal"
+        android:text="999 999"
+        android:gravity="center_vertical"
+        />
+
+    <TextView
+        android:id="@+id/diunit1"
+        android:layout_below="@id/diprice"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_toRightOf="@id/itotal"
+        android:text="(VND)"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/diunit2"
+        android:layout_below="@id/diquantity"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_toRightOf="@id/iprice"
+        android:text="(VND)"
+        android:gravity="center"
+        />
+
+</RelativeLayout>

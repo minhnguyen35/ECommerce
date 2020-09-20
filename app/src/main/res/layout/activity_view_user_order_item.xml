@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:contextB=".ViewUserOrderItem">
+
+
+    <Button
+        android:id="@+id/btn_confirm_finish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="CONFRIM FINISHED"
+        android:background="@color/colorPrimary"
+        android:textColor="#EEFF41"
+        />
+
+    <TextView
+        android:id="@+id/dototal"
+        android:layout_width="70dp"
+        android:layout_height="35dp"
+        android:text="Total:"
+        android:gravity="center"
+        android:layout_above="@id/btn_confirm_finish"
+        android:background="#FF9100"
+        android:textColor="#EEFF41"
+        />
+
+    <TextView
+        android:id="@+id/ototal"
+        android:layout_width="270dp"
+        android:layout_height="35dp"
+        android:layout_toRightOf="@id/dototal"
+        android:text="999 999"
+        android:gravity="center"
+        android:layout_above="@id/btn_confirm_finish"
+        />
+
+    <TextView
+        android:id="@+id/dounit"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_toRightOf="@id/ototal"
+        android:text="(VND)"
+        android:gravity="center"
+        android:layout_above="@id/btn_confirm_finish"
+        />
+    <GridView
+        android:id="@+id/orderItemList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+
+</RelativeLayout>
