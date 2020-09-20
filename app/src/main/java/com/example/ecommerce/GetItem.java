@@ -227,7 +227,7 @@ public class GetItem implements FirebaseGetBehaviour {
     public GetItem(Context context) {
         this.context = context;
     }
-    public void getCategory(final String branchID)
+    /*public void getCategory(final String branchID)
     {
         final ArrayList<Item> listItem = new ArrayList<>();
         final ArrayList<Category> listCategory = new ArrayList<>();
@@ -255,9 +255,9 @@ public class GetItem implements FirebaseGetBehaviour {
                     }
                 }
 
-                  /*
+
                     Do something with the data
-                    */
+
             }
 
             @Override
@@ -265,7 +265,7 @@ public class GetItem implements FirebaseGetBehaviour {
 
             }
         });
-    }
+    }*/
     public void getList(final String categoryID)
     {
 
