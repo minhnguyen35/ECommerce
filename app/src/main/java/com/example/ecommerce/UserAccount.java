@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class UserAccount {
+    private String userID;
     private User_Info userInfo;
     private ArrayList<String> userOrderID;
     private String dateRegister;

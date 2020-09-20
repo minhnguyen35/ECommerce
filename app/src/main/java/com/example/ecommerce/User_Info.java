@@ -2,7 +2,9 @@ package com.example.ecommerce;
 
 import android.graphics.Bitmap;
 
-public class User_Info {
+import java.io.Serializable;
+
+public class User_Info implements Serializable {
     private String userImage;
     private String username;
     private String password;
@@ -13,7 +15,10 @@ public class User_Info {
 
 
     /****************************************************************************************/
+    public User_Info()
+    {
 
+    }
     public User_Info(String username, String password, String phone) {
         this.userImage = null;
         this.username = username;
