@@ -6,14 +6,14 @@ import java.util.ArrayList;
 
 public class Item implements Serializable {
     private String ID="";
-    private int CategoryID;
+    private String CategoryID;
     private String Name="";
     private double Price;
     private ArrayList<String> ImageArrayList;
     private int Quantity;
     private String Description="";
 
-    public Item(String ID, int categoryID, String name, double price, ArrayList<String> imageArrayList, int quantity, String description) {
+    public Item(String ID, String categoryID, String name, double price, ArrayList<String> imageArrayList, int quantity, String description) {
         this.ID = ID;
         CategoryID = categoryID;
         Name = name;
@@ -33,11 +33,11 @@ public class Item implements Serializable {
         this.ID = ID;
     }
 
-    public int getCategoryID() {
+    public String getCategoryID() {
         return CategoryID;
     }
 
-    public void setCategoryID(int categoryID) {
+    public void setCategoryID(String categoryID) {
         CategoryID = categoryID;
     }
 

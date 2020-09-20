@@ -8,8 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,6 +29,10 @@ public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder
         this.branchArrayList = branchArrayList;
     }
 
+    public void setBranchArrayList(ArrayList<Branch> branchArrayList) {
+        this.branchArrayList = branchArrayList;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -36,21 +42,33 @@ public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         if(branchArrayList.get(position).getLogo()!="")
             Picasso.get().load(Uri.parse(branchArrayList.get(position).getLogo())).into(holder.imageView);
         holder.txtName.setText(branchArrayList.get(position).getName());
-        holder.txtID.setText(String.valueOf(branchArrayList.get(position).getBranchID()));
         holder.txtAddress.setText(branchArrayList.get(position).getAddress());
+
+        holder.imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, MapsActivity.class);
+                intent.putExtra("branch",branchArrayList);
+                intent.putExtra("from",branchArrayList.get(position).getLatLng());
+                context.startActivity(intent);
+            }
+        });
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context,MainScreenActivity.class);
                 intent.putExtra("category",branchArrayList.get(position).getCategoryArrayList());
+                intent.putExtra("branchID",branchArrayList.get(position).getBranchID());
                 context.startActivity(intent);
             }
         });
+
+
 
 
     }
@@ -62,14 +80,16 @@ public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        TextView txtName, txtID, txtAddress;
+        TextView txtName;
+        TextView txtAddress;
+        ImageButton imageButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageLogoBranch);
             txtName = itemView.findViewById(R.id.textViewBranchName);
-            txtID = itemView.findViewById(R.id.textViewBranchID);
             txtAddress = itemView.findViewById(R.id.textViewAddress);
+            imageButton = itemView.findViewById(R.id.buttonDirect);
         }
     }
 }

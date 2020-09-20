@@ -4,22 +4,22 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Category implements Serializable {
-    private int ID;
+    private String categoryID;
     private String name;
     private ArrayList<Item> itemArrayList;
 
-    public Category(int ID, String name, ArrayList<Item> itemArrayList) {
-        this.ID = ID;
+    public Category(String ID, String name, ArrayList<Item> itemArrayList) {
+        this.categoryID = ID;
         this.name = name;
         this.itemArrayList = itemArrayList;
     }
 
-    public int getID() {
-        return ID;
+    public String getCategoryID() {
+        return categoryID;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setCategoryID(String categoryID) {
+        this.categoryID = categoryID;
     }
 
     public String getName() {

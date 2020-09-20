@@ -3,11 +3,15 @@ package com.example.ecommerce;
 import java.io.Serializable;
 
 public class Supermarket implements Serializable {
-    private int supermarketID;
+    private String supermarketID;
     private String name;
     private String logo;
 
-    public Supermarket(int id, String name, String logo) {
+    public Supermarket(){
+
+    }
+
+    public Supermarket(String id, String name, String logo) {
         this.supermarketID = id;
         this.name = name;
         this.logo = logo;
@@ -19,11 +23,11 @@ public class Supermarket implements Serializable {
         this.logo = supermarket.logo;
     }
 
-    public int getSupermarketID() {
+    public String getSupermarketID() {
         return supermarketID;
     }
 
-    public void setSupermarketID(int supermarketID) {
+    public void setSupermarketID(String supermarketID) {
         this.supermarketID = supermarketID;
     }
 

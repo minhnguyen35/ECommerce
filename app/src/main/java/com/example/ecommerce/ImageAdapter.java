@@ -16,11 +16,15 @@ import java.util.ArrayList;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
 
-    Context context;
-    ArrayList<String> imageArray;
+    private Context context;
+    private ArrayList<String> imageArray;
 
     public ImageAdapter(Context context, ArrayList<String> imageArray) {
         this.context = context;
+        this.imageArray = imageArray;
+    }
+
+    public void setImageArray(ArrayList<String> imageArray) {
         this.imageArray = imageArray;
     }
 

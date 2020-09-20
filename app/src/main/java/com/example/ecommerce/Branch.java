@@ -1,17 +1,15 @@
 package com.example.ecommerce;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Branch extends Supermarket implements Serializable {
-    private int branchID;
+    private String branchID;
     private String address;
     private double[] latLng;
-    private ArrayList<Category> categoryArrayList;
+    private ArrayList<Integer> categoryArrayList;
 
-    public Branch(int id, String name, String logo, int branchID, String address, double[] latLng, ArrayList<Category> categoryArrayList) {
+    public Branch(String id, String name, String logo, String branchID, String address, double[] latLng, ArrayList<Integer> categoryArrayList) {
         super(id, name, logo);
         this.branchID = branchID;
         this.address = address;
@@ -19,7 +17,7 @@ public class Branch extends Supermarket implements Serializable {
         this.categoryArrayList = categoryArrayList;
     }
 
-    public Branch(Supermarket supermarket, int branchID, String address, double[] latLng, ArrayList<Category> categoryArrayList) {
+    public Branch(Supermarket supermarket, String branchID, String address, double[] latLng, ArrayList<Integer> categoryArrayList) {
         super(supermarket);
         this.branchID = branchID;
         this.address = address;
@@ -28,11 +26,11 @@ public class Branch extends Supermarket implements Serializable {
     }
 
 
-    public int getBranchID() {
+    public String getBranchID() {
         return branchID;
     }
 
-    public void setBranchID(int branchID) {
+    public void setBranchID(String branchID) {
         this.branchID = branchID;
     }
 
@@ -52,11 +50,11 @@ public class Branch extends Supermarket implements Serializable {
         this.latLng = latLng;
     }
 
-    public ArrayList<Category> getCategoryArrayList() {
+    public ArrayList<Integer> getCategoryArrayList() {
         return categoryArrayList;
     }
 
-    public void setCategoryArrayList(ArrayList<Category> categoryArrayList) {
+    public void setCategoryArrayList(ArrayList<Integer> categoryArrayList) {
         this.categoryArrayList = categoryArrayList;
     }
 }

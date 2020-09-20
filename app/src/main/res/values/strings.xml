@@ -16,6 +16,7 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="login_reg">Already Has Account?</string>
     <string-array name="city">
+        <item>All</item>
         <item>An Giang</item>
         <item>Bà Rịa - Vũng Tàu</item>
         <item>Bạc Liêu</item>

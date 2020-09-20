@@ -28,6 +28,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
         this.itemArrayList = itemArrayList;
     }
 
+    public void setItemArrayList(ArrayList<Item> itemArrayList) {
+        this.itemArrayList = itemArrayList;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -38,7 +42,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        if(itemArrayList.get(position).getImageArrayList()!=null)
+        if(itemArrayList.get(position).getImageArrayList()!=null && !itemArrayList.get(position).getImageArrayList().isEmpty())
             Picasso.get().load(Uri.parse(itemArrayList.get(position).getImageArrayList().get(0))).into(holder.imageView);
         holder.txtName.setText(itemArrayList.get(position).getName());
         holder.txtPrice.setText(String.valueOf(itemArrayList.get(position).getPrice()));

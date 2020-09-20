@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.renderscript.Sampler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,28 +24,65 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class MainMenuActivity extends AppCompatActivity {
-    ArrayList<Supermarket> supermarketArrayList; // sau nay se co tam thoi ko qan tam
-    ArrayList<ArrayList<Branch>> branches;
+    ArrayList<Supermarket> supermarketArrayList;
     RecyclerView recyclerView;
     SupermarketAdapter adapter;
     LinearLayoutManager linearLayoutManager;
+    DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
         mapping();
-        testingInitSupermarket();
+        initSupermarketList();
+        activateAdapter();
 
-        Log.d("AAA","adapter");
+    }
 
-        adapter = new SupermarketAdapter(this, supermarketArrayList, branches);
-        recyclerView.setAdapter(adapter);
+
+    ValueEventListener newEvent = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            clearSupermarketList();
+            DataSnapshot itemList = snapshot.child("Supermarkets");//co s vao :)) tu`. de t lam cai nay
+            for(DataSnapshot it: itemList.getChildren())
+            {
+                Supermarket supermarket = it.getValue(Supermarket.class);
+                supermarketArrayList.add(supermarket);
+            }
+
+            adapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    };
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        db.addValueEventListener(newEvent);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        db.removeEventListener(newEvent);
     }
 
     void mapping() {
@@ -54,18 +92,34 @@ public class MainMenuActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
     }
 
+    void initSupermarketList(){
+        supermarketArrayList = new ArrayList<>();
+        clearSupermarketList();
+    }
+
+    void clearSupermarketList(){
+        supermarketArrayList.clear();
+        supermarketArrayList.add(new Supermarket("-1","All Supermarket",""));
+    }
+
+
+    void activateAdapter(){
+        adapter = new SupermarketAdapter(MainMenuActivity.this, supermarketArrayList);
+        recyclerView.setAdapter(adapter);
+    }
+
     void testingInitSupermarket() {
-        Supermarket mega_market = new Supermarket(0,
+        /*Supermarket mega_market = new Supermarket("0",
                 "Mega Market",
                 "https://png2.cleanpng.com/sh/3a6d34f28d9d89d5c578008f3045e880/L0KzQYm3VsAyN6V5gZH0aYP2gLBuTf1uNZ5qf9M2bXH1e7b7TfFvNaFtRd92LX3od7K0jfFzc5Z5RdR3aD3zeH70Tf1uNZ10f9G2NXK0QYHpU8dma2Y8fag3M0C5SIa3VscyPWM8UKY8NkO8SYeBUb5xdpg=/kisspng-mm-mega-market-an-ph-mm-mega-market-bnh-ph-m-mm-logo-5b110b37ec57e6.3068506715278436399681.png"
         );
-        Supermarket coopmart = new Supermarket(1,
+        Supermarket coopmart = new Supermarket("1",
                 "Coop Mart",
                 "https://tiepthigiadinh.vn/wp-content/uploads/2017/12/logo-coopmart-756x380.png");
-        Supermarket lotte_mart = new Supermarket(2,
+        Supermarket lotte_mart = new Supermarket("2",
                 "Lotte Mart",
                 "https://img2.pngio.com/filelotte-mart-2018svg-wikimedia-commons-lotte-mart-png-1672_391.png");
-        Supermarket vinmart = new Supermarket(3,
+        Supermarket vinmart = new Supermarket("3",
                 "Vinmart",
                 "https://static.ybox.vn/2018/10/1/1540182368009-Cover.png");
 
@@ -82,24 +136,24 @@ public class MainMenuActivity extends AppCompatActivity {
         };
         Log.d("AAA",String.valueOf(d.length));
         Log.d("AAA",String.valueOf(d[0][0]));
-        mmBranches.add(new Branch(mega_market,0,"Hà Nội", d[0],null));
-        mmBranches.add(new Branch(mega_market, 1, "Thanh Hóa", d[1],null));
+        mmBranches.add(new Branch(mega_market,"0","Hà Nội", d[0],null));
+        mmBranches.add(new Branch(mega_market, "1", "Thanh Hóa", d[1],null));
 
         ArrayList<Branch> coBranches = new ArrayList<>();
-        coBranches.add(new Branch(coopmart, 0, "Hà Nội", d[2], null));
-        coBranches.add(new Branch(coopmart, 1, "Thành Phố Hồ Chí Minh", d[3],null));
-        coBranches.add(new Branch(coopmart, 2, "Thừa Thiên - Huế", d[4], null));
+        coBranches.add(new Branch(coopmart, "0", "Hà Nội", d[2], null));
+        coBranches.add(new Branch(coopmart, "1", "Thành Phố Hồ Chí Minh", d[3],null));
+        coBranches.add(new Branch(coopmart, "2", "Thừa Thiên - Huế", d[4], null));
 
         ArrayList<Branch> loBranches = new ArrayList<>();
-        loBranches.add(new Branch(lotte_mart, 0, "Đà Nẵng", d[5],null));
-        loBranches.add(new Branch(lotte_mart, 1, "Bình Dương", d[6],null));
+        loBranches.add(new Branch(lotte_mart, "0", "Đà Nẵng", d[5],null));
+        loBranches.add(new Branch(lotte_mart, "1", "Bình Dương", d[6],null));
 
         ArrayList<Branch> vmBranches = new ArrayList<>();
-        vmBranches.add(new Branch(vinmart, 0, "Nghệ An", d[7],null));
-        vmBranches.add(new Branch(vinmart, 1, "Bắc Giang", d[8], null));
+        vmBranches.add(new Branch(vinmart, "0", "Nghệ An", d[7],null));
+        vmBranches.add(new Branch(vinmart, "1", "Bắc Giang", d[8], null));
 
         supermarketArrayList = new ArrayList<>();
-        supermarketArrayList.add(new Supermarket(-1,"All Markets",""));
+        supermarketArrayList.add(new Supermarket("-1","All Markets",""));
         supermarketArrayList.add(mega_market);
         supermarketArrayList.add(coopmart);
         supermarketArrayList.add(lotte_mart);
@@ -117,7 +171,7 @@ public class MainMenuActivity extends AppCompatActivity {
         branches.add(coBranches);
         branches.add(loBranches);
         branches.add(vmBranches);
-
+*/
     }
 
 }

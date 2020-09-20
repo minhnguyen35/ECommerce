@@ -25,12 +25,10 @@ public class SupermarketAdapter extends RecyclerView.Adapter<SupermarketAdapter.
 
     Context context;
     ArrayList<Supermarket> supermarketArrayList;
-    ArrayList<ArrayList<Branch>> branches;
 
-    public SupermarketAdapter(Context context, ArrayList<Supermarket> supermarketArrayList, ArrayList<ArrayList<Branch>> branches) {
+    public SupermarketAdapter(Context context, ArrayList<Supermarket> supermarketArrayList) {
         this.context = context;
         this.supermarketArrayList = supermarketArrayList;
-        this.branches = branches;
     }
 
     @NonNull
@@ -51,8 +49,7 @@ public class SupermarketAdapter extends RecyclerView.Adapter<SupermarketAdapter.
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context,BranchMenuActivity.class);
-                intent.putExtra("branch",branches.get(position));
-                //intent.putExtra("supermarketID",supermarketArrayList.get(position).getSupermarketID());
+                intent.putExtra("supermarketID",supermarketArrayList.get(position).getSupermarketID());
                 context.startActivity(intent);
             }
         });

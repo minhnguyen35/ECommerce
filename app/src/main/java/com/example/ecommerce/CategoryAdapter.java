@@ -26,6 +26,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         this.categoryArrayList = categoryArrayList;
     }
 
+    public void setCategoryArrayList(ArrayList<Category> categoryArrayList) {
+        this.categoryArrayList = categoryArrayList;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
