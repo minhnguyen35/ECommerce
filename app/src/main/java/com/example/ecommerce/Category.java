@@ -4,32 +4,22 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Category implements Serializable {
-    private String ID;
+    private String categoryID;
     private String name;
-    private ArrayList<String> itemArrayList;
-    private String branchID;
-    public String getBranchID() {
-        return branchID;
-    }
+    private ArrayList<Item> itemArrayList;
 
-    public void setBranchID(String branchID) {
-        this.branchID = branchID;
-    }
-
-
-    public Category(String ID, String name, ArrayList<String> itemArrayList, String brID) {
-        this.ID = ID;
+    public Category(String ID, String name, ArrayList<Item> itemArrayList) {
+        this.categoryID = ID;
         this.name = name;
         this.itemArrayList = itemArrayList;
-        this.branchID = brID;
     }
 
-    public String getID() {
-        return ID;
+    public String getCategoryID() {
+        return categoryID;
     }
 
-    public void setID(String ID) {
-        this.ID = ID;
+    public void setCategoryID(String categoryID) {
+        this.categoryID = categoryID;
     }
 
     public String getName() {
@@ -40,11 +30,11 @@ public class Category implements Serializable {
         this.name = name;
     }
 
-    public ArrayList<String> getItemArrayList() {
+    public ArrayList<Item> getItemArrayList() {
         return itemArrayList;
     }
 
-    public void setItemArrayList(ArrayList<String> itemArrayList) {
+    public void setItemArrayList(ArrayList<Item> itemArrayList) {
         this.itemArrayList = itemArrayList;
     }
 }

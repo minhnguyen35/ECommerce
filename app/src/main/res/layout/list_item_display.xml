@@ -3,19 +3,18 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
     >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#40D5E8"
+        android:layout_height="50dp"
+        android:background="#F3E8E4"
         >
 
         <TextView
             android:id="@+id/categoryName"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="  CATEGORY"
             android:textSize="20sp"
             android:textColor="#DA5389"
@@ -40,6 +39,5 @@
         android:id="@+id/recyclerViewListItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
-
 
 </LinearLayout>

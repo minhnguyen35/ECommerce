@@ -8,12 +8,12 @@ public class Item implements Serializable {
     private String ID="";
     private String CategoryID;
     private String Name="";
-    private long Price;
-    private ArrayList<String> ImageArrayList = new ArrayList<>();
+    private double Price;
+    private ArrayList<String> ImageArrayList;
     private int Quantity;
     private String Description="";
-    private ArrayList<Integer> ImageArray = new ArrayList<>();
-    public Item(String ID, String categoryID, String name, long price, ArrayList<String> imageArrayList, int quantity, String description) {
+
+    public Item(String ID, String categoryID, String name, double price, ArrayList<String> imageArrayList, int quantity, String description) {
         this.ID = ID;
         CategoryID = categoryID;
         Name = name;
@@ -24,10 +24,7 @@ public class Item implements Serializable {
     }
 
 
-    public ArrayList<Integer> getImageArray()
-    {
-        return ImageArray;
-    }
+
     public String getID() {
         return ID;
     }
@@ -56,7 +53,7 @@ public class Item implements Serializable {
         return Price;
     }
 
-    public void setPrice(long price) {
+    public void setPrice(double price) {
         Price = price;
     }
 

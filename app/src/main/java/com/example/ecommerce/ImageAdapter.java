@@ -1,6 +1,7 @@
 package com.example.ecommerce;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,15 +10,21 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
 
-    Context context;
-    ArrayList<Integer> imageArray;
+    private Context context;
+    private ArrayList<String> imageArray;
 
-    public ImageAdapter(Context context, ArrayList<Integer> imageArray) {
+    public ImageAdapter(Context context, ArrayList<String> imageArray) {
         this.context = context;
+        this.imageArray = imageArray;
+    }
+
+    public void setImageArray(ArrayList<String> imageArray) {
         this.imageArray = imageArray;
     }
 
@@ -31,7 +38,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.imageView.setImageResource(imageArray.get(position));
+        Picasso.get().load(imageArray.get(position)).into(holder.imageView);
     }
 
     @Override

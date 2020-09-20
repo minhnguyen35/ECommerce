@@ -24,14 +24,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:layout_height="164dp"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="165dp"
-            android:layout_height="153dp"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
@@ -135,7 +134,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@drawable/ic_baseline_add_24" />
+                android:layout_marginTop="15dp"
+                android:background="@drawable/ic_baseline_add_24"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true"/>
 
         </LinearLayout>
 
@@ -144,6 +146,7 @@
             android:layout_width="246dp"
             android:layout_height="match_parent"
             android:text="Description: GỖ 100% thật tự nhiên"
+            android:textAlignment="center"
             android:textStyle="italic" />
 
     </LinearLayout>
@@ -152,6 +155,6 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewArraySuggestion"
         android:layout_width="match_parent"
-        android:layout_height="216dp" />
+        android:layout_height="170dp" />
 
 </LinearLayout>

@@ -26,6 +26,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         this.categoryArrayList = categoryArrayList;
     }
 
+    public void setCategoryArrayList(ArrayList<Category> categoryArrayList) {
+        this.categoryArrayList = categoryArrayList;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -58,7 +62,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         ItemAdapter itemAdapter = new ItemAdapter(context, categoryArrayList.get(position).getItemArrayList());
         holder.listItem.setAdapter(itemAdapter);
-        itemAdapter.notifyDataSetChanged();
+        //itemAdapter.notifyDataSetChanged();
 
         holder.btnMore.setOnClickListener(new View.OnClickListener() {
             @Override

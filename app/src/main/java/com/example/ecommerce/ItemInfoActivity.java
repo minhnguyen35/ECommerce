@@ -1,5 +1,6 @@
 package com.example.ecommerce;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,17 +13,26 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import static com.example.ecommerce.MainScreenActivity.categoryArrayList;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class ItemInfoActivity extends AppCompatActivity {
     Item item;
-    Category category;
+    ArrayList<Item> suggestionItemList;
     RecyclerView recyclerViewArrayImage, recyclerViewArraySuggestion;
     TextView textViewName, textViewPrice, textViewQuantity,textViewID,textViewCateID, textViewDescr;
     Button btnAdd;
 
     ItemAdapter suggestionAdapter;
     ImageAdapter imageAdapter;
+
+    private String categoryID;
+    DatabaseReference db = FirebaseDatabase.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +44,66 @@ public class ItemInfoActivity extends AppCompatActivity {
         init();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        db.addValueEventListener(newEvent);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        db.removeEventListener(newEvent);
+    }
+
+    ValueEventListener newEvent = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            suggestionItemList = new ArrayList<>();
+            DataSnapshot itemList = snapshot.child("Items");
+            for(DataSnapshot it: itemList.getChildren())
+            {
+                String catID = it.child("categoryID").getValue().toString();
+                if(categoryID.equals(catID)) {
+                    String ID = it.child("id").getValue().toString();
+                    String Name= it.child("name").getValue().toString();
+                    long Price = it.child("price").getValue(Long.class);
+                    ArrayList<String> imageUrl = new ArrayList<>();
+                    for(DataSnapshot url : it.child("imageArrayList").getChildren())
+                    {
+                        String curUrl = url.getValue().toString();
+                        imageUrl.add(curUrl);
+                    }
+                    int Quantity = it.child("quantity").getValue(Long.class).intValue();
+                    String Description= (String) it.child("description").getValue();
+                    Item newItem = new Item(ID, catID, Name, Price, imageUrl, Quantity, Description);
+                    if(!ID.equals(item.getID()))
+                        suggestionItemList.add(newItem);
+                    else{
+                        item = newItem;
+                        imageAdapter.setImageArray(item.getImageArrayList());
+                        updateItemInfo();
+                    }
+                }
+            }
+
+            suggestionAdapter.setItemArrayList(suggestionItemList);
+            suggestionAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    };
+
+
     private void catchIntent() {
         Intent intent = getIntent();
         item = (Item) intent.getSerializableExtra("item");
-        category = categoryArrayList.get((Integer.valueOf(item.getCategoryID()) - 1));
+        categoryID = item.getCategoryID();
+
+
     }
 
     private void mapping(){
@@ -55,33 +121,38 @@ public class ItemInfoActivity extends AppCompatActivity {
     private void init(){
         recyclerViewArrayImage.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         recyclerViewArrayImage.setHasFixedSize(true);
-        imageAdapter = new ImageAdapter(this,item.getImageArray());
+        imageAdapter = new ImageAdapter(this,item.getImageArrayList());
         recyclerViewArrayImage.setAdapter(imageAdapter);
-        imageAdapter.notifyDataSetChanged();
+        //imageAdapter.notifyDataSetChanged();
 
         recyclerViewArraySuggestion.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
         recyclerViewArraySuggestion.setHasFixedSize(true);
-        //suggestionAdapter = new ItemAdapter(this, category.getItemArrayList());
+        suggestionItemList = new ArrayList<>();
+        suggestionAdapter = new ItemAdapter(this, suggestionItemList);
         recyclerViewArraySuggestion.setAdapter(suggestionAdapter);
-        suggestionAdapter.notifyDataSetChanged();
+        //suggestionAdapter.notifyDataSetChanged();
 
+        updateItemInfo();
+        btnAdd.setOnClickListener(add);
+    }
 
+    private void updateItemInfo(){
         textViewName.setText(item.getName());
         textViewID.setText(item.getID());
         textViewCateID.setText(String.valueOf(item.getCategoryID()));
         textViewPrice.setText(String.valueOf(item.getPrice()));
         textViewQuantity.setText(String.valueOf(item.getQuantity()));
         textViewDescr.setText(item.getDescription());
-
-        btnAdd.setOnClickListener(add);
+        imageAdapter.notifyDataSetChanged();
     }
-
     Button.OnClickListener add = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             Toast.makeText(ItemInfoActivity.this,"Add to Cart",Toast.LENGTH_LONG).show();
         }
     };
+
+
 
 
 }
