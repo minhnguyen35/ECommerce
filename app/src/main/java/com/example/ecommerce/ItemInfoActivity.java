@@ -2,11 +2,14 @@ package com.example.ecommerce;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -39,9 +42,44 @@ public class ItemInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_info);
 
+        Toolbar toolbar = findViewById(R.id.appToolbar);
+        setSupportActionBar(toolbar);
+
         mapping();
         catchIntent();
         init();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.userInfo:
+                //todo: please intent here
+
+                /*
+                Intent intent = new Intent(MainMenuActivity.this, HomeActivity.class);
+                startActivity(intent);
+                */
+                Toast.makeText(ItemInfoActivity.this,item.getTitle(),Toast.LENGTH_LONG);
+                return true;
+            case R.id.inCart:
+                Toast.makeText(ItemInfoActivity.this,item.getTitle(),Toast.LENGTH_LONG);
+                return true;
+            case R.id.order:
+                Toast.makeText(ItemInfoActivity.this,item.getTitle(),Toast.LENGTH_LONG);
+                return true;
+            case R.id.logout:
+                Toast.makeText(ItemInfoActivity.this,item.getTitle(),Toast.LENGTH_LONG);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

@@ -6,13 +6,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainScreenActivity"
-    android:background="#F1F3F0">
+    >
+
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/appToolbar"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="10"
+        android:background="#F1F3F0"
         >
         <androidx.appcompat.widget.SearchView
             android:layout_width="0dp"

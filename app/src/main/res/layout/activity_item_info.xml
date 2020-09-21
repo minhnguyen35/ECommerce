@@ -7,10 +7,14 @@
     android:orientation="vertical"
     tools:context=".ItemInfoActivity">
 
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/appToolbar"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewArrayImage"
         android:layout_width="match_parent"
-        android:layout_height="209dp" />
+        android:layout_height="210dp" />
 
     <TextView
         android:id="@+id/textViewItemName"
@@ -18,7 +22,7 @@
         android:layout_height="wrap_content"
         android:text="Gỗ thiên nhiên cao cấp"
         android:textAlignment="center"
-        android:textSize="20sp"
+        android:textSize="35sp"
         android:textStyle="bold"
         />
 
@@ -155,6 +159,6 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewArraySuggestion"
         android:layout_width="match_parent"
-        android:layout_height="170dp" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
