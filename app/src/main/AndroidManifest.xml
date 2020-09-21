@@ -16,6 +16,21 @@
         <activity android:name=".AdminItemInfoActivity"></activity>
         <activity android:name=".AdminCategoryActivity" />
         <activity android:name=".AdminBranchMenuActivity" />
+        <activity android:name=".ViewUserInfo"
+            android:label="User Info"
+            android:parentActivityName=".ViewUserInfo">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ecommerce.MainMenuActivity" />
+        </activity>
+
+        <activity android:name=".EditUserInfo"
+            android:label="User Info"
+            android:parentActivityName=".EditUserInfo">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ecommerce.MainMenuActivity" />
+        </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

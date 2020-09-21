@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
@@ -56,6 +57,7 @@ public class EditUserInfo extends AppCompatActivity {
     }
 
     private void adaptHint() {
+        Picasso.get().load(userInfo.getUserImage()).fit().into(userImage);
         username.setHint(userInfo.getUsername());
         password.setHint(userInfo.getPassword());
         phone.setHint(userInfo.getPhone());
@@ -72,15 +74,15 @@ public class EditUserInfo extends AppCompatActivity {
     }
 
     private void initBtn() {
-        BtnSave.findViewById(R.id.btn_save_info);
+        BtnSave = findViewById(R.id.btn_save_info);
 
-        userImage.findViewById(R.id.userImage);
-        username.findViewById(R.id.userName);
-        password.findViewById(R.id.userPass);
-        phone.findViewById(R.id.userPhone);
-        mail.findViewById(R.id.userMail);
-        bankNumber.findViewById(R.id.userBank);
-        address.findViewById(R.id.userAddress);
+        userImage = findViewById(R.id.userImage);
+        username = findViewById(R.id.userName);
+        password = findViewById(R.id.userPass);
+        phone = findViewById(R.id.userPhone);
+        mail = findViewById(R.id.userMail);
+        bankNumber = findViewById(R.id.userBank);
+        address = findViewById(R.id.userAddress);
     }
 
 

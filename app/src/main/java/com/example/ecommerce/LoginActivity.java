@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        //checkRemember();
+
         setView();
         setCheckedTextView();
         checkLogin();
@@ -105,14 +105,14 @@ public class LoginActivity extends AppCompatActivity {
                 String supID;
                 if(snapshot.child(getData).child(user).exists())
                 {
-                    String user_db = snapshot.child(getData).child(user).child("password").getValue().toString();
+                    String user_db = snapshot.child(getData).child(user).child("userInfo").child("password").getValue().toString();
                     supID = " ";
                     if(getData.equals("Admins"))
                         supID = snapshot.child(getData).child(user).child("supermarketID").getValue().toString();
                     if(user_db.equals(pass))
                     {
 
-                        if(isChecked) {
+                        if(isChecked) {//cai nay la luu dang nhap ne
                             SharedPreferences sharedPref = getSharedPreferences("checkbox", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedPref.edit();
                             editor.putString("remember", "true");
@@ -123,7 +123,10 @@ public class LoginActivity extends AppCompatActivity {
                         toast.show();
                         Intent intent;
                         if(getData == "Users")
+                        {
                             intent = new Intent(LoginActivity.this, MainMenuActivity.class);
+                            intent.putExtra("account", user);
+                        }
                         else
                         {
                             intent = new Intent(LoginActivity.this, AdminBranchMenuActivity.class);

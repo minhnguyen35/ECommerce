@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,37 +44,45 @@ public class ViewUserInfo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_user_info);
 
-        getData();
+        //Intent getAccount = getIntent();
+        //userID = getAccount.getStringExtra("account");
+
+        //getData();
         initBtn();
         clickEdit();
     }
 
-    private void getData() {
+    /*private void getData() {
         Intent intent = getIntent();
         userID = intent.getStringExtra("userID");
-    }
+    }*/
 
     private void initBtn() {
-        BtnEdit.findViewById(R.id.btn_edit_info);
+        BtnEdit = (Button) findViewById(R.id.btn_edit_info);
 
-        userImage.findViewById(R.id.userImage);
-        username.findViewById(R.id.userName);
-        password.findViewById(R.id.userPass);
-        phone.findViewById(R.id.userPhone);
-        mail.findViewById(R.id.userMail);
-        bankNumber.findViewById(R.id.userBank);
-        address.findViewById(R.id.userAddress);
+        userImage = findViewById(R.id.userImage);
+        username = findViewById(R.id.userName);
+        password = findViewById(R.id.userPass);
+        phone = findViewById(R.id.userPhone);
+        mail = findViewById(R.id.userMail);
+        bankNumber = findViewById(R.id.userBank);
+        address = findViewById(R.id.userAddress);
     }
+
+
 
     @Override
     protected void onResume() {
         super.onResume();
-        //final String id = "anotheradmin";
 
-        getDataFromDB();
+        Intent getAccount = getIntent();
+        userID = getAccount.getStringExtra("account");
+        //initBtn();
+        getDataFromDB(userID);
+
     }
 
-    private void getDataFromDB() {
+    private void getDataFromDB(String account) {
         user = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -104,6 +113,7 @@ public class ViewUserInfo extends AppCompatActivity {
 
 
 
+
     private void adaptInfo() {
         Picasso.get().load(userInfo.getUserImage()).fit().into(userImage);
         username.setText(userInfo.getUsername());
@@ -115,6 +125,7 @@ public class ViewUserInfo extends AppCompatActivity {
     }
 
     private void clickEdit() {
+        BtnEdit = (Button) findViewById(R.id.btn_edit_info);
         BtnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

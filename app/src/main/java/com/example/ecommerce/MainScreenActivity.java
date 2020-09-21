@@ -59,6 +59,7 @@ public class MainScreenActivity extends AppCompatActivity {
                 /*
                 Intent intent = new Intent(MainMenuActivity.this, HomeActivity.class);
                 startActivity(intent);
+
                 */
                 Toast.makeText(MainScreenActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
                 return true;
@@ -138,6 +139,7 @@ public class MainScreenActivity extends AppCompatActivity {
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             categoryArrayList = new ArrayList<>();
             DataSnapshot categoryList = snapshot.child("Category");
+
             for(DataSnapshot cate: categoryList.getChildren())
             {
                 String brID = cate.child("branchID").getValue().toString();
