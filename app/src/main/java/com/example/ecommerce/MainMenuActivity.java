@@ -51,6 +51,10 @@ public class MainMenuActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
 
     ValueEventListener newEvent = new ValueEventListener() {
         @Override

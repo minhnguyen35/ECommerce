@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    <Button
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        android:text="New Category"
+        android:id="@+id/add_category"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#F3E8E4"
+        >
+
+        <TextView
+            android:id="@+id/categoryName"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="CATEGORY"
+            android:textSize="20sp"
+            android:textColor="#DA5389"
+            android:textStyle="italic|bold"
+            android:gravity="center_vertical"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/categoryName"
+            android:layout_marginLeft="30dp"
+            android:id="@+id/seeMoreItemButton"
+            android:background="@drawable/ic_baseline_arrow_forward_24"
+
+            />
+
+    </RelativeLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewListItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

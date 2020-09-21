@@ -23,10 +23,11 @@ import java.util.ArrayList;
 public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder> {
     Context context;
     ArrayList<Branch> branchArrayList;
-
-    public BranchAdapter(Context context, ArrayList<Branch> branchArrayList) {
+    boolean isAdminSite;
+    public BranchAdapter(Context context, ArrayList<Branch> branchArrayList, boolean isAdminSite) {
         this.context = context;
         this.branchArrayList = branchArrayList;
+        this.isAdminSite = isAdminSite;
     }
 
     public void setBranchArrayList(ArrayList<Branch> branchArrayList) {
@@ -47,27 +48,30 @@ public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder
             Picasso.get().load(Uri.parse(branchArrayList.get(position).getLogo())).into(holder.imageView);
         holder.txtName.setText(branchArrayList.get(position).getName());
         holder.txtAddress.setText(branchArrayList.get(position).getAddress());
-
-        holder.imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, MapsActivity.class);
-                intent.putExtra("branch",branchArrayList);
-                intent.putExtra("from",branchArrayList.get(position).getLatLng());
-                context.startActivity(intent);
-            }
-        });
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context,MainScreenActivity.class);
-                intent.putExtra("category",branchArrayList.get(position).getCategoryArrayList());
-                intent.putExtra("branchID",branchArrayList.get(position).getBranchID());
+                Intent intent;
+                if(!isAdminSite)
+                    intent = new Intent(context, MainScreenActivity.class);
+                else
+                    intent = new Intent(context, AdminCategoryActivity.class);
+                intent.putExtra("category", branchArrayList.get(position).getCategoryArrayList());
+                intent.putExtra("branchID", branchArrayList.get(position).getBranchID());
                 context.startActivity(intent);
             }
         });
-
+        if(!isAdminSite) {
+            holder.imageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, MapsActivity.class);
+                    intent.putExtra("branch", branchArrayList);
+                    intent.putExtra("from", branchArrayList.get(position).getLatLng());
+                    context.startActivity(intent);
+                }
+            });
+        }
 
 
 

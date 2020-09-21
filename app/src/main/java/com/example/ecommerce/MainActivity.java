@@ -21,14 +21,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //initItemView();
+        initItemView();
 
 
-        Intent intent = new Intent(this, MainMenuActivity.class);
-        startActivity(intent);
+        //Intent intent = new Intent(this, MainMenuActivity.class);
+        //startActivity(intent);
 
-        //setUpLander();
+        setUpLander();
         //checkRemember();
+    }
+
+    private void initItemView() {
+        login = findViewById(R.id.button_login);
+        register = findViewById(R.id.register_login);
     }
 
 

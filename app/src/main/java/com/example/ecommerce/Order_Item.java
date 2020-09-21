@@ -9,7 +9,6 @@ public class Order_Item {
     private int quantityPurchase;
     private long total;
 
-
     /****************************************************************************************/
 
 

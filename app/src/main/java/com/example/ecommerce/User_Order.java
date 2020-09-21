@@ -11,13 +11,13 @@ public class User_Order {
     private int shipType; /* 1 for take over, 2 for delivery */
     private long total;
     private boolean status;
-
-    private ArrayList<Order_Item> itemArrayList;
+    private String account;
+    //private ArrayList<Order_Item> itemArrayList;
 
     /****************************************************************************************/
 
 
-    public User_Order(String superMarketLogo, String id, String superMarketName, String date, int checkOutType, int shipType, long total, boolean status, ArrayList<Order_Item> itemArrayList) {
+    public User_Order(String superMarketLogo, String id, String superMarketName, String date, int checkOutType, int shipType, long total, boolean status) {
         this.superMarketLogo = superMarketLogo;
         this.id = id;
         this.superMarketName = superMarketName;
@@ -26,13 +26,13 @@ public class User_Order {
         this.shipType = shipType;
         this.total = total;
         this.status = status;
-        this.itemArrayList = itemArrayList;
+
     }
 
 
-    public void addItem(Order_Item newItem){
+    /*public void addItem(Order_Item newItem){
         itemArrayList.add(newItem);
-    }
+    }*/
 
     public String getSuperMarketLogo() {
         return superMarketLogo;
@@ -97,12 +97,12 @@ public class User_Order {
     public void setStatus(boolean status) {
         this.status = status;
     }
-
+    /*
     public ArrayList<Order_Item> getItemArrayList() {
         return itemArrayList;
     }
 
     public void setItemArrayList(ArrayList<Order_Item> itemArrayList) {
         this.itemArrayList = itemArrayList;
-    }
+    }*/
 }
