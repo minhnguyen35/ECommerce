@@ -34,7 +34,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/register"/>
-    <!--        android:background="@color/common_google_signin_btn_tint"-->
+    <Button
+        android:id="@+id/main_test"
+        android:padding="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Test"/>
 
 
 </LinearLayout>

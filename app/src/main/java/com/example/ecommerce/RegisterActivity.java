@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,10 +22,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -74,7 +77,11 @@ public class RegisterActivity extends AppCompatActivity {
         final String p = password.getText().toString();
         final String pnum = phone.getText().toString();
         final String passAgain = passwordAgain.getText().toString();
+        final String mail = "default@gmail.com";
+        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
 
+        cal.setTimeInMillis(System.currentTimeMillis());
+        final String date = DateFormat.format("HH:mm dd-MM-yyyy", cal).toString();
         if(u.isEmpty())
         {
             CharSequence x = "Empty Username!";
@@ -97,12 +104,16 @@ public class RegisterActivity extends AppCompatActivity {
         }
         else
         {
-
             final DatabaseReference db;
-            long ts = System.currentTimeMillis();
-            String ts1 = String.valueOf(ts);
-            final UserAccount user = new UserAccount(u, p, pnum, ts1);
-
+            //long ts = System.currentTimeMillis();
+            ArrayList<String> orderID = new ArrayList<>();
+            orderID.add("123345");
+            orderID.add("123389");
+            String bankNumber = " ";
+            String address = " ";
+            String userImage = "https://firebasestorage.googleapis.com/v0/b/ecommerce-c3c8f.appspot.com/o/avt.png?alt=media&token=92057ded-2f01-416e-a15d-a26a36362c45";
+            User_Info newUser = new User_Info(userImage, u, p, pnum, mail, bankNumber, address);
+            final UserAccount user = new UserAccount(newUser, orderID, date);
             db = FirebaseDatabase.getInstance().getReference();
             ValueEventListener valueEventListener = new ValueEventListener() {
                 @Override
@@ -139,7 +150,7 @@ public class RegisterActivity extends AppCompatActivity {
     private boolean checkExists(DataSnapshot snapshot, String user, String pnum) {
         if(snapshot.child("Users").child(user).exists())
         {
-            CharSequence y = snapshot.child("Users").child(user).child("phoneNumber").toString();
+            CharSequence y = snapshot.child("Users").child(user).child("userInfo").child("phone").toString();
             CharSequence x = "Username already exists!";
             notify(x + " " + y);
             return true;
@@ -148,7 +159,7 @@ public class RegisterActivity extends AppCompatActivity {
         {
             for(DataSnapshot traverse: snapshot.child("Users").getChildren())
             {
-                if(Objects.equals(traverse.child("phoneNumber").getValue(), pnum))
+                if(Objects.equals(traverse.child("phone").getValue(), pnum))
                 {
                     CharSequence x = "Phone Number already registered";
                     notify(x);
@@ -159,11 +170,5 @@ public class RegisterActivity extends AppCompatActivity {
         return false;
     }
 
-//    private void setRegisterButton() {
-//        String user = username.getText().toString();
-//        String pass = password.getText().toString();
-//        String phone_num = phone.getText().toString();
-//        checkInform();
-//    }
 
 }
