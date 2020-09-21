@@ -135,6 +135,11 @@ public class EditUserInfo extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 updateUser(userID);
+                try {
+                    Thread.sleep(1500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 finish();
             }
         });

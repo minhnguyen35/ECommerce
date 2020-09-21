@@ -47,15 +47,15 @@ public class ViewUserInfo extends AppCompatActivity {
         //Intent getAccount = getIntent();
         //userID = getAccount.getStringExtra("account");
 
-        //getData();
+        getData();
         initBtn();
         clickEdit();
     }
 
-    /*private void getData() {
-        Intent intent = getIntent();
-        userID = intent.getStringExtra("userID");
-    }*/
+    private void getData() {
+        Intent getAccount = getIntent();
+        userID = getAccount.getStringExtra("account");
+    }
 
     private void initBtn() {
         BtnEdit = (Button) findViewById(R.id.btn_edit_info);
@@ -75,11 +75,7 @@ public class ViewUserInfo extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        Intent getAccount = getIntent();
-        userID = getAccount.getStringExtra("account");
-        //initBtn();
         getDataFromDB(userID);
-
     }
 
     private void getDataFromDB(String account) {
