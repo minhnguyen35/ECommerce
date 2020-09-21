@@ -2,12 +2,16 @@ package com.example.ecommerce;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,8 +37,43 @@ public class MainScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
 
+        Toolbar toolbar = findViewById(R.id.appToolbar);
+        setSupportActionBar(toolbar);
+
         catchIntent();
         createRecyclerView();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.userInfo:
+                //todo: please intent here
+
+                /*
+                Intent intent = new Intent(MainMenuActivity.this, HomeActivity.class);
+                startActivity(intent);
+                */
+                Toast.makeText(MainScreenActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.inCart:
+                Toast.makeText(MainScreenActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.order:
+                Toast.makeText(MainScreenActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.logout:
+                Toast.makeText(MainScreenActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     void catchIntent(){
@@ -48,7 +87,7 @@ public class MainScreenActivity extends AppCompatActivity {
         layoutManager=new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
-        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
+        //recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
         /*categoryArrayList = new ArrayList<>();
         categoryArrayList.add(new Category(1,"Phone",ThisIsDraft()));

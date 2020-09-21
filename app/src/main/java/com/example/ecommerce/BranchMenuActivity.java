@@ -16,11 +16,14 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -51,11 +54,47 @@ public class BranchMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_branch_menu);
 
+        Toolbar toolbar = findViewById(R.id.appToolbar);
+        setSupportActionBar(toolbar);
+
         catchIntent();
         mapping();
         createRecyclerView();
         createListener();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.userInfo:
+                //todo: please intent here
+
+                /*
+                Intent intent = new Intent(MainMenuActivity.this, HomeActivity.class);
+                startActivity(intent);
+                */
+                Toast.makeText(BranchMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG);
+                return true;
+            case R.id.inCart:
+                Toast.makeText(BranchMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG);
+                return true;
+            case R.id.order:
+                Toast.makeText(BranchMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG);
+                return true;
+            case R.id.logout:
+                Toast.makeText(BranchMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     void mapping() {
         spinner = findViewById(R.id.spinnerCity);
