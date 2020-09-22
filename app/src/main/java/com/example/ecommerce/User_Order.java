@@ -17,7 +17,7 @@ public class User_Order {
     /****************************************************************************************/
 
 
-    public User_Order(String superMarketLogo, String id, String superMarketName, String date, int checkOutType, int shipType, long total, boolean status) {
+    public User_Order(String superMarketLogo, String id, String superMarketName, String date, int checkOutType, int shipType, long total, boolean status, String account) {
         this.superMarketLogo = superMarketLogo;
         this.id = id;
         this.superMarketName = superMarketName;
@@ -26,11 +26,17 @@ public class User_Order {
         this.shipType = shipType;
         this.total = total;
         this.status = status;
-
+        this.account = account;
     }
 
+    public String getAccount() {
+        return account;
+    }
 
-    /*public void addItem(Order_Item newItem){
+    public void setAccount(String account) {
+        this.account = account;
+    }
+/*public void addItem(Order_Item newItem){
         itemArrayList.add(newItem);
     }*/
 

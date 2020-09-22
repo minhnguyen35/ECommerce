@@ -1,6 +1,7 @@
 package com.example.ecommerce;
 
 public class Order_Item {
+    private String orderItemID;
     private String itemLogo;
     private String orderId;
     private String id;
@@ -10,32 +11,12 @@ public class Order_Item {
     private long price;
     private long total;
 
+
     /****************************************************************************************/
 
 
-
-
-    public Order_Item(String itemLogo, String id, String itemName, int quantity, int quantityPurchase, long total) {
-        this.itemLogo = itemLogo;
-        this.id = id;
-        this.itemName = itemName;
-        this.quantity = quantity;
-        this.quantityPurchase = quantityPurchase;
-        this.total = total;
-    }
-
-
-    public Order_Item(String itemLogo, String orderId, String id, String itemName, int quantity, int quantityPurchase, long total) {
-        this.itemLogo = itemLogo;
-        this.orderId = orderId;
-        this.id = id;
-        this.itemName = itemName;
-        this.quantity = quantity;
-        this.quantityPurchase = quantityPurchase;
-        this.total = total;
-    }
-
     public Order_Item(String itemLogo, String orderId, String id, String itemName, int quantity, int quantityPurchase, long price, long total) {
+        this.orderItemID = id + "o" + orderId;
         this.itemLogo = itemLogo;
         this.orderId = orderId;
         this.id = id;
@@ -45,6 +26,7 @@ public class Order_Item {
         this.price = price;
         this.total = total;
     }
+
 
     public long getPrice() {
         return price;
