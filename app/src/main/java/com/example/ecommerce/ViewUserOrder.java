@@ -27,9 +27,18 @@ public class ViewUserOrder extends AppCompatActivity {
         setContentView(R.layout.activity_view_user_order);
 
 
+        getData();
         initView();
         adaptView();
         clickOrderElement();
+    }
+
+    /*TODO:
+     *  get list of user order from database by userID */
+
+    private void getData() {
+        Intent getAccount = getIntent();
+        userID = getAccount.getStringExtra("account");
     }
 
     private void clickOrderElement() {
@@ -38,6 +47,8 @@ public class ViewUserOrder extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent viewOrder = new Intent(ViewUserOrder.this, ViewUserOrderItem.class);
                 viewOrder.putExtra("orderID", userOrderList.get(i).getId());
+                viewOrder.putExtra("orderStatus", userOrderList.get(i).isStatus());
+                viewOrder.putExtra("orderTotal", userOrderList.get(i).getTotal());
                 startActivity(viewOrder);
             }
         });
