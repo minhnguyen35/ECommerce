@@ -1,6 +1,7 @@
 package com.example.ecommerce;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -32,6 +33,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.IOException;
 
@@ -212,7 +215,7 @@ public class EditUserInfo extends AppCompatActivity {
     //private Button addImage;
     private Bitmap imageBitmap;
     Uri imageUri;
-    @Override
+   /* @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -233,7 +236,7 @@ public class EditUserInfo extends AppCompatActivity {
         }
 
     }
-
+*/
     private void scaleImage(Bitmap imageBitmap) {
         if (imageBitmap == null) return;
 
@@ -272,15 +275,37 @@ public class EditUserInfo extends AppCompatActivity {
         userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //addScaleImage();
-                addImageFromGallery();
+                addScaleImage();
+                //addImageFromGallery();
                 //Picasso.get().load(userInfo.getUserImage()).fit().into(userImage);
             }
         });
     }
 
-   /* private void addScaleImage() {
-        CropImage.activity(imageUri)
-                .start
-    }*/
+   private void addScaleImage() {
+        // start cropping activity for pre-acquired image saved on the device
+       CropImage.activity(imageUri)
+               .setAspectRatio(1, 1)
+               .start(this);
+   }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && data != null){
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            imageUri = result.getUri();
+
+            userImage.setImageURI(imageUri);
+        }
+        else if (requestCode != RESULT_OK){
+            Toast.makeText(this, "Load image fail !", Toast.LENGTH_LONG).show();
+            //startActivity(new Intent(EditUserInfo.this, EditUserInfo.class));
+            //finish();
+        }
+        else {
+            Toast.makeText(this, "Load and crop image fail !", Toast.LENGTH_LONG).show();
+        }
+    }
 }
