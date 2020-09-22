@@ -119,15 +119,6 @@ public class ViewUserInfo extends AppCompatActivity {
     private void adaptInfo() {
         Picasso.get().load(userInfo.getUserImage()).fit().into(userImage);
 
-        //RequestCreator tmp = Picasso.get().load(userInfo.getUserImage());
-
-        //userImage.invalidate();
-        //BitmapDrawable drawable = (BitmapDrawable) userImage.getDrawable();
-        //if (drawable == null) Toast.makeText(this, "loading image", Toast.LENGTH_LONG).show();
-        //Bitmap bitmap = drawable.getBitmap();
-        //Bitmap tmp = ((BitmapDrawable) userImage.getDrawable()).getBitmap();
-        //scaleImage(tmp);
-        //Picasso.get().load(userInfo.getUserImage()).fit().into(userImage);
         username.setText(userInfo.getUsername());
         //password.setText(userInfo.getPassword());
         password.setText("*******");

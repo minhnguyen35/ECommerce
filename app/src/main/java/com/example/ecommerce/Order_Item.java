@@ -7,6 +7,7 @@ public class Order_Item {
     private String itemName;
     private int quantity;
     private int quantityPurchase;
+    private long price;
     private long total;
 
     /****************************************************************************************/
@@ -32,6 +33,25 @@ public class Order_Item {
         this.quantity = quantity;
         this.quantityPurchase = quantityPurchase;
         this.total = total;
+    }
+
+    public Order_Item(String itemLogo, String orderId, String id, String itemName, int quantity, int quantityPurchase, long price, long total) {
+        this.itemLogo = itemLogo;
+        this.orderId = orderId;
+        this.id = id;
+        this.itemName = itemName;
+        this.quantity = quantity;
+        this.quantityPurchase = quantityPurchase;
+        this.price = price;
+        this.total = total;
+    }
+
+    public long getPrice() {
+        return price;
+    }
+
+    public void setPrice(long price) {
+        this.price = price;
     }
 
     public String getOrderId() {
