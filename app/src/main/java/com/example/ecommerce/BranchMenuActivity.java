@@ -52,7 +52,6 @@ public class BranchMenuActivity extends AppCompatActivity {
     private int RESULT_LOGOUT = 88888;
 
     public static Bundle cart;
-    private String avatar="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -224,15 +223,6 @@ public class BranchMenuActivity extends AppCompatActivity {
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             branchArrayList = new ArrayList<>();
             DataSnapshot branches = snapshot.child("Branchs");
-            User_Info userInfo = null;
-            if(snapshot.child("Users").child(acc).exists()){
-                userInfo = snapshot.child("Users").child(acc).child("userInfo").getValue(User_Info.class);
-            }
-            if(userInfo != null)
-            {
-                avatar=userInfo.getUserImage();
-                adapter.setAvatar(avatar);
-            }
 
             for (DataSnapshot tmp : branches.getChildren()) {
                 //get branch id

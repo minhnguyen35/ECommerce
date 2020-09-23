@@ -3,6 +3,7 @@ package com.example.ecommerce;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.Image;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import static com.example.ecommerce.BranchMenuActivity.cart;
@@ -27,7 +29,6 @@ public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder
     private Context context;
     private ArrayList<Branch> branchArrayList;
     private boolean isAdminSite;
-    private String avatar="";
 
     private final int REQUEST_CODE_CATEGORY = 456;
 
@@ -41,9 +42,6 @@ public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder
         this.branchArrayList = branchArrayList;
     }
 
-    public void setAvatar(String avatar){
-        this.avatar=avatar;
-    }
 
     @NonNull
     @Override
@@ -82,7 +80,6 @@ public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder
                     Intent intent = new Intent(context, MapsActivity.class);
                     intent.putExtra("branch", branchArrayList);
                     intent.putExtra("from", branchArrayList.get(position).getLatLng());
-                    intent.putExtra("avatar",avatar);
                     context.startActivity(intent);
                 }
             });

@@ -166,14 +166,6 @@ public class AdminItemInfoActivity extends AppCompatActivity {
         recyclerViewArrayImage.setHasFixedSize(true);
         imageAdapter = new ImageAdapter(this,item.getImageArrayList());
         recyclerViewArrayImage.setAdapter(imageAdapter);
-        //imageAdapter.notifyDataSetChanged();
-
-        //recyclerViewArraySuggestion.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
-        //recyclerViewArraySuggestion.setHasFixedSize(true);
-        //suggestionItemList = new ArrayList<>();
-        //suggestionAdapter = new ItemAdapter(this, suggestionItemList, true);
-        //recyclerViewArraySuggestion.setAdapter(suggestionAdapter);
-        //suggestionAdapter.notifyDataSetChanged();
 
         updateItemInfo();
 

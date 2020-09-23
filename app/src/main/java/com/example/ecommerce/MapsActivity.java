@@ -21,6 +21,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.google.android.gms.location.LocationServices;
@@ -37,11 +38,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -49,8 +45,6 @@ import com.squareup.picasso.Target;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
-import static com.example.ecommerce.MainMenuActivity.acc;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -64,12 +58,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private final String token = "pk.eyJ1IjoiY3M0MjYiLCJhIjoiY2tmYjY1cWkyMTJ2ZzMwbzc3czhveWFwYSJ9.hpBZHxDgg33rs9TnkeM6Kw";
     public static Polyline path=null;
-
-
+    private Marker mMarker;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
 
         catchIntent();
 
@@ -91,8 +85,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             String provider = mlocationManager.getBestProvider(new Criteria(),true);
             if(provider!=null)
                 mlocationManager.requestLocationUpdates(provider,5000,5,mLocationListener);
-        }
 
+        }
     }
 
     void catchIntent() {
@@ -103,8 +97,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         mMap = googleMap;
+
 
         ImageView imageView = findViewById(R.id.imageTemp);
         for(int i=0; i<mBranchArrayList.size();++i){
@@ -118,6 +112,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 );
         }
         mMap.setOnMarkerClickListener(this);
+
     }
 
 
@@ -175,6 +170,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         public void onLocationChanged(@NonNull Location location) {
             if (location != null) {
+                if(mMarker!=null){
+                    mMarker.remove();
+                }
                 mLocation=location;
                 CameraPosition cameraPosition = new CameraPosition.Builder()
                         .target(new LatLng(location.getLatitude(), location.getLongitude()))
@@ -183,15 +181,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .tilt(30)
                         .build();
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                mMap.addMarker(new MarkerOptions()
+                mMarker=mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(location.getLatitude(), location.getLongitude()))
                         .title("You're here")
-                        .icon(BitmapDescriptorFactory.fromBitmap(
-                                Bitmap.createScaledBitmap(
-                                        BitmapFactory.decodeResource(getResources(),R.drawable.logo),
-                                        120,
-                                        120,
-                                        false)
+                        .icon(
+                                BitmapDescriptorFactory.fromBitmap(
+                                        Bitmap.createScaledBitmap(
+                                                BitmapFactory.decodeResource(
+                                                        MapsActivity.this.getResources(),
+                                                        R.drawable.logo
+                                                ),
+                                                120,
+                                                120,
+                                                false
+                                        )
                                 )
                         )
                 );
@@ -214,6 +217,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+        if(marker.getPosition().equals(mMarker.getPosition()))
+            return false;
         if(from==null){
             from = new double[2];
         }
