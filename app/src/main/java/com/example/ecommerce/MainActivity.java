@@ -1,6 +1,7 @@
 package com.example.ecommerce;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -19,10 +20,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -46,67 +50,79 @@ public class MainActivity extends AppCompatActivity {
     ProgressDialog loadingBar;
     private void TestButton()
     {
-        final ArrayList<String> listItem = new ArrayList<>();
-        listItem.add("1235");
-        listItem.add("1100");
         Button test = findViewById(R.id.main_test);
+        final int quantity = 100000;
+        final long[] quant = new long[1];
+        ArrayList<Order_Item> listOrder = new ArrayList<>();
+        final ArrayList<Order_Item> orderItems = new ArrayList<>();
+        Order_Item y = new Order_Item(null, null, "1235", null,
+                1, 1, 20000000, 20000000);
+        orderItems.add(y);
+        final ArrayList<Integer>  listQuantityInDB = new ArrayList<>();
+        quant[0] = 0;
         loadingBar = new ProgressDialog(this);
-
         loadingBar.setCanceledOnTouchOutside(false);
+
         test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 loadingBar.show();
-                getOrderItem(listItem);
-            }
-        });
-    }
-    public void getOrderItem(final ArrayList<String> items)
-    {
+                final DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+                final Order_Item x = new Order_Item(null, null, "1243", null,
+                1, 1, 23000, 23000);
+                DatabaseReference itemObject = db.child("Items");
+                itemObject.runTransaction(new Transaction.Handler() {
+                    @NonNull
+                    @Override
+                    public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                        for(int i = 0; i < orderItems.size(); i++)
+                        {
+                            Order_Item newItem = orderItems.get(i);
+                            int quantityOrd = newItem.getQuantity();
+                            long quantityRealtmp = 0;// = currentData.child(newItem.getId()).child("quantity").getValue();
+                            while (currentData.child(newItem.getId()).child("quantity").getValue() != null)
+                            {
+                                quantityRealtmp =(long) currentData.child(newItem.getId()).child("quantity").getValue();
+                            }
+                            int quantityReal = (int) quantityRealtmp;
+                            listQuantityInDB.add(quantityReal);
+                            quant[0] = quantityReal;
+                            if(quantityOrd > quantityReal)
+                            {
 
-        final ArrayList<Item> listOrderItem = new ArrayList<>();
-        final DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-        db.addValueEventListener(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                DataSnapshot itemList = snapshot.child("Items");
-                for(int i = 0; i <items.size(); i++) {
-                    String id = items.get(i);
-
-                    if (itemList.child(id).exists()) {
-                        String ID = itemList.child(id).getValue().toString();
-                        String CategoryID = itemList.child(id).child("categoryID").getValue().toString();
-
-                        String Name= itemList.child(id).child("name").getValue().toString();
-                        long Price = itemList.child(id).child("price").getValue(Long.class);
-
-                        int Quantity = itemList.child(id).child("quantity").getValue(Long.class).intValue();
-                        String Description= (String) itemList.child(id).child("description").getValue();
-                        ArrayList<String> tmp = new ArrayList<>();
-                        for(DataSnapshot x: itemList.child(id).child("imageArrayList").getChildren())
-                            tmp.add(x.getValue().toString());
-                        Item addItem= new Item(ID, CategoryID, Name, Price, null, Quantity, Description);
-
-                        listOrderItem.add(addItem);
-
-                    } else {
-                        CharSequence s = "Item out of stock";
-                        Toast toast = Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT);
-                        toast.show();
+                                return Transaction.abort();
+                            }
+                            long priceOrd = newItem.getPrice();
+                            long priceReal = (long) currentData.child(newItem.getId()).child("price").getValue();
+                            if(priceOrd != priceReal)
+                            {
+                                return Transaction.abort();
+                            }
+                        }
+                        for(int i = 0; i < orderItems.size();i++)
+                        {
+                            String id = orderItems.get(i).getId();
+                            int quantityOrd = orderItems.get(i).getQuantity();
+                            int quantityReal = listQuantityInDB.get(i);
+                            currentData.child(id).child("quantity").setValue(quantityReal - quantityOrd);
+                        }
+                        return Transaction.success(currentData);
                     }
-                }
-                //Toast.makeText(MainActivity.this, listOrderItem.get(1).getName(), Toast.LENGTH_SHORT).show();
-                loadingBar.dismiss();
-                Toast.makeText(MainActivity.this, listOrderItem.get(1).getName(), Toast.LENGTH_SHORT).show();
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                        if(committed)
+                        {
+                            loadingBar.dismiss();
+                            Toast.makeText(MainActivity.this, String.valueOf(quant[0]), Toast.LENGTH_LONG).show();
+                        }
 
+                    }
+                });
             }
         });
     }
+
     private void initItemView() {
         login = findViewById(R.id.button_login);
         register = findViewById(R.id.register_login);

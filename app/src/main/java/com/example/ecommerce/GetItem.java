@@ -140,6 +140,64 @@ public class GetItem implements FirebaseGetBehaviour {
             }
         });
     }
+    public void getOrder(final String UserID)
+    {
+        final ArrayList<User_Order> listOrder = new ArrayList<>();
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                DataSnapshot orders = snapshot.child("Orders");
+                for(DataSnapshot tmp: orders.getChildren())
+                {
+                    //get branch id
+                    String account = (String) tmp.child("account").getValue();
+                    if(UserID.equals(account))
+                    {
+                        User_Order orderCur = tmp.getValue(User_Order.class);
+                    }
+                }
+               //Toast.makeText(MainActivity.this, String.valueOf(listBranch.size()), Toast.LENGTH_LONG).show();
+                  /*
+                    Do something with the data
+                    */
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    public void getOrderItem(final String OrderID)
+    {
+        final ArrayList<User_Order> listOrder = new ArrayList<>();
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                DataSnapshot orders = snapshot.child("OrderItem");
+                for(DataSnapshot tmp: orders.getChildren())
+                {
+                    //get branch id
+                    String orderID = (String) tmp.child("orderID").getValue();
+                    if(OrderID.equals(orderID))
+                    {
+                        Order_Item orderItemCur = tmp.getValue(Order_Item.class);
+                    }
+                }
+                //Toast.makeText(MainActivity.this, String.valueOf(listBranch.size()), Toast.LENGTH_LONG).show();
+                  /*
+                    Do something with the data
+                    */
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
     public void getBranchCond(final String supID, final String add)
     {
         final ArrayList<Branch> listBranch = new ArrayList<>();
@@ -387,47 +445,144 @@ public class GetItem implements FirebaseGetBehaviour {
             }
         });
     }
+    ValueEventListener add;
+    public void addOrder(final User_Order newOrder)
+    {
+        final DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+        add =  new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int tmpOrdID = (int) snapshot.child("ID").child("OrderID").getValue() + 1;
+                final String newOrdID = String.valueOf(tmpOrdID);
+                newOrder.setId(newOrdID);
+                db.child("Orders").child(newOrdID).setValue(newOrder).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        db.child("ID").child("OrderID").setValue(newOrdID).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(context, "Success Add Order", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                });
+            }
 
-    public void updateItem(final String id, final Item newItem)
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        db.addListenerForSingleValueEvent(add);
+    }
+    public void checkValidItems(final ArrayList<Order_Item> listOrderItems, final ArrayList<Integer> listQuantityInDB)
+    {
+        //final ArrayList<Order_Item> listOrderItems;
+        final DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+        ValueEventListener checkItems = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                DataSnapshot items = snapshot.child("Items");
+                for(int i = 0; i < listOrderItems.size(); i++)
+                {
+                    Order_Item curItem = listOrderItems.get(i);
+                    String id = curItem.getId();
+                    if(!items.child(id).exists())
+                    {
+                        Toast.makeText(context, "Item " + id + " is out of stock!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    int quantityOrd = curItem.getQuantity();
+                    long quantityRealtmp = (long) items.child(id).child("quantity").getValue();
+                    int quantityReal = (int) quantityRealtmp;
+                    listQuantityInDB.add(quantityReal);
+                    if(quantityOrd > quantityReal)
+                    {
+                        Toast.makeText(context, "Item " + id + " is out of stock!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    long priceOrd = curItem.getPrice();
+                    long priceReal = (long) items.child(id).child("price").getValue();
+                    if(priceOrd != priceReal)
+                    {
+                        Toast.makeText(context, "Item " + id + " is out of stock!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        db.addListenerForSingleValueEvent(checkItems);
+    }
+/*
+    public void updateItem(final ArrayList<Order_Item> orderItems)
     {
         final DatabaseReference db = FirebaseDatabase.getInstance().getReference();
 
-        DatabaseReference itemObject = db.child("Items").child(id);
-
+        DatabaseReference itemObject = db.child("Items");
+        ArrayList<Order_Item> listOrderItems;
+        User_Order newOrd;
         if(itemObject != null)
         {
             itemObject.runTransaction(new Transaction.Handler() {
                 @NonNull
                 @Override
                 public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                    int quantityOrd = newItem.getQuantity();
-                    int quantityReal = (int) currentData.child("quantity").getValue();
-                    if(quantityOrd > quantityReal)
+                    boolean isAbort = false;
+                    ArrayList<Integer> listQuantityInDB = new ArrayList<>();
+                    for(int i = 0; i < orderItems.size(); i++)
                     {
-                        Toast.makeText(context, "Quantity is not enough for the item " + newItem.getName(), Toast.LENGTH_LONG).show();
-                        return Transaction.abort();
+                        Order_Item newItem = orderItems.get(i);
+                        int quantityOrd = newItem.getQuantity();
+                        int quantityReal = (int) currentData.child(newItem.getId()).child("quantity").getValue();
+                        listQuantityInDB.add(quantityReal);
+                        if(quantityOrd > quantityReal)
+                        {
+                            Toast.makeText(context, "Quantity is not enough for the item " +
+                                    newItem.getName(), Toast.LENGTH_LONG).show();
+                            return Transaction.abort();
+                        }
+                        long priceOrd = newItem.getPrice();
+                        long priceReal = (long) currentData.child(newItem.getID()).child("price").getValue();
+                        if(priceOrd != priceReal)
+                        {
+                            Toast.makeText(context, "Sorry there's something wrong with Item "
+                                    + newItem.getName(), Toast.LENGTH_LONG).show();
+                            return Transaction.abort();
+                        }
                     }
-                    long priceOrd = newItem.getPrice();
-                    long priceReal = (long) currentData.child("price").getValue();
-                    if(priceOrd != priceReal)
+
+
+                    for(int i = 0; i < orderItems.size();i++)
                     {
-                        Toast.makeText(context, "Sorry there's something wrong with Item " + newItem.getName(), Toast.LENGTH_LONG).show();
-                        return Transaction.abort();
+                        String id = orderItems.get(i).getID();
+                        int quantityOrd = orderItems.get(i).getQuantity();
+                        int quantityReal = listQuantityInDB.get(i);
+                        HashMap<String, Object> itemAfter = new HashMap<>();
+                        itemAfter.put("quantity", quantityReal - quantityOrd);
+                        db.child("Items").child(id).updateChildren(itemAfter);
+
+
                     }
-                    HashMap<String, Object> itemAfter = new HashMap<>();
-                    itemAfter.put("quantity", quantityReal - quantityOrd);
-                    db.child("Items").child(id).updateChildren(itemAfter);
                     return  Transaction.success(currentData);
                 }
 
                 @Override
-                public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                public void onComplete(@Nullable DatabaseError error, boolean committed,
+                                       @Nullable DataSnapshot currentData) {
+
                     Toast.makeText(context, "Success Transaction", Toast.LENGTH_SHORT).show();
                 }
+
             });
         }
 
     }
+    */
     public void getOrderItem(final ArrayList<String> items)
     {
 

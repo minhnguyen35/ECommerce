@@ -16,7 +16,8 @@ public class User_Order {
 
     /****************************************************************************************/
 
-
+    public User_Order()
+    {}
     public User_Order(String superMarketLogo, String id, String superMarketName, String date, int checkOutType, int shipType, long total, boolean status, String account) {
         this.superMarketLogo = superMarketLogo;
         this.id = id;

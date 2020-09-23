@@ -75,7 +75,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainMenuActivity.this, ViewUserInfo.class);
                 intent.putExtra("account",acc);
                 startActivity(intent);
-                */
+
                 Toast.makeText(MainMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG);
                 return true;
             case R.id.inCart:
