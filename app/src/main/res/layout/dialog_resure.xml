@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <androidx.cardview.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        card_view:cardCornerRadius="20dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        card_view:cardBackgroundColor="#FFD600"
+        >
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:id="@+id/info_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:text="You confirm that the order was successfully delivered and paid for the partner ! "
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                />
+
+
+            <Button
+                android:id="@+id/btn_confirm"
+                android:layout_alignParentBottom="true"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:text="Yes"
+                android:layout_marginLeft="3dp"
+                android:textSize="16dp"
+                android:background="#FFAB40"
+                />
+
+            <Button
+                android:id="@+id/btn_not_confirm"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@id/btn_confirm"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:text="NO"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+
+                android:textSize="16dp"
+
+                android:background="#FFAB40"
+                />
+
+
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
