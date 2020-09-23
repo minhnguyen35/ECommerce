@@ -1,7 +1,6 @@
 package com.example.ecommerce;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -9,24 +8,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
-import androidx.appcompat.widget.Toolbar;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,7 +26,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class BranchMenuActivity extends AppCompatActivity {
+public class AdminBranchMenuActivity extends AppCompatActivity {
+
     private String supermarketID;
     private ArrayList<Branch> branchArrayList;
     private ArrayList<Branch> selectedBranchArrayList;
@@ -46,66 +38,34 @@ public class BranchMenuActivity extends AppCompatActivity {
 
     private BranchAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
-
+    private Button button_branch;
     DatabaseReference db = FirebaseDatabase.getInstance().getReference();
 
     private final int PERMISSION_REQUEST_CODE = 12345;
-    private int REQUEST_CODE_CART = 10000, REQUEST_CODE_ACCOUNT = 20000, REQUEST_CODE_ORDERS = 30000;
-    private int REQUEST_CODE_CATEGORY = 456;
-
-    public static Bundle cart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_branch_menu);
-
+        setContentView(R.layout.activity_admin_branch_menu);
         catchIntent();
-
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavBar);
-        bottomNavigationView.setOnNavigationItemSelectedListener(botNavBarListener);
-
         mapping();
         createRecyclerView();
         createListener();
     }
 
-
-    private BottomNavigationView.OnNavigationItemSelectedListener botNavBarListener =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.back:
-                            finish();
-                        case R.id.userInfo:
-                            Toast.makeText(BranchMenuActivity.this, item.getTitle(), Toast.LENGTH_LONG).show();
-                            return true;
-                        case R.id.inCart:
-                            return true;
-                        case R.id.order:
-                            Toast.makeText(BranchMenuActivity.this, item.getTitle(), Toast.LENGTH_LONG).show();
-                            return true;
-                        case R.id.logout:
-                            Toast.makeText(BranchMenuActivity.this, item.getTitle(), Toast.LENGTH_LONG).show();
-                            return true;
-                    }
-                    return false;
-                }
-            };
-
-
     void mapping() {
         spinner = findViewById(R.id.spinnerCity);
         recyclerView = findViewById(R.id.recyclerViewBranches);
         mapButton = findViewById(R.id.buttonMap);
+        button_branch = findViewById(R.id.add_branch);
     }
 
     void catchIntent() {
         Intent intent = getIntent();
-        supermarketID = intent.getStringExtra("supermarketID");
+        supermarketID = intent.getStringExtra("supID");
         //displaySupermarketBranches.addAll(branchArrayList);
     }
+
 
     void createRecyclerView() {
         linearLayoutManager = new LinearLayoutManager(this);
@@ -114,27 +74,34 @@ public class BranchMenuActivity extends AppCompatActivity {
 
         selectedBranchArrayList = new ArrayList<>();
         //branchArrayList = new ArrayList<>();
-        adapter = new BranchAdapter(this, selectedBranchArrayList, false);
+        adapter = new BranchAdapter(this, selectedBranchArrayList, true);
         recyclerView.setAdapter(adapter);
     }
-
-
 
     void createListener() {
         spinner.setOnItemSelectedListener(spinnerHelper);
         mapButton.setOnClickListener(mapHelper);
     }
-
+    void addBranch()
+    {
+//        button_branch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent addBranchIntent = new Intent(this, AddBranchActivity.class);
+//                startActivity(addBranchIntent);
+//            }
+//        });
+    }
     private boolean checkPermisson() {
         if (ContextCompat.checkSelfPermission(
-                BranchMenuActivity.this,
+                AdminBranchMenuActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION
         ) != PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(
-                        BranchMenuActivity.this,
+                        AdminBranchMenuActivity.this,
                         Manifest.permission.ACCESS_COARSE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(BranchMenuActivity.this,
+            ActivityCompat.requestPermissions(AdminBranchMenuActivity.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.ACCESS_COARSE_LOCATION},
                     PERMISSION_REQUEST_CODE);
@@ -147,7 +114,7 @@ public class BranchMenuActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             if (checkPermisson()) {
-                Intent intent = new Intent(BranchMenuActivity.this, MapsActivity.class);
+                Intent intent = new Intent(AdminBranchMenuActivity.this, MapsActivity.class);
                 intent.putExtra("branch", branchArrayList);
                 startActivity(intent);
             }
@@ -168,7 +135,7 @@ public class BranchMenuActivity extends AppCompatActivity {
                 adapter.setBranchArrayList(selectedBranchArrayList);
                 adapter.notifyDataSetChanged();
 
-                Toast.makeText(BranchMenuActivity.this, spinner.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(AdminBranchMenuActivity.this, spinner.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
             }
 
         }
@@ -185,7 +152,7 @@ public class BranchMenuActivity extends AppCompatActivity {
                 if(grantResults.length>0 &&
                         (grantResults[0] == PackageManager.PERMISSION_GRANTED ||
                                 grantResults[1] == PackageManager.PERMISSION_GRANTED)){
-                    Intent intent = new Intent(BranchMenuActivity.this, MapsActivity.class); //map
+                    Intent intent = new Intent(AdminBranchMenuActivity.this, MapsActivity.class); //map
                     intent.putExtra("branch", branchArrayList);
                     startActivity(intent);
 
@@ -242,8 +209,6 @@ public class BranchMenuActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         db.addValueEventListener(newEvent);
-        cart = new Bundle();
-        cart.putSerializable("orderItems",new ArrayList<Order_Item>());
     }
 
     @Override
@@ -251,5 +216,4 @@ public class BranchMenuActivity extends AppCompatActivity {
         super.onPause();
         db.removeEventListener(newEvent);
     }
-
 }

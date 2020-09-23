@@ -6,6 +6,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.DataSetObserver;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,7 +32,7 @@ public class MainMenuActivity extends AppCompatActivity {
     SupermarketAdapter adapter;
     LinearLayoutManager linearLayoutManager;
     DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-
+    String acc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +40,9 @@ public class MainMenuActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavBar);
         bottomNavigationView.setOnNavigationItemSelectedListener(botNavBarListener);
+
+        Intent getAcc = getIntent();
+        acc = getAcc.getStringExtra("account");
 
         mapping();
         initSupermarketList();
@@ -48,7 +57,9 @@ public class MainMenuActivity extends AppCompatActivity {
             switch (item.getItemId()){
 
                 case R.id.userInfo:
-                    Toast.makeText(MainMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(MainMenuActivity.this, ViewUserInfo.class);
+                    intent.putExtra("account",acc);
+                    startActivity(intent);
                     return true;
                 case R.id.inCart:
                     Toast.makeText(MainMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
@@ -57,13 +68,23 @@ public class MainMenuActivity extends AppCompatActivity {
                     Toast.makeText(MainMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
                     return true;
                 case R.id.logout:
-                    Toast.makeText(MainMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
+                    SharedPreferences sharedPref = getSharedPreferences("checkbox", Context.MODE_PRIVATE); // cai nay la de bo cai ghi nho dang nhap
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("remember", "false");
+                    editor.apply();
+                    Intent intentLogout = new Intent(MainMenuActivity.this, MainActivity.class);
+                    startActivity(intentLogout);
                     return true;
             }
             return false;
         }
     };
 
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
 
     ValueEventListener newEvent = new ValueEventListener() {
         @Override

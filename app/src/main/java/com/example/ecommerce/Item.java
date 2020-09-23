@@ -13,6 +13,8 @@ public class Item implements Serializable {
     private int Quantity;
     private String Description="";
 
+    public Item()
+    {}
     public Item(String ID, String categoryID, String name, long price, ArrayList<String> imageArrayList, int quantity, String description) {
         this.ID = ID;
         CategoryID = categoryID;

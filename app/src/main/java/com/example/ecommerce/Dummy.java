@@ -20,12 +20,12 @@ public class Dummy extends AppCompatActivity {
         Logout = findViewById(R.id.LogOut);
         logOutAccount();
     }
-    private void logOutAccount()
+    private void logOutAccount()//log out day nha
     {
         Logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences sharedPref = getSharedPreferences("checkbox", Context.MODE_PRIVATE);
+                SharedPreferences sharedPref = getSharedPreferences("checkbox", Context.MODE_PRIVATE); // cai nay la de bo cai ghi nho dang nhap
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString("remember", "false");
                 editor.apply();

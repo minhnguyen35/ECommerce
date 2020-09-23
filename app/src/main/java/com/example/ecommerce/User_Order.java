@@ -10,8 +10,8 @@ public class User_Order {
     private int shipType; /* 1 for take over, 2 for delivery */
     private long total;
     private boolean status;
-
-    private ArrayList<Order_Item> itemArrayList;
+    private String account;
+    //private ArrayList<Order_Item> itemArrayList;
 
     /****************************************************************************************/
 
@@ -24,13 +24,17 @@ public class User_Order {
         this.shipType = shipType;
         this.total = total;
         this.status = status;
-        this.itemArrayList = itemArrayList;
+        this.account = account;
     }
 
-
-    public void addItem(Order_Item newItem){
-        itemArrayList.add(newItem);
+    public String getAccount() {
+        return account;
     }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
 
 
 
@@ -88,13 +92,5 @@ public class User_Order {
 
     public void setStatus(boolean status) {
         this.status = status;
-    }
-
-    public ArrayList<Order_Item> getItemArrayList() {
-        return itemArrayList;
-    }
-
-    public void setItemArrayList(ArrayList<Order_Item> itemArrayList) {
-        this.itemArrayList = itemArrayList;
     }
 }

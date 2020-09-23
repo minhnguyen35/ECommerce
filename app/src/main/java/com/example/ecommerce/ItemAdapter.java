@@ -24,9 +24,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
     private Context context;
     private ArrayList<Item> itemArrayList;
     private int REQUEST_CODE_ITEM = 789;
-    public ItemAdapter(Context context, ArrayList<Item> itemArrayList) {
+    boolean isAdmin;
+
+    public ItemAdapter(Context context, ArrayList<Item> itemArrayList, boolean isAdmin) {
         this.context = context;
         this.itemArrayList = itemArrayList;
+        this.isAdmin = isAdmin;
     }
 
     public void setItemArrayList(ArrayList<Item> itemArrayList) {
@@ -53,7 +56,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent intent = new Intent(context,ItemInfoActivity.class);
+                if(!isAdmin)
+                    intent = new Intent(context, AdminItemInfoActivity.class);
                 intent.putExtra("item",itemArrayList.get(position));
                 ((Activity)context).startActivityForResult(intent, REQUEST_CODE_ITEM);
             }

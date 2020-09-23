@@ -106,14 +106,14 @@ public class RegisterActivity extends AppCompatActivity {
         {
             final DatabaseReference db;
             //long ts = System.currentTimeMillis();
-            ArrayList<String> orderID = new ArrayList<>();
-            orderID.add("123345");
-            orderID.add("123389");
+//            ArrayList<String> orderID = new ArrayList<>();
+//            orderID.add("123345");
+//            orderID.add("123389");
             String bankNumber = " ";
             String address = " ";
             String userImage = "https://firebasestorage.googleapis.com/v0/b/ecommerce-c3c8f.appspot.com/o/avt.png?alt=media&token=92057ded-2f01-416e-a15d-a26a36362c45";
             User_Info newUser = new User_Info(userImage, u, p, pnum, mail, bankNumber, address);
-            final UserAccount user = new UserAccount(newUser, orderID, date);
+            final UserAccount user = new UserAccount(newUser, date);
             db = FirebaseDatabase.getInstance().getReference();
             ValueEventListener valueEventListener = new ValueEventListener() {
                 @Override

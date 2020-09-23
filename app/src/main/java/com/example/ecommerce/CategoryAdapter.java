@@ -60,7 +60,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 //        itemArrayList.add(new Item("5",2,"eur",10000,imageList,100,"vietnamese flag"));
 
 
-        ItemAdapter itemAdapter = new ItemAdapter(context, categoryArrayList.get(position).getItemArrayList());
+        ItemAdapter itemAdapter = new ItemAdapter(context, categoryArrayList.get(position).getItemArrayList(), false);
         holder.listItem.setAdapter(itemAdapter);
         //itemAdapter.notifyDataSetChanged();
 

@@ -1,23 +1,20 @@
 package com.example.ecommerce;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,14 +23,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import static com.example.ecommerce.BranchMenuActivity.cart;
+public class AdminItemInfoActivity extends AppCompatActivity {
 
-public class ItemInfoActivity extends AppCompatActivity {
     Item item;
     ArrayList<Item> suggestionItemList;
     RecyclerView recyclerViewArrayImage, recyclerViewArraySuggestion;
     TextView textViewName, textViewPrice, textViewQuantity,textViewID,textViewCateID, textViewDescr;
-    Button btnAdd;
+    Button remove, edit;
 
     ItemAdapter suggestionAdapter;
     ImageAdapter imageAdapter;
@@ -41,55 +37,36 @@ public class ItemInfoActivity extends AppCompatActivity {
     private String categoryID;
     DatabaseReference db = FirebaseDatabase.getInstance().getReference();
 
-    private int REQUEST_CODE_CART = 10000, REQUEST_CODE_ACCOUNT = 20000, REQUEST_CODE_ORDERS = 30000;
-    private int REQUEST_CODE_ITEM = 789;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_info);
-
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavBar);
-        bottomNavigationView.setOnNavigationItemSelectedListener(botNavBarListener);
+        setContentView(R.layout.activity_admin_item_info);
 
         mapping();
         catchIntent();
         init();
+        removeClick();
+        editClick();
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener botNavBarListener =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.back:
-                            finish();
-                        case R.id.userInfo:
-                            Toast.makeText(ItemInfoActivity.this, item.getTitle(), Toast.LENGTH_LONG).show();
-                            return true;
-                        case R.id.inCart:
-                            Intent intent = new Intent(ItemInfoActivity.this,PaymentActivity.class);
-                            intent.putExtra("bundle",cart);
-                            startActivityForResult(intent,REQUEST_CODE_CART);
-                            return true;
-                        case R.id.order:
-                            Toast.makeText(ItemInfoActivity.this, item.getTitle(), Toast.LENGTH_LONG).show();
-                            return true;
-                        case R.id.logout:
-                            Toast.makeText(ItemInfoActivity.this, item.getTitle(), Toast.LENGTH_LONG).show();
-                            return true;
-                    }
-                    return false;
-                }
-            };
+    private void editClick() {
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AdminItemInfoActivity.this, AdminActivity.class);
+                intent.putExtra("ItemInfo", item);
+                startActivity(intent);
+            }
+        });
+    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if((requestCode==REQUEST_CODE_CART || requestCode==REQUEST_CODE_ITEM) && resultCode == RESULT_OK) {
-            setResult(RESULT_OK);
-            finish();
-        }
-        super.onActivityResult(requestCode, resultCode, data);
+    private void removeClick() {
+        remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                removeItem();
+            }
+        });
     }
 
     @Override
@@ -103,7 +80,24 @@ public class ItemInfoActivity extends AppCompatActivity {
         super.onPause();
         db.removeEventListener(newEvent);
     }
-
+    public void removeItem()
+    {
+        db.child("Items").child(item.getID()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful())
+                {
+                    Toast.makeText(AdminItemInfoActivity.this, "Remove Successfully", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(AdminItemInfoActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
     ValueEventListener newEvent = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -135,8 +129,8 @@ public class ItemInfoActivity extends AppCompatActivity {
                 }
             }
 
-            suggestionAdapter.setItemArrayList(suggestionItemList);
-            suggestionAdapter.notifyDataSetChanged();
+            //suggestionAdapter.setItemArrayList(suggestionItemList);
+            //suggestionAdapter.notifyDataSetChanged();
         }
 
         @Override
@@ -163,7 +157,8 @@ public class ItemInfoActivity extends AppCompatActivity {
         textViewPrice=findViewById(R.id.textViewItemPrice);
         textViewQuantity=findViewById(R.id.textViewItemQuantity);
         textViewDescr=findViewById(R.id.textViewItemDescription);
-        btnAdd=findViewById(R.id.buttonAddToCart);
+        remove = findViewById(R.id.remove_item);
+        edit = findViewById(R.id.edit_item);
     }
 
     private void init(){
@@ -173,52 +168,25 @@ public class ItemInfoActivity extends AppCompatActivity {
         recyclerViewArrayImage.setAdapter(imageAdapter);
         //imageAdapter.notifyDataSetChanged();
 
-        recyclerViewArraySuggestion.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
-        recyclerViewArraySuggestion.setHasFixedSize(true);
-        suggestionItemList = new ArrayList<>();
-        suggestionAdapter = new ItemAdapter(this, suggestionItemList, false);
-        recyclerViewArraySuggestion.setAdapter(suggestionAdapter);
+        //recyclerViewArraySuggestion.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
+        //recyclerViewArraySuggestion.setHasFixedSize(true);
+        //suggestionItemList = new ArrayList<>();
+        //suggestionAdapter = new ItemAdapter(this, suggestionItemList, true);
+        //recyclerViewArraySuggestion.setAdapter(suggestionAdapter);
         //suggestionAdapter.notifyDataSetChanged();
 
         updateItemInfo();
-        btnAdd.setOnClickListener(add);
+
     }
 
     private void updateItemInfo(){
         textViewName.setText(item.getName());
         textViewID.setText(item.getID());
-        textViewCateID.setText(item.getCategoryID());
-        textViewPrice.setText(String.valueOf(item.getPrice())+"VND");
+        textViewCateID.setText(String.valueOf(item.getCategoryID()));
+        textViewPrice.setText(String.valueOf(item.getPrice()));
         textViewQuantity.setText(String.valueOf(item.getQuantity()));
         textViewDescr.setText(item.getDescription());
         imageAdapter.notifyDataSetChanged();
     }
-
-    Button.OnClickListener add = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Toast.makeText(ItemInfoActivity.this,"Add to Cart",Toast.LENGTH_LONG).show();
-            String imageUri="";
-            if (item.getImageArrayList()!=null && item.getImageArrayList().size()>0)
-                imageUri=item.getImageArrayList().get(0);
-            ArrayList<Order_Item> orderItemArrayList = (ArrayList<Order_Item>) cart.getSerializable("orderItems");
-            for(int i=0; i<orderItemArrayList.size();++i) {
-                Order_Item temp = orderItemArrayList.get(i);
-                if (temp.getId().equals(item.getID())) {
-                    temp.setQuantityPurchase(temp.getQuantityPurchase() + 1);
-                    temp.setTotal(temp.getTotal()+item.getPrice());
-                    cart.putSerializable("orderItems",orderItemArrayList);
-                    return;
-                }
-            }
-
-            Order_Item orderItem = new Order_Item(imageUri,item.getID(),item.getName(),item.getQuantity(),1,item.getPrice(),item.getPrice());
-            orderItemArrayList.add(orderItem);
-            cart.putSerializable("orderItems",orderItemArrayList);
-        }
-    };
-
-
-
 
 }

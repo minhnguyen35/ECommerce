@@ -3,6 +3,7 @@ package com.example.ecommerce;
 import java.io.Serializable;
 
 public class Order_Item implements Serializable {
+    private String orderItemID;
     private String itemLogo;
     private String orderId;
     private String id;
@@ -16,20 +17,8 @@ public class Order_Item implements Serializable {
     /****************************************************************************************/
 
 
-
-
-    public Order_Item(String itemLogo, String id, String itemName, int quantity, int quantityPurchase, long price, long total) {
-        this.itemLogo = itemLogo;
-        this.id = id;
-        this.itemName = itemName;
-        this.quantity = quantity;
-        this.quantityPurchase = quantityPurchase;
-        this.price = price;
-        this.total = total;
-    }
-
-
     public Order_Item(String itemLogo, String orderId, String id, String itemName, int quantity, int quantityPurchase, long price, long total) {
+        this.orderItemID = id + "o" + orderId;
         this.itemLogo = itemLogo;
         this.orderId = orderId;
         this.id = id;
@@ -51,20 +40,21 @@ public class Order_Item implements Serializable {
         this.orderId = orderId;
     }
 
+
+    public long getPrice() {
+        return price;
+    }
+
+    public void setPrice(long price) {
+        this.price = price;
+    }
+
     public String getOrderId() {
         return orderId;
     }
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
     public int getQuantityPurchase() {
@@ -100,12 +90,12 @@ public class Order_Item implements Serializable {
         this.itemName = itemName;
     }
 
-    public long getPrice() {
-        return price;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setPrice(long price) {
-        this.price = price;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public long getTotal() {

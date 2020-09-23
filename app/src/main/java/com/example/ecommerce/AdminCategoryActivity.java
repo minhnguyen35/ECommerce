@@ -1,10 +1,8 @@
 package com.example.ecommerce;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,9 +10,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,9 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import static com.example.ecommerce.BranchMenuActivity.cart;
-
-public class MainScreenActivity extends AppCompatActivity {
+public class AdminCategoryActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
@@ -35,55 +32,34 @@ public class MainScreenActivity extends AppCompatActivity {
     private ArrayList<Integer> categoryIDList;
     private String branchID;
     DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-
-    private int REQUEST_CODE_CART = 10000, REQUEST_CODE_ACCOUNT = 20000, REQUEST_CODE_ORDERS = 30000;
-    private int REQUEST_CODE_ITEM = 789;
-
+    private Button addItem;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_screen);
+        setContentView(R.layout.activity_admin_category);
 
+        addNewItem();
         catchIntent();
-
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavBar);
-        bottomNavigationView.setOnNavigationItemSelectedListener(botNavBarListener);
-
         createRecyclerView();
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener botNavBarListener =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()){
-                case R.id.back:
-                    finish();
-                case R.id.userInfo:
-                    Toast.makeText(MainScreenActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
-                    return true;
-                case R.id.inCart:
-                    Intent intent = new Intent(MainScreenActivity.this,PaymentActivity.class);
-                    intent.putExtra("bundle",cart);
-                    startActivityForResult(intent,REQUEST_CODE_CART);
-                    return true;
-                case R.id.order:
-                    Toast.makeText(MainScreenActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
-                    return true;
-                case R.id.logout:
-                    Toast.makeText(MainScreenActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
-                    return true;
-            }
-            return false;
-        }
-    };
-
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if((requestCode==REQUEST_CODE_CART || requestCode==REQUEST_CODE_ITEM ) && resultCode == RESULT_OK) {
-            finish();
-        }
-        super.onActivityResult(requestCode, resultCode, data);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void addNewItem()
+    {
+        addItem = findViewById(R.id.addItem);
+        addItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AdminCategoryActivity.this, AdminAddItemActivity.class);
+                intent.putExtra("branchID", branchID);
+                startActivity(intent);
+            }
+        });
     }
 
     void catchIntent(){
@@ -134,7 +110,7 @@ public class MainScreenActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        db.addListenerForSingleValueEvent(newEvent);
+        db.addValueEventListener(newEvent);
     }
 
     @Override
@@ -148,7 +124,6 @@ public class MainScreenActivity extends AppCompatActivity {
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             categoryArrayList = new ArrayList<>();
             DataSnapshot categoryList = snapshot.child("Category");
-
             for(DataSnapshot cate: categoryList.getChildren())
             {
                 String brID = cate.child("branchID").getValue().toString();
@@ -194,5 +169,3 @@ public class MainScreenActivity extends AppCompatActivity {
         }
     };
 }
-
-
