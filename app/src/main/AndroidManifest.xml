@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -18,6 +20,21 @@
         <activity android:name=".AdminCategoryActivity" />
         <activity android:name=".AdminBranchMenuActivity" />
         <activity android:name=".AdminActivity" />
+        <activity android:name=".ViewUserInfo"
+            android:label="User Info"
+            android:parentActivityName=".ViewUserInfo">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ecommerce.MainMenuActivity" />
+        </activity>
+
+        <activity android:name=".EditUserInfo"
+            android:label="User Info"
+            android:parentActivityName=".EditUserInfo">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ecommerce.MainMenuActivity" />
+        </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -44,8 +61,7 @@
         <activity android:name=".MainMenuActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name=".ViewUserInfo" />
-        <activity android:name=".EditUserInfo" />
+
         <activity android:name=".MainActivity">
 
             <!-- <intent-filter> -->
@@ -56,6 +72,10 @@
             <!-- </intent-filter> -->
 
         </activity>
+
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"/> <!-- optional (needed if default theme has no action bar) -->
+
         <activity android:name=".LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

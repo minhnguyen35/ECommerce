@@ -4,14 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.storage.StorageManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
+import com.squareup.picasso.Target;
 
 import java.io.Serializable;
 
@@ -52,13 +56,12 @@ public class ViewUserInfo extends AppCompatActivity {
     }
 
     private void getData() {
-        Intent intent = getIntent();
-        userID = intent.getStringExtra("account");
-        //Toast.makeText(this,userID,Toast.LENGTH_LONG).show();
+        Intent getAccount = getIntent();
+        userID = getAccount.getStringExtra("account");
     }
 
     private void initBtn() {
-        BtnEdit = findViewById(R.id.btn_edit_info);
+        BtnEdit = (Button) findViewById(R.id.btn_edit_info);
 
         userImage = findViewById(R.id.userImage);
         username = findViewById(R.id.userName);
@@ -74,15 +77,14 @@ public class ViewUserInfo extends AppCompatActivity {
         super.onResume();
         //final String id = "anotheradmin";
 
-        getDataFromDB();
+        getDataFromDB(userID);
     }
-    ProgressDialog loadingBar;
-    private void getDataFromDB() {
+
+    private void getDataFromDB(String account) {
         user = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //User_Info getUser = new User_Info();
-
                 if(snapshot.child("Users").child(userID).exists()){
                     userInfo = snapshot.child("Users").child(userID).child("userInfo").getValue(User_Info.class);
                 }
@@ -112,14 +114,42 @@ public class ViewUserInfo extends AppCompatActivity {
     private void adaptInfo() {
         Picasso.get().load(userInfo.getUserImage()).fit().into(userImage);
         username.setText(userInfo.getUsername());
-        password.setText(userInfo.getPassword());
+        //password.setText(userInfo.getPassword());
+        password.setText("*******");
         phone.setText(userInfo.getPhone());
         mail.setText(userInfo.getMail());
         bankNumber.setText(userInfo.getBankNumber());
         address.setText(userInfo.getAddress());
     }
 
+    private void scaleImage(Bitmap imageBitmap) {
+        if (imageBitmap == null) return;
+
+        int width = imageBitmap.getWidth();
+        int height = imageBitmap.getHeight();
+
+        float boundingX = userImage.getWidth();
+        float boundingY = userImage.getHeight();
+
+        // Determine how much to scale: the dimension requiring less scaling is
+        // closer to the its side. This way the image always stays inside your
+        // bounding box AND either x/y axis touches it.
+        float xScale = boundingX / width;
+        float yScale = boundingY / height;
+        float scale = (xScale <= yScale) ? xScale : yScale;
+
+        // Create a matrix for the scaling and add the scaling data
+        Matrix matrix = new Matrix();
+        matrix.postScale(scale, scale);
+
+        // Create a new bitmap and convert it to a format understood by the ImageView
+        Bitmap scaledBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, width, height, matrix, true);
+        userImage.setImageBitmap(scaledBitmap);
+
+    }
+
     private void clickEdit() {
+        BtnEdit = (Button) findViewById(R.id.btn_edit_info);
         BtnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
