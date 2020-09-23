@@ -1,6 +1,7 @@
 package com.example.ecommerce;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,6 +25,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+
+import static com.example.ecommerce.BranchMenuActivity.cart;
 
 public class ItemInfoActivity extends AppCompatActivity {
     Item item;
@@ -37,49 +41,55 @@ public class ItemInfoActivity extends AppCompatActivity {
     private String categoryID;
     DatabaseReference db = FirebaseDatabase.getInstance().getReference();
 
+    private int REQUEST_CODE_CART = 10000, REQUEST_CODE_ACCOUNT = 20000, REQUEST_CODE_ORDERS = 30000;
+    private int REQUEST_CODE_ITEM = 789;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_info);
 
-        Toolbar toolbar = findViewById(R.id.appToolbar);
-        setSupportActionBar(toolbar);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavBar);
+        bottomNavigationView.setOnNavigationItemSelectedListener(botNavBarListener);
 
         mapping();
         catchIntent();
         init();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main,menu);
-        return super.onCreateOptionsMenu(menu);
-    }
+    private BottomNavigationView.OnNavigationItemSelectedListener botNavBarListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.back:
+                            finish();
+                        case R.id.userInfo:
+                            Toast.makeText(ItemInfoActivity.this, item.getTitle(), Toast.LENGTH_LONG).show();
+                            return true;
+                        case R.id.inCart:
+                            Intent intent = new Intent(ItemInfoActivity.this,PaymentActivity.class);
+                            intent.putExtra("bundle",cart);
+                            startActivityForResult(intent,REQUEST_CODE_CART);
+                            return true;
+                        case R.id.order:
+                            Toast.makeText(ItemInfoActivity.this, item.getTitle(), Toast.LENGTH_LONG).show();
+                            return true;
+                        case R.id.logout:
+                            Toast.makeText(ItemInfoActivity.this, item.getTitle(), Toast.LENGTH_LONG).show();
+                            return true;
+                    }
+                    return false;
+                }
+            };
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.userInfo:
-                //todo: please intent here
-
-                /*
-                Intent intent = new Intent(MainMenuActivity.this, HomeActivity.class);
-                startActivity(intent);
-                */
-                Toast.makeText(ItemInfoActivity.this,item.getTitle(),Toast.LENGTH_LONG);
-                return true;
-            case R.id.inCart:
-                Toast.makeText(ItemInfoActivity.this,item.getTitle(),Toast.LENGTH_LONG);
-                return true;
-            case R.id.order:
-                Toast.makeText(ItemInfoActivity.this,item.getTitle(),Toast.LENGTH_LONG);
-                return true;
-            case R.id.logout:
-                Toast.makeText(ItemInfoActivity.this,item.getTitle(),Toast.LENGTH_LONG);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if((requestCode==REQUEST_CODE_CART || requestCode==REQUEST_CODE_ITEM) && resultCode == RESULT_OK) {
+            setResult(RESULT_OK);
+            finish();
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -177,16 +187,34 @@ public class ItemInfoActivity extends AppCompatActivity {
     private void updateItemInfo(){
         textViewName.setText(item.getName());
         textViewID.setText(item.getID());
-        textViewCateID.setText(String.valueOf(item.getCategoryID()));
-        textViewPrice.setText(String.valueOf(item.getPrice()));
+        textViewCateID.setText(item.getCategoryID());
+        textViewPrice.setText(String.valueOf(item.getPrice())+"VND");
         textViewQuantity.setText(String.valueOf(item.getQuantity()));
         textViewDescr.setText(item.getDescription());
         imageAdapter.notifyDataSetChanged();
     }
+
     Button.OnClickListener add = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             Toast.makeText(ItemInfoActivity.this,"Add to Cart",Toast.LENGTH_LONG).show();
+            String imageUri="";
+            if (item.getImageArrayList()!=null && item.getImageArrayList().size()>0)
+                imageUri=item.getImageArrayList().get(0);
+            ArrayList<Order_Item> orderItemArrayList = (ArrayList<Order_Item>) cart.getSerializable("orderItems");
+            for(int i=0; i<orderItemArrayList.size();++i) {
+                Order_Item temp = orderItemArrayList.get(i);
+                if (temp.getId().equals(item.getID())) {
+                    temp.setQuantityPurchase(temp.getQuantityPurchase() + 1);
+                    temp.setTotal(temp.getTotal()+item.getPrice());
+                    cart.putSerializable("orderItems",orderItemArrayList);
+                    return;
+                }
+            }
+
+            Order_Item orderItem = new Order_Item(imageUri,item.getID(),item.getName(),item.getQuantity(),1,item.getPrice(),item.getPrice());
+            orderItemArrayList.add(orderItem);
+            cart.putSerializable("orderItems",orderItemArrayList);
         }
     };
 

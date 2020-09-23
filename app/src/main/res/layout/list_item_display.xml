@@ -20,7 +20,7 @@
             android:layout_height="match_parent"
             android:text="  CATEGORY"
             android:textSize="20sp"
-            android:textColor="#12DCDC"
+            android:textColor="#FFFFFF"
             android:textStyle="italic|bold"
             android:gravity="center_vertical"
             android:layout_marginLeft="10dp"

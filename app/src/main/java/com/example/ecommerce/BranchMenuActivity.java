@@ -1,6 +1,7 @@
 package com.example.ecommerce;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -25,6 +26,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,52 +50,49 @@ public class BranchMenuActivity extends AppCompatActivity {
     DatabaseReference db = FirebaseDatabase.getInstance().getReference();
 
     private final int PERMISSION_REQUEST_CODE = 12345;
+    private int REQUEST_CODE_CART = 10000, REQUEST_CODE_ACCOUNT = 20000, REQUEST_CODE_ORDERS = 30000;
+    private int REQUEST_CODE_CATEGORY = 456;
+
+    public static Bundle cart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_branch_menu);
 
-        Toolbar toolbar = findViewById(R.id.appToolbar);
-        setSupportActionBar(toolbar);
-
         catchIntent();
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavBar);
+        bottomNavigationView.setOnNavigationItemSelectedListener(botNavBarListener);
+
         mapping();
         createRecyclerView();
         createListener();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main,menu);
-        return super.onCreateOptionsMenu(menu);
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.userInfo:
-                //todo: please intent here
-
-                /*
-                Intent intent = new Intent(MainMenuActivity.this, HomeActivity.class);
-                startActivity(intent);
-                */
-                Toast.makeText(BranchMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG);
-                return true;
-            case R.id.inCart:
-                Toast.makeText(BranchMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG);
-                return true;
-            case R.id.order:
-                Toast.makeText(BranchMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG);
-                return true;
-            case R.id.logout:
-                Toast.makeText(BranchMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+    private BottomNavigationView.OnNavigationItemSelectedListener botNavBarListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.back:
+                            finish();
+                        case R.id.userInfo:
+                            Toast.makeText(BranchMenuActivity.this, item.getTitle(), Toast.LENGTH_LONG).show();
+                            return true;
+                        case R.id.inCart:
+                            return true;
+                        case R.id.order:
+                            Toast.makeText(BranchMenuActivity.this, item.getTitle(), Toast.LENGTH_LONG).show();
+                            return true;
+                        case R.id.logout:
+                            Toast.makeText(BranchMenuActivity.this, item.getTitle(), Toast.LENGTH_LONG).show();
+                            return true;
+                    }
+                    return false;
+                }
+            };
 
 
     void mapping() {
@@ -241,6 +240,8 @@ public class BranchMenuActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         db.addValueEventListener(newEvent);
+        cart = new Bundle();
+        cart.putSerializable("orderItems",new ArrayList<Order_Item>());
     }
 
     @Override

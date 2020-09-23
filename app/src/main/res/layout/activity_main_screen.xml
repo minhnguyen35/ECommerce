@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".MainScreenActivity"
     >
-
-
-    <include layout="@layout/toolbar"
-        android:id="@+id/appToolbar"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,6 +13,9 @@
         android:orientation="horizontal"
         android:weightSum="10"
         android:background="#F1F3F0"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/llmainscreentop"
         >
         <androidx.appcompat.widget.SearchView
             android:layout_width="0dp"
@@ -39,8 +37,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/listCategory"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/llmainscreentop"
+        android:layout_marginTop="0dp"
+        android:layout_above="@+id/bottomNavBar"
+        android:layout_marginBottom="0dp"
         />
 
 
 
-</LinearLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:menu="@menu/menu_main"
+        android:layout_alignParentBottom="true"
+        android:background="?android:attr/windowBackground"
+        app:itemIconTint="#3EA1AE"
+        app:labelVisibilityMode="labeled"
+        />
+</RelativeLayout>

@@ -1,5 +1,6 @@
 package com.example.ecommerce;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
@@ -20,9 +21,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import static com.example.ecommerce.BranchMenuActivity.cart;
+
 public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder> {
-    Context context;
-    ArrayList<Branch> branchArrayList;
+    private Context context;
+    private ArrayList<Branch> branchArrayList;
 
     public BranchAdapter(Context context, ArrayList<Branch> branchArrayList) {
         this.context = context;
@@ -64,6 +67,7 @@ public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder
                 Intent intent = new Intent(context,MainScreenActivity.class);
                 intent.putExtra("category",branchArrayList.get(position).getCategoryArrayList());
                 intent.putExtra("branchID",branchArrayList.get(position).getBranchID());
+                cart.putSerializable("branch",branchArrayList.get(position));
                 context.startActivity(intent);
             }
         });

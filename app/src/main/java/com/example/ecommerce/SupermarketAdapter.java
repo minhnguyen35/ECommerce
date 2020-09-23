@@ -41,8 +41,12 @@ public class SupermarketAdapter extends RecyclerView.Adapter<SupermarketAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        if(supermarketArrayList.get(position).getLogo()!="")
-            Picasso.get().load(Uri.parse(supermarketArrayList.get(position).getLogo())).into(holder.imageView);
+        String logo = supermarketArrayList.get(position).getLogo();
+        if(logo!=null && logo!="")
+            Picasso.get().load(Uri.parse(logo)).into(holder.imageView);
+        else if (supermarketArrayList.get(position).getSupermarketID().equals("-1"))
+            holder.imageView.setImageResource(R.drawable.logo);
+        else holder.imageView.setImageResource(R.drawable.noimage);
         holder.textView.setText(supermarketArrayList.get(position).getName());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

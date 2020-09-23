@@ -3,8 +3,7 @@ package com.example.ecommerce;
 import java.util.ArrayList;
 
 public class User_Order {
-    private String superMarketLogo;
-    private String id;
+    private String id; //order id
     private String superMarketName;
     private String date;
     private int checkOutType; /* 1 for COD, 2 for Bank */
@@ -17,8 +16,7 @@ public class User_Order {
     /****************************************************************************************/
 
 
-    public User_Order(String superMarketLogo, String id, String superMarketName, String date, int checkOutType, int shipType, long total, boolean status, ArrayList<Order_Item> itemArrayList) {
-        this.superMarketLogo = superMarketLogo;
+    public User_Order(String id, String superMarketName, String date, int checkOutType, int shipType, long total, boolean status, ArrayList<Order_Item> itemArrayList) {
         this.id = id;
         this.superMarketName = superMarketName;
         this.date = date;
@@ -34,13 +32,7 @@ public class User_Order {
         itemArrayList.add(newItem);
     }
 
-    public String getSuperMarketLogo() {
-        return superMarketLogo;
-    }
 
-    public void setSuperMarketLogo(String superMarketLogo) {
-        this.superMarketLogo = superMarketLogo;
-    }
 
     public String getId() {
         return id;

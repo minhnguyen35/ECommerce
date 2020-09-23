@@ -1,12 +1,15 @@
 package com.example.ecommerce;
 
-public class Order_Item {
+import java.io.Serializable;
+
+public class Order_Item implements Serializable {
     private String itemLogo;
     private String orderId;
     private String id;
     private String itemName;
     private int quantity;
     private int quantityPurchase;
+    private long price;
     private long total;
 
 
@@ -15,24 +18,37 @@ public class Order_Item {
 
 
 
-    public Order_Item(String itemLogo, String id, String itemName, int quantity, int quantityPurchase, long total) {
+    public Order_Item(String itemLogo, String id, String itemName, int quantity, int quantityPurchase, long price, long total) {
         this.itemLogo = itemLogo;
         this.id = id;
         this.itemName = itemName;
         this.quantity = quantity;
         this.quantityPurchase = quantityPurchase;
+        this.price = price;
         this.total = total;
     }
 
 
-    public Order_Item(String itemLogo, String orderId, String id, String itemName, int quantity, int quantityPurchase, long total) {
+    public Order_Item(String itemLogo, String orderId, String id, String itemName, int quantity, int quantityPurchase, long price, long total) {
         this.itemLogo = itemLogo;
         this.orderId = orderId;
         this.id = id;
         this.itemName = itemName;
         this.quantity = quantity;
         this.quantityPurchase = quantityPurchase;
+        this.price = price;
         this.total = total;
+    }
+
+    public Order_Item(Order_Item item, String orderId){
+        this.itemLogo = item.itemLogo;
+        this.id = item.id;
+        this.itemName = item.itemName;
+        this.quantity = item.quantity;
+        this.quantityPurchase = item.quantityPurchase;
+        this.price = item.price;
+        this.total = item.total;
+        this.orderId = orderId;
     }
 
     public String getOrderId() {
@@ -41,6 +57,14 @@ public class Order_Item {
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public int getQuantityPurchase() {
@@ -76,12 +100,12 @@ public class Order_Item {
         this.itemName = itemName;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public long getPrice() {
+        return price;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setPrice(long price) {
+        this.price = price;
     }
 
     public long getTotal() {

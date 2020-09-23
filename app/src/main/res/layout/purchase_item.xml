@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="10dp"
+    android:background="#FBF9F5"
+    android:layout_margin="5dp"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        >
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:id="@+id/orderItemImage"
+            android:src="@mipmap/ic_launcher"
+            android:layout_margin="10dp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tên sản phảm nè , nó có thể rất là dài ơi là dài nên tui sẽ cắt nó"
+                android:textSize="19sp"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:id="@+id/orderItemName"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0 đồng"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                android:id="@+id/orderItemPrice"
+                android:gravity="end"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="5dp"
+                >
+                <Button
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:text="+"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:id="@+id/orderMoreButton"
+                    android:layout_weight="2"
+                    />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="0"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:id="@+id/orderItemQuantity"
+                    android:layout_weight="5"
+                    android:background="#F8F1F8"
+                    />
+
+                <Button
+                    android:layout_marginRight="15dp"
+                    android:id="@+id/orderLessButton"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:text="-"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:layout_weight="2"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total"
+                    android:textSize="18sp"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0 VND"
+                    android:textSize="18sp"
+                    android:textStyle="italic"
+                    android:id="@+id/orderItemTotalPrice"
+                    android:gravity="end"
+                    />
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

@@ -6,32 +6,17 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.database.DataSetObserver;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.renderscript.Sampler;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -46,8 +31,9 @@ public class MainMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-        Toolbar toolbar = findViewById(R.id.appToolbar);
-        setSupportActionBar(toolbar);
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavBar);
+        bottomNavigationView.setOnNavigationItemSelectedListener(botNavBarListener);
 
         mapping();
         initSupermarketList();
@@ -55,37 +41,29 @@ public class MainMenuActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main,menu);
-        return super.onCreateOptionsMenu(menu);
-    }
+    private BottomNavigationView.OnNavigationItemSelectedListener botNavBarListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()){
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.userInfo:
-                //todo: please intent here
-
-                /*
-                Intent intent = new Intent(MainMenuActivity.this, HomeActivity.class);
-                startActivity(intent);
-                */
-                Toast.makeText(MainMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG);
-                return true;
-            case R.id.inCart:
-                Toast.makeText(MainMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG);
-                return true;
-            case R.id.order:
-                Toast.makeText(MainMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG);
-                return true;
-            case R.id.logout:
-                Toast.makeText(MainMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+                case R.id.userInfo:
+                    Toast.makeText(MainMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
+                    return true;
+                case R.id.inCart:
+                    Toast.makeText(MainMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
+                    return true;
+                case R.id.order:
+                    Toast.makeText(MainMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
+                    return true;
+                case R.id.logout:
+                    Toast.makeText(MainMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
+                    return true;
+            }
+            return false;
         }
-    }
+    };
+
 
     ValueEventListener newEvent = new ValueEventListener() {
         @Override
