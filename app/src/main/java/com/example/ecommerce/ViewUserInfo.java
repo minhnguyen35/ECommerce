@@ -125,7 +125,7 @@ public class ViewUserInfo extends AppCompatActivity {
 
 
     private void adaptInfo() {
-        Picasso.get().load(userInfo.getUserImage()).fit().into(userImage);
+        if (userInfo.getUserImage().contains("https://firebasestorage.googleapis.com/") == true) Picasso.get().load(userInfo.getUserImage()).fit().into(userImage);
         username.setText(userInfo.getUsername());
         //password.setText(userInfo.getPassword());
         password.setText("*******");
