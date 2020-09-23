@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import static android.widget.Toast.LENGTH_LONG;
 import static com.example.ecommerce.R.color.colorStatus_finished;
 import static com.example.ecommerce.R.color.colorStatus_processing;
+import static com.example.ecommerce.R.color.colorTrans;
+import static com.example.ecommerce.R.color.colorWord;
 
 public class ViewUserOrder_Adapter extends BaseAdapter {
 
@@ -103,10 +105,12 @@ public class ViewUserOrder_Adapter extends BaseAdapter {
         if (userOrder.isStatus()) {
             holder.status.setText("Finished");
             holder.status.setBackgroundColor(ContextCompat.getColor(context.getApplicationContext(), colorStatus_finished));
+            holder.status.setTextColor(ContextCompat.getColor(context.getApplicationContext(), colorStatus_processing));
         }
         else {
             holder.status.setText("Processing");
             holder.status.setBackgroundColor(ContextCompat.getColor(context.getApplicationContext(), colorStatus_processing));
+            holder.status.setTextColor(ContextCompat.getColor(context.getApplicationContext(), colorWord));
         }
 
         /*LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

@@ -3,7 +3,7 @@
     <color name="colorPrimary">#536DFE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
-    <color name="colorStatus_finished">#8069F0B1</color>
+    <color name="colorStatus_finished">#0069F0B1</color>
     <color name="colorStatus_processing">#FF9100</color>
     <color name="colorWord">#EEFF41</color>
 </resources>

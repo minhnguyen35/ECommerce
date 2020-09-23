@@ -100,11 +100,13 @@
         android:layout_height="35dp"
         android:layout_toRightOf="@id/supermarketName"
         android:gravity="center"
+        android:background="#0069F0B1"
         android:text="Finished/ Process"
-        android:background="@color/colorStatus_finished"
-        android:textColor="@color/colorWord"
+        android:textColor="@color/colorStatus_processing"
         />
 
+            <!--android:background="@color/colorStatus_finished"
+        android:textColor="#FF9100"-->
     <TextView
         android:id="@+id/dtotal"
         android:layout_width="80dp"
