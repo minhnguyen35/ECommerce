@@ -17,7 +17,7 @@ public class User_Order {
     public User_Order()
     {}
 
-    public User_Order(String id, String superMarketName, String date, int checkOutType, int shipType, long total, boolean status, ArrayList<Order_Item> itemArrayList) {
+    public User_Order(String id, String superMarketName, String date, int checkOutType, int shipType, long total, boolean status, String account) {
         this.id = id;
         this.supermarketName = superMarketName;
         this.date = date;

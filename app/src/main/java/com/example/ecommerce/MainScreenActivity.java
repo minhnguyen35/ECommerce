@@ -115,7 +115,7 @@ public class MainScreenActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         categoryArrayList = new ArrayList<>();
-        adapter=new CategoryAdapter(this,categoryArrayList);
+        adapter=new CategoryAdapter(this,categoryArrayList, false);
         recyclerView.setAdapter(adapter);
     }
 
