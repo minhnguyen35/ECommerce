@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import static android.widget.Toast.LENGTH_LONG;
 import static com.example.ecommerce.R.color.colorStatus_finished;
 import static com.example.ecommerce.R.color.colorStatus_processing;
-import static com.example.ecommerce.R.color.colorTrans;
+
 import static com.example.ecommerce.R.color.colorWord;
 
 public class ViewUserOrder_Adapter extends BaseAdapter {

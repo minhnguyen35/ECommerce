@@ -32,6 +32,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
+import static com.example.ecommerce.MainMenuActivity.acc;
+
 public class PaymentActivity extends AppCompatActivity {
 
     private RadioGroup payGroup, receiveGroup;
@@ -277,18 +279,13 @@ public class PaymentActivity extends AppCompatActivity {
             }
 
 
-//            if(!updateItem(orderItemArrayList)) {
-//                getOrderItem(orderItemArrayList);
-//                return;
-//            }
-//run lại đi animation van hoi bi kia
-            // teaam view hồi chiều xong emulator nó lag
+
             Date calendar = Calendar.getInstance().getTime();
             String date=calendar.toString();
-
+            long timeCurrent = System.currentTimeMillis();
             String name = branch.getName()+" "+branch.getAddress();
-            String id = branch.getSupermarketID()+branch.getBranchID()+date;
-            User_Order userOrder = new User_Order(id,name,date,COD,take,total,false,orderItemArrayList);
+            String id = branch.getSupermarketID() + branch.getBranchID()+String.valueOf(timeCurrent);
+            User_Order userOrder = new User_Order(id,name,date,COD,take,total,false, acc);
             initListener(userOrder);
             db.addListenerForSingleValueEvent(checkItem);
             if(!isValidOrder) {
@@ -296,7 +293,7 @@ public class PaymentActivity extends AppCompatActivity {
                 db.removeEventListener(checkItem);
                 setResult(RESULT_OK);
                 finish();
-                // nãy có bug UIthi t keu m coi cho nay nay// chac bi cho ỏder
+
             }
 
 //
