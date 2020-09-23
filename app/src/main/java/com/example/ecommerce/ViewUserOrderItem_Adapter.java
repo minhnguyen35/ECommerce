@@ -2,6 +2,7 @@ package com.example.ecommerce;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,12 +31,12 @@ public class ViewUserOrderItem_Adapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        return userOrderItemList.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return null;
+        return userOrderItemList.get(i);
     }
 
     @Override
@@ -76,12 +77,15 @@ public class ViewUserOrderItem_Adapter extends BaseAdapter {
         else {
             holder = (userOrderItemViewHolder) view.getTag();
         }
-
-
+        //"https://firebasestorage.googleapis.com/v0/b/eco..."?cai link hinh nhu vay a
+        //lai nao
         Order_Item userOrderItem = userOrderItemList.get(i);
 
+        //String testLogo = "https://firebasestorage.googleapis.com/v0/b/ecommerce-c3c8f.appspot.com/o/Users%2Fanotheradmin%2Fcropped889999813765955468.jpg.jpg?alt=media&token=f9c7702b-1f2e-498a-9a59-ca8527e00b14";
 
         Picasso.get().load(userOrderItem.getItemLogo()).fit().into(holder.itemImage);
+        //Picasso.get().load(Uri.parse(supermarketArrayList.get(position).getLogo())).into(holder.imageView);
+        //Picasso.get().load(testLogo).fit().into(holder.itemImage);
         holder.itemID.setText(userOrderItem.getId());
         holder.itemName.setText(userOrderItem.getItemName());
         holder.itemQuantity.setText(Integer.toString(userOrderItem.getQuantityPurchase()));

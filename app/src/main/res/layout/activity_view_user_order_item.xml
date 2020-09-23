@@ -51,7 +51,7 @@
         android:id="@+id/orderItemList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/dototal"
+        android:layout_marginBottom="95dp"
         />
 
 
