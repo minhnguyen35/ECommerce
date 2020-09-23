@@ -4,15 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.storage.StorageManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +46,10 @@ public class ViewUserInfo extends AppCompatActivity {
     private TextView mail;
     private TextView bankNumber;
     private TextView address;
+    private Button BtnCheck;
+    private Dialog PopUpCheck;
+    private EditText passCheck;
+
     final DatabaseReference db = FirebaseDatabase.getInstance().getReference();
     ValueEventListener user;
 
@@ -158,13 +166,38 @@ public class ViewUserInfo extends AppCompatActivity {
         BtnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent2 = new Intent(ViewUserInfo.this, EditUserInfo.class);
-                intent2.putExtra("userID", userID);
-                intent2.putExtra("userInfoCurrent", userInfo);
-                startActivity(intent2);
-                //startActivityForResult(intent2, 1);
+
+                verifyPassword();
             }
         });
+    }
+
+    private void verifyPassword() {
+        PopUpCheck = new Dialog(this);
+        PopUpCheck.setContentView(R.layout.dialog_check_password);
+        passCheck = PopUpCheck.findViewById(R.id.passCheck);
+        BtnCheck = PopUpCheck.findViewById(R.id.btn_check_pass);
+
+        BtnCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopUpCheck.dismiss();
+                if (passCheck.getText().toString().compareTo(userInfo.getPassword()) == 0) viewEditInfo();
+                else Toast.makeText(ViewUserInfo.this, "Incorrect password !", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        PopUpCheck.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        PopUpCheck.show();
+
+    }
+
+    private void viewEditInfo() {
+        Intent intent2 = new Intent(ViewUserInfo.this, EditUserInfo.class);
+        intent2.putExtra("userID", userID);
+        intent2.putExtra("userInfoCurrent", userInfo);
+        startActivity(intent2);
+        //startActivityForResult(intent2, 1);
     }
 
 
