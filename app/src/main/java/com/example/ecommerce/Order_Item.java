@@ -1,10 +1,12 @@
 package com.example.ecommerce;
 
-public class Order_Item {
+import java.io.Serializable;
+
+public class Order_Item implements Serializable {
     private String orderItemID;
     private String itemLogo;
     private String orderId;
-    private String id;
+    private String itemID;
     private String itemName;
     private int quantity;
     private int quantityPurchase;
@@ -14,13 +16,13 @@ public class Order_Item {
 
     /****************************************************************************************/
 
-    public Order_Item()
-    {}
+    public Order_Item() {}
+
     public Order_Item(String itemLogo, String orderId, String id, String itemName, int quantity, int quantityPurchase, long price, long total) {
         this.orderItemID = id + "o" + orderId;
         this.itemLogo = itemLogo;
         this.orderId = orderId;
-        this.id = id;
+        this.itemID = id;
         this.itemName = itemName;
         this.quantity = quantity;
         this.quantityPurchase = quantityPurchase;
@@ -30,7 +32,7 @@ public class Order_Item {
 
     public Order_Item(Order_Item item, String orderId){
         this.itemLogo = item.itemLogo;
-        this.id = item.id;
+        this.itemID = item.itemID;
         this.itemName = item.itemName;
         this.quantity = item.quantity;
         this.quantityPurchase = item.quantityPurchase;
@@ -74,11 +76,11 @@ public class Order_Item {
     }
 
     public String getId() {
-        return id;
+        return itemID;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.itemID = id;
     }
 
     public String getItemName() {
