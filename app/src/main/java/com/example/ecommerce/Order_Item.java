@@ -1,6 +1,8 @@
 package com.example.ecommerce;
 
-public class Order_Item {
+import java.io.Serializable;
+
+public class Order_Item implements Serializable {
     private String orderItemID;
     private String itemLogo;
     private String orderId;
@@ -14,8 +16,8 @@ public class Order_Item {
 
     /****************************************************************************************/
 
-    public Order_Item()
-    {}
+    public Order_Item() {}
+
     public Order_Item(String itemLogo, String orderId, String id, String itemName, int quantity, int quantityPurchase, long price, long total) {
         this.orderItemID = id + "o" + orderId;
         this.itemLogo = itemLogo;
@@ -26,6 +28,17 @@ public class Order_Item {
         this.quantityPurchase = quantityPurchase;
         this.price = price;
         this.total = total;
+    }
+
+    public Order_Item(Order_Item item, String orderId){
+        this.itemLogo = item.itemLogo;
+        this.itemID = item.itemID;
+        this.itemName = item.itemName;
+        this.quantity = item.quantity;
+        this.quantityPurchase = item.quantityPurchase;
+        this.price = item.price;
+        this.total = item.total;
+        this.orderId = orderId;
     }
 
 

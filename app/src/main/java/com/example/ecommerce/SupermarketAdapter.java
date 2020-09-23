@@ -1,5 +1,6 @@
 package com.example.ecommerce;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
@@ -23,8 +24,9 @@ import java.util.ArrayList;
 
 public class SupermarketAdapter extends RecyclerView.Adapter<SupermarketAdapter.ViewHolder> {
 
-    Context context;
-    ArrayList<Supermarket> supermarketArrayList;
+    private Context context;
+    private ArrayList<Supermarket> supermarketArrayList;
+    private final int REQUEST_CODE_BRANCH = 123;
 
     public SupermarketAdapter(Context context, ArrayList<Supermarket> supermarketArrayList) {
         this.context = context;
@@ -41,8 +43,12 @@ public class SupermarketAdapter extends RecyclerView.Adapter<SupermarketAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        if(supermarketArrayList.get(position).getLogo()!="")
-            Picasso.get().load(Uri.parse(supermarketArrayList.get(position).getLogo())).into(holder.imageView);
+        String logo = supermarketArrayList.get(position).getLogo();
+        if(logo!=null && logo!="")
+            Picasso.get().load(Uri.parse(logo)).into(holder.imageView);
+        else if (supermarketArrayList.get(position).getSupermarketID().equals("-1"))
+            holder.imageView.setImageResource(R.drawable.logo);
+        else holder.imageView.setImageResource(R.drawable.noimage);
         holder.textView.setText(supermarketArrayList.get(position).getName());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -50,7 +56,7 @@ public class SupermarketAdapter extends RecyclerView.Adapter<SupermarketAdapter.
             public void onClick(View view) {
                 Intent intent = new Intent(context,BranchMenuActivity.class);
                 intent.putExtra("supermarketID",supermarketArrayList.get(position).getSupermarketID());
-                context.startActivity(intent);
+                ((Activity)context).startActivityForResult(intent,REQUEST_CODE_BRANCH);
             }
         });
     }

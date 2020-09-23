@@ -3,8 +3,7 @@ package com.example.ecommerce;
 import java.util.ArrayList;
 
 public class User_Order {
-    //private String superMarketLogo;
-    private String id;
+    private String id; //order id
     private String supermarketName;
     private String date;
     private int checkOutType; /* 1 for COD, 2 for Bank */
@@ -12,16 +11,13 @@ public class User_Order {
     private long total;
     private boolean status;
     private String account;
-    //private ArrayList<Order_Item> itemArrayList;
 
     /****************************************************************************************/
 
     public User_Order()
     {}
 
-    public User_Order(String id, String superMarketName, String date, int checkOutType, int shipType, long total, boolean status, String account) {
-        /*String superMarketLogo,*/
-        //this.superMarketLogo = superMarketLogo;
+    public User_Order(String id, String superMarketName, String date, int checkOutType, int shipType, long total, boolean status, ArrayList<Order_Item> itemArrayList) {
         this.id = id;
         this.supermarketName = superMarketName;
         this.date = date;
@@ -40,17 +36,8 @@ public class User_Order {
         this.account = account;
     }
 
-    /*public void addItem(Order_Item newItem){
-        itemArrayList.add(newItem);
-    }
 
-    public String getSuperMarketLogo() {
-        return superMarketLogo;
-    }
 
-    public void setSuperMarketLogo(String superMarketLogo) {
-        this.superMarketLogo = superMarketLogo;
-    }*/
 
     public String getId() {
         return id;
@@ -107,12 +94,4 @@ public class User_Order {
     public void setStatus(boolean status) {
         this.status = status;
     }
-    /*
-    public ArrayList<Order_Item> getItemArrayList() {
-        return itemArrayList;
-    }
-
-    public void setItemArrayList(ArrayList<Order_Item> itemArrayList) {
-        this.itemArrayList = itemArrayList;
-    }*/
 }

@@ -40,7 +40,5 @@
             android:layout_marginRight="10dp"
             android:id="@+id/textViewSupermarketName"/>
 
-
-
     </LinearLayout>
 </androidx.cardview.widget.CardView>
