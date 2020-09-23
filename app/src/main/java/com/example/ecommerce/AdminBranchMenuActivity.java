@@ -49,6 +49,7 @@ public class AdminBranchMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin_branch_menu);
         catchIntent();
         mapping();
+        addBranch();
         createRecyclerView();
         createListener();
     }
@@ -82,13 +83,14 @@ public class AdminBranchMenuActivity extends AppCompatActivity {
     }
     void addBranch()
     {
-//        button_branch.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent addBranchIntent = new Intent(this, AddBranchActivity.class);
-//                startActivity(addBranchIntent);
-//            }
-//        });
+        button_branch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent addBranchIntent = new Intent(AdminBranchMenuActivity.this, AdminAddBranchActivity.class);
+                addBranchIntent.putExtra("supID", supermarketID);
+                startActivity(addBranchIntent);
+            }
+        });
     }
     private boolean checkPermisson() {
         if (ContextCompat.checkSelfPermission(

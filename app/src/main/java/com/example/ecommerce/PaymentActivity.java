@@ -193,39 +193,47 @@ public class PaymentActivity extends AppCompatActivity {
             calculateTotal();
         }
     };
+    boolean isEveryThingOk;
     private boolean doTransaction(User_Order newOrd, final ArrayList<Integer> listQuant)
     {
-        for(int i = 0; i < orderItemArrayList.size(); i++) {
-
-            final String id = orderItemArrayList.get(i).getId();
-            final int cnt = i;
-            final Order_Item curItem = orderItemArrayList.get(i);
-            final DatabaseReference itemObject = db.child("Items").child(id);
-            if(itemObject != null) {
-                itemObject.runTransaction(new Transaction.Handler() {
-                    @NonNull
-                    @Override
-                    public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+        isEveryThingOk = false;
+        final DatabaseReference itemObject = db.child("Items");
+        if(itemObject != null) {
+            itemObject.runTransaction(new Transaction.Handler() {
+                @NonNull
+                @Override
+                public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                    for(int i = 0; i < orderItemArrayList.size(); i++) {
+                        final String id = orderItemArrayList.get(i).getId();
+                        if(currentData.child(id) == null)
+                        {
+                            isValidOrder = false;
+                            return Transaction.abort();
+                        }
+                        final int cnt = i;
+                        final Order_Item curItem = orderItemArrayList.get(i);
                         currentData.child("quantity").setValue(listQuant.get(cnt));
-
-                        return Transaction.success(currentData);
                     }
+                    return Transaction.success(currentData);
+                }
 
-                    @Override
-                    public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-
+                @Override
+                public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                    if(error == null && committed && isValidOrder)
+                    {
+                        isEveryThingOk = true;
                     }
-                });
-
-            }
-            else{
-                Toast.makeText(PaymentActivity.this, "Item " + id + " is out of stocks!", Toast.LENGTH_LONG).show();
-                break;
-            }
+                }
+            });
 
         }
+        else{
 
-            for(int i = 0; i < orderItemArrayList.size(); i++){
+            isValidOrder = false;
+        }
+
+        if(isEveryThingOk) {
+            for (int i = 0; i < orderItemArrayList.size(); i++) {
                 Order_Item curItem = orderItemArrayList.get(i);
                 String idOrdItem = newOrd.getId() + curItem.getId();
                 HashMap<String, Object> newOrdItem = new HashMap<>();
@@ -241,12 +249,12 @@ public class PaymentActivity extends AppCompatActivity {
                 db.child("OrderItem").child(idOrdItem).updateChildren(newOrdItem).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        if(cnt == orderItemArrayList.size() - 1)
+                        if (cnt == orderItemArrayList.size() - 1)
                             Toast.makeText(PaymentActivity.this, "Your Order is Success", Toast.LENGTH_LONG).show();
                     }
                 });
 
-             }
+            }
             db.child("Orders").child(newOrd.getId()).setValue(newOrd).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
@@ -254,9 +262,9 @@ public class PaymentActivity extends AppCompatActivity {
                 }
             });
 
+        }
 
-
-        return true;
+        return isEveryThingOk;
     }
     private Button.OnClickListener confirmHelper = new View.OnClickListener() {
         @Override

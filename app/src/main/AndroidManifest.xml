@@ -5,8 +5,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -15,37 +15,39 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PaymentActivity"></activity>
-        <activity android:name=".AdminAddItemActivity"></activity>
+        <activity android:name=".AdminAddBranchActivity"></activity>
+        <activity android:name=".PaymentActivity" />
+        <activity android:name=".AdminAddItemActivity" />
         <activity android:name=".AdminItemInfoActivity" />
         <activity android:name=".AdminCategoryActivity" />
         <activity android:name=".AdminBranchMenuActivity" />
         <activity android:name=".AdminActivity" />
-        <activity android:name=".ViewUserInfo"
+        <activity
+            android:name=".ViewUserInfo"
             android:label="User Info"
             android:parentActivityName=".ViewUserInfo">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.ecommerce.MainMenuActivity" />
         </activity>
-
-        <activity android:name=".EditUserInfo"
+        <activity
+            android:name=".EditUserInfo"
             android:label="User Info"
             android:parentActivityName=".EditUserInfo">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.ecommerce.MainMenuActivity" />
         </activity>
-
-        <activity android:name=".ViewUserOrder"
+        <activity
+            android:name=".ViewUserOrder"
             android:label="Your orders"
             android:parentActivityName=".ViewUserOrder">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.ecommerce.MainMenuActivity" />
         </activity>
-
-        <activity android:name=".ViewUserOrderItem"
+        <activity
+            android:name=".ViewUserOrderItem"
             android:label="Your items"
             android:parentActivityName=".ViewUserOrderItem">
             <meta-data
@@ -80,7 +82,6 @@
         <activity android:name=".MainMenuActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
-
         <activity android:name=".MainActivity">
 
             <!-- <intent-filter> -->
@@ -91,10 +92,9 @@
             <!-- </intent-filter> -->
 
         </activity>
-
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/> <!-- optional (needed if default theme has no action bar) -->
-
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" /> <!-- optional (needed if default theme has no action bar) -->
         <activity android:name=".LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
