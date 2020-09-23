@@ -63,7 +63,6 @@ public class AdminBranchMenuActivity extends AppCompatActivity {
     void catchIntent() {
         Intent intent = getIntent();
         supermarketID = intent.getStringExtra("supID");
-        //displaySupermarketBranches.addAll(branchArrayList);
     }
 
 
@@ -73,7 +72,6 @@ public class AdminBranchMenuActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         selectedBranchArrayList = new ArrayList<>();
-        //branchArrayList = new ArrayList<>();
         adapter = new BranchAdapter(this, selectedBranchArrayList, true);
         recyclerView.setAdapter(adapter);
     }
