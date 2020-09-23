@@ -7,9 +7,7 @@ public class Supermarket implements Serializable {
     private String name;
     private String logo;
 
-    public Supermarket(){
-
-    }
+    public Supermarket(){}
 
     public Supermarket(String id, String name, String logo) {
         this.supermarketID = id;

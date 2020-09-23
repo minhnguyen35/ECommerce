@@ -1,18 +1,19 @@
 package com.example.ecommerce;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,6 +21,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+
+import static com.example.ecommerce.BranchMenuActivity.cart;
+import static com.example.ecommerce.MainMenuActivity.acc;
 
 public class MainScreenActivity extends AppCompatActivity {
 
@@ -32,49 +36,67 @@ public class MainScreenActivity extends AppCompatActivity {
     private String branchID;
     DatabaseReference db = FirebaseDatabase.getInstance().getReference();
 
+    private final int REQUEST_CODE_CART = 10000, REQUEST_CODE_ACCOUNT = 20000, REQUEST_CODE_ORDERS = 30000;
+    private final int REQUEST_CODE_ITEM = 789;
+    private final int RESULT_LOGOUT = 88888;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
 
-        Toolbar toolbar = findViewById(R.id.appToolbar);
-        setSupportActionBar(toolbar);
-
         catchIntent();
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavBar);
+        bottomNavigationView.setOnNavigationItemSelectedListener(botNavBarListener);
+
         createRecyclerView();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main,menu);
-        return super.onCreateOptionsMenu(menu);
+    private BottomNavigationView.OnNavigationItemSelectedListener botNavBarListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Intent intent;
+            switch (item.getItemId()){
+                case R.id.userInfo:
+                    intent = new Intent(MainScreenActivity.this, ViewUserInfo.class);
+                    intent.putExtra("account",acc);
+                    startActivity(intent);
+                    return true;
+                case R.id.inCart:
+                    intent = new Intent(MainScreenActivity.this,PaymentActivity.class);
+                    intent.putExtra("bundle",cart);
+                    startActivityForResult(intent,REQUEST_CODE_CART);
+                    return true;
+                case R.id.order:
+                    Toast.makeText(MainScreenActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
+                    return true;
+                case R.id.logout:
+                    logout();
+                    return true;
+            }
+            return false;
+        }
+    };
+
+    private void logout() {
+        SharedPreferences sharedPref = getSharedPreferences("checkbox", Context.MODE_PRIVATE); // cai nay la de bo cai ghi nho dang nhap
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("remember", "false");
+        editor.apply();
+        setResult(RESULT_LOGOUT);
+        finish();
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.userInfo:
-                //todo: please intent here
-
-                /*
-                Intent intent = new Intent(MainMenuActivity.this, HomeActivity.class);
-                startActivity(intent);
-
-                */
-                Toast.makeText(MainScreenActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
-                return true;
-            case R.id.inCart:
-                Toast.makeText(MainScreenActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
-                return true;
-            case R.id.order:
-                Toast.makeText(MainScreenActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
-                return true;
-            case R.id.logout:
-                Toast.makeText(MainScreenActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if((requestCode==REQUEST_CODE_CART || requestCode==REQUEST_CODE_ITEM ) && resultCode == RESULT_OK) {
+            finish();
         }
+        else if(resultCode==RESULT_LOGOUT)
+            logout();
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     void catchIntent(){
@@ -88,38 +110,10 @@ public class MainScreenActivity extends AppCompatActivity {
         layoutManager=new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
-        //recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
-        /*categoryArrayList = new ArrayList<>();
-        categoryArrayList.add(new Category(1,"Phone",ThisIsDraft()));
-        categoryArrayList.add(new Category(2,"Laptop",ThisIsDraft()));
-        categoryArrayList.add(new Category(3,"Plant",ThisIsDraft()));
-        categoryArrayList.add(new Category(4,"PC",ThisIsDraft()));
-*/
         categoryArrayList = new ArrayList<>();
         adapter=new CategoryAdapter(this,categoryArrayList);
         recyclerView.setAdapter(adapter);
-        //adapter.notifyDataSetChanged();
-    }
-
-    private ArrayList<Item> ThisIsDraft(){
-
-        ArrayList<Item> itemArrayList = new ArrayList<>();
-        ArrayList<String> imageList = new ArrayList<>();
-/*
-        imageList.add((Bitmap)BitmapFactory.decodeResource(getResources(),R.drawable.vietnam));
-        imageList.add((Bitmap)BitmapFactory.decodeResource(getResources(),R.drawable.usa));
-        imageList.add((Bitmap)BitmapFactory.decodeResource(getResources(),R.drawable.uk));
-        imageList.add((Bitmap)BitmapFactory.decodeResource(getResources(),R.drawable.japan));
-        imageList.add((Bitmap)BitmapFactory.decodeResource(getResources(),R.drawable.eur));
-
-        itemArrayList.add(new Item("1",2,"VN",10000,imageList,100,"vietnamese flag"));
-        itemArrayList.add(new Item("2",2,"USA Flag",5.1,imageList,51,"nothing"));
-        itemArrayList.add(new Item("3",2,"uk",10000,imageList,100,"uk flag ne"));
-        itemArrayList.add(new Item("4",2,"jp",10000,imageList,100,"japan fffff"));
-        itemArrayList.add(new Item("5",2,"eur",10000,imageList,100,"heheheheh"));
-*/
-        return itemArrayList;
     }
 
     @Override

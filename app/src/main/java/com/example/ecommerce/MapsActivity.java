@@ -37,6 +37,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -44,6 +49,8 @@ import com.squareup.picasso.Target;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import static com.example.ecommerce.MainMenuActivity.acc;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -58,11 +65,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private final String token = "pk.eyJ1IjoiY3M0MjYiLCJhIjoiY2tmYjY1cWkyMTJ2ZzMwbzc3czhveWFwYSJ9.hpBZHxDgg33rs9TnkeM6Kw";
     public static Polyline path=null;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
 
         catchIntent();
 
@@ -84,12 +91,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             String provider = mlocationManager.getBestProvider(new Criteria(),true);
             if(provider!=null)
                 mlocationManager.requestLocationUpdates(provider,5000,5,mLocationListener);
-            //fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         }
 
     }
-
-
 
     void catchIntent() {
         Intent intent = getIntent();
@@ -97,27 +101,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         from = intent.getDoubleArrayExtra("from");
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
 
-
-
-        //asynctask
-
         ImageView imageView = findViewById(R.id.imageTemp);
         for(int i=0; i<mBranchArrayList.size();++i){
-
             Picasso.get().load(Uri.parse(mBranchArrayList.get(i).getLogo())).into(imageView);
             Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
                 mMap.addMarker(new MarkerOptions()
@@ -127,8 +117,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap,120,100,false)))
                 );
         }
-
-
         mMap.setOnMarkerClickListener(this);
     }
 
@@ -188,28 +176,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         public void onLocationChanged(@NonNull Location location) {
             if (location != null) {
                 mLocation=location;
-                //mMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
                 CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .target(new LatLng(location.getLatitude(), location.getLongitude()))     // Sets the center of the map to Mountain View
-                        .zoom(15)                           // Sets the zoom
-                        .bearing(90)                        // Sets the orientation of the camera to east
-                        .tilt(30)                           // Sets the tilt of the camera to 30 degrees
+                        .target(new LatLng(location.getLatitude(), location.getLongitude()))
+                        .zoom(15)
+                        .bearing(90)
+                        .tilt(30)
                         .build();
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(location.getLatitude(), location.getLongitude()))
                         .title("You're here")
-                        .icon(
-                                BitmapDescriptorFactory.fromBitmap(
-                                        Bitmap.createScaledBitmap(
-                                                BitmapFactory.decodeResource(
-                                                        MapsActivity.this.getResources(),
-                                                        R.drawable.vietnam
-                                                ),
-                                                120,
-                                                120,
-                                                false
-                                        )
+                        .icon(BitmapDescriptorFactory.fromBitmap(
+                                Bitmap.createScaledBitmap(
+                                        BitmapFactory.decodeResource(getResources(),R.drawable.logo),
+                                        120,
+                                        120,
+                                        false)
                                 )
                         )
                 );
@@ -240,4 +222,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         requestApi();
         return false;
     }
+
 }

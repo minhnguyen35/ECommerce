@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PaymentActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Siêu thị Khoa học Tự Nhiên"
+                android:textSize="20sp"
+                android:gravity="center_horizontal"
+                android:id="@+id/textViewOrderSupName"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Địa chỉ 227, Nguyễn Văn Cừ, Phường 4, Quận 5, Thành phố Hồ Chí Minh, Việt Nam"
+                android:textSize="15sp"
+                android:gravity="center_horizontal"
+                android:id="@+id/textViewOrderBranchAddress"
+                />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/recyclerViewOrderItems"
+                android:layout_marginTop="10dp"
+                />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:id="@+id/radioGroupPay"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Payment Method:"
+                    android:layout_marginLeft="20dp"
+                    android:textSize="18sp"
+                    />
+                <RadioButton
+                    android:id="@+id/radioButtonCOD"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" COD"
+                    android:textSize="17sp"
+                    android:layout_marginLeft="10dp"
+                    android:checked="true"
+                    />
+                <RadioButton
+                    android:id="@+id/radioButtonBank"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bank"
+                    android:textSize="17sp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_gravity="end"
+                    />
+
+            </RadioGroup>
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:id="@+id/radioGroupReceive"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/checkboxReceiving"
+                    android:text="Receive Method: "
+                    android:textSize="18.5sp"
+                    android:layout_marginLeft="20dp"
+                    />
+
+                <RadioButton
+                    android:id="@+id/radioButtonTake"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Take "
+                    android:textSize="17sp"
+                    android:layout_marginLeft="10dp"
+                    android:checked="true"
+                    />
+
+                <RadioButton
+                    android:id="@+id/radioButtonShip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ship"
+                    android:textSize="17sp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_gravity="end"
+                    />
+            </RadioGroup>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:alpha="0"
+                android:id="@+id/relativeLayoutOrderMoney">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginTop="20dp"
+                    android:text="SUBTOTAL"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textViewSubtotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="90dp"
+                    android:maxWidth="160sp"
+                    android:gravity="end"
+                    android:text="0"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textViewSubtotal"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginTop="20dp"
+                    android:text="SHIP FEE"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textViewShipFee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textViewSubtotal"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="90dp"
+                    android:gravity="end"
+                    android:maxWidth="160sp"
+                    android:text="0"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textViewShipFee"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginTop="20dp"
+                    android:text="TOTAL"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textViewTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textViewShipFee"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="90dp"
+                    android:gravity="end"
+                    android:maxWidth="160sp"
+                    android:text="0"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/buttonConfirm"
+                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CONFIRM ITEMS"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:paddingHorizontal="25dp"
+                android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

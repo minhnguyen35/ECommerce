@@ -45,6 +45,11 @@ public class ViewUserInfo extends AppCompatActivity {
     final DatabaseReference db = FirebaseDatabase.getInstance().getReference();
     ValueEventListener user;
 
+    private final int REQUEST_CODE_CART = 10000, REQUEST_CODE_ACCOUNT = 20000, REQUEST_CODE_ORDERS = 30000;
+    private final int REQUEST_CODE_ITEM = 789;
+    private final int RESULT_LOGOUT = 88888;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,13 +85,13 @@ public class ViewUserInfo extends AppCompatActivity {
         getDataFromDB(userID);
     }
 
-    private void getDataFromDB(String account) {
+    private void getDataFromDB(final String account) {
         user = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //User_Info getUser = new User_Info();
-                if(snapshot.child("Users").child(userID).exists()){
-                    userInfo = snapshot.child("Users").child(userID).child("userInfo").getValue(User_Info.class);
+                if(snapshot.child("Users").child(account).exists()){
+                    userInfo = snapshot.child("Users").child(account).child("userInfo").getValue(User_Info.class);
                 }
                 if(userInfo != null)
                 {

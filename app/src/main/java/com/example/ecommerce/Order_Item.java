@@ -28,6 +28,17 @@ public class Order_Item {
         this.total = total;
     }
 
+    public Order_Item(Order_Item item, String orderId){
+        this.itemLogo = item.itemLogo;
+        this.id = item.id;
+        this.itemName = item.itemName;
+        this.quantity = item.quantity;
+        this.quantityPurchase = item.quantityPurchase;
+        this.price = item.price;
+        this.total = item.total;
+        this.orderId = orderId;
+    }
+
 
     public long getPrice() {
         return price;
