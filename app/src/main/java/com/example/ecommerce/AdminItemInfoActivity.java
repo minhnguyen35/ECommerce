@@ -75,7 +75,7 @@ public class AdminItemInfoActivity extends AppCompatActivity {
 
                 removeConfirm();
 
-                removeItem();
+                //removeItem();
             }
         });
     }
