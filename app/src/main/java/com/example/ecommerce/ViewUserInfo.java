@@ -4,13 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.storage.StorageManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -50,19 +53,20 @@ public class ViewUserInfo extends AppCompatActivity {
 
     private void getData() {
         Intent intent = getIntent();
-        userID = intent.getStringExtra("userID");
+        userID = intent.getStringExtra("account");
+        //Toast.makeText(this,userID,Toast.LENGTH_LONG).show();
     }
 
     private void initBtn() {
-        BtnEdit.findViewById(R.id.btn_edit_info);
+        BtnEdit = findViewById(R.id.btn_edit_info);
 
-        userImage.findViewById(R.id.userImage);
-        username.findViewById(R.id.userName);
-        password.findViewById(R.id.userPass);
-        phone.findViewById(R.id.userPhone);
-        mail.findViewById(R.id.userMail);
-        bankNumber.findViewById(R.id.userBank);
-        address.findViewById(R.id.userAddress);
+        userImage = findViewById(R.id.userImage);
+        username = findViewById(R.id.userName);
+        password = findViewById(R.id.userPass);
+        phone = findViewById(R.id.userPhone);
+        mail = findViewById(R.id.userMail);
+        bankNumber = findViewById(R.id.userBank);
+        address = findViewById(R.id.userAddress);
     }
 
     @Override
@@ -72,12 +76,13 @@ public class ViewUserInfo extends AppCompatActivity {
 
         getDataFromDB();
     }
-
+    ProgressDialog loadingBar;
     private void getDataFromDB() {
         user = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 //User_Info getUser = new User_Info();
+
                 if(snapshot.child("Users").child(userID).exists()){
                     userInfo = snapshot.child("Users").child(userID).child("userInfo").getValue(User_Info.class);
                 }
@@ -92,7 +97,7 @@ public class ViewUserInfo extends AppCompatActivity {
 
             }
         };
-        db.addListenerForSingleValueEvent(user);
+        db.addValueEventListener(user);
     }
 
     @Override

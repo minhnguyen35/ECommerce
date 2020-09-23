@@ -22,10 +22,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
 
     Context context;
     ArrayList<Item> itemArrayList;
-
-    public ItemAdapter(Context context, ArrayList<Item> itemArrayList) {
+    boolean isAdmin;
+    public ItemAdapter(Context context, ArrayList<Item> itemArrayList, boolean isAdmin) {
         this.context = context;
         this.itemArrayList = itemArrayList;
+        this.isAdmin = isAdmin;
     }
 
     public void setItemArrayList(ArrayList<Item> itemArrayList) {
@@ -50,7 +51,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent intent = new Intent(context,ItemInfoActivity.class);
+                if(!isAdmin)
+                    intent = new Intent(context, AdminItemInfoActivity.class);
                 intent.putExtra("item",itemArrayList.get(position));
                 context.startActivity(intent);
             }

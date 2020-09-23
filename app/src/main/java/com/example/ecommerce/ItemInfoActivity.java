@@ -166,7 +166,7 @@ public class ItemInfoActivity extends AppCompatActivity {
         recyclerViewArraySuggestion.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
         recyclerViewArraySuggestion.setHasFixedSize(true);
         suggestionItemList = new ArrayList<>();
-        suggestionAdapter = new ItemAdapter(this, suggestionItemList);
+        suggestionAdapter = new ItemAdapter(this, suggestionItemList, false);
         recyclerViewArraySuggestion.setAdapter(suggestionAdapter);
         //suggestionAdapter.notifyDataSetChanged();
 

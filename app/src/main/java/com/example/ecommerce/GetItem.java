@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,11 +26,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 
 import org.xml.sax.DTDHandler;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -190,9 +194,45 @@ public class GetItem implements FirebaseGetBehaviour {
             }
         });
     }
+    /*
     public void updateUser(final String id)
     {
         final DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+        Uri imageUri = "images/";
+        String acc = "anotheradmin";
+        final String[] downloadUri = new String[1];
+        final StorageReference savePath = storage.getReference().child("Users").child(acc).child(imageUri.getLastPathSegment() + ".jpg");
+        final UploadTask uploadTask = savePath.putFile(imageUri);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(context, "Image Upload Successfully", Toast.LENGTH_LONG).show();
+                Task<Uri> uriTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    @Override
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if(!task.isSuccessful()) {
+                            throw task.getException();
+                        }
+                        downloadUri[0] = savePath.getDownloadUrl().toString();
+                        return savePath.getDownloadUrl();
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if(task.isSuccessful())
+                        {
+                            Toast.makeText(context, "Successful Update!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+        });
+
         ValueEventListener update = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -224,6 +264,7 @@ public class GetItem implements FirebaseGetBehaviour {
         db.addListenerForSingleValueEvent(update);
 
     }
+    */
     public GetItem(Context context) {
         this.context = context;
     }
@@ -349,7 +390,7 @@ public class GetItem implements FirebaseGetBehaviour {
 
     public void updateItem(final String id, final Item newItem)
     {
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference db = FirebaseDatabase.getInstance().getReference();
 
         DatabaseReference itemObject = db.child("Items").child(id);
 
@@ -359,13 +400,23 @@ public class GetItem implements FirebaseGetBehaviour {
                 @NonNull
                 @Override
                 public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                    currentData.child("id").setValue(newItem.getID());
-                    currentData.child("categoryID").setValue(newItem.getCategoryID());
-                    currentData.child("name").setValue(newItem.getName());
-                    currentData.child("price").setValue(newItem.getPrice());
-                    currentData.child("quantity").setValue(newItem.getQuantity());
-                    currentData.child("description").setValue(newItem.getDescription());
-
+                    int quantityOrd = newItem.getQuantity();
+                    int quantityReal = (int) currentData.child("quantity").getValue();
+                    if(quantityOrd > quantityReal)
+                    {
+                        Toast.makeText(context, "Quantity is not enough for the item " + newItem.getName(), Toast.LENGTH_LONG).show();
+                        return Transaction.abort();
+                    }
+                    long priceOrd = newItem.getPrice();
+                    long priceReal = (long) currentData.child("price").getValue();
+                    if(priceOrd != priceReal)
+                    {
+                        Toast.makeText(context, "Sorry there's something wrong with Item " + newItem.getName(), Toast.LENGTH_LONG).show();
+                        return Transaction.abort();
+                    }
+                    HashMap<String, Object> itemAfter = new HashMap<>();
+                    itemAfter.put("quantity", quantityReal - quantityOrd);
+                    db.child("Items").child(id).updateChildren(itemAfter);
                     return  Transaction.success(currentData);
                 }
 
@@ -376,6 +427,50 @@ public class GetItem implements FirebaseGetBehaviour {
             });
         }
 
+    }
+    public void getOrderItem(final ArrayList<String> items)
+    {
+
+        final ArrayList<Item> listOrderItem = new ArrayList<>();
+        final DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+        db.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                DataSnapshot itemList = snapshot.child("Items");
+                for(int i = 0; i <items.size(); i++) {
+                    String id = items.get(i);
+
+                    if (itemList.child(id).exists()) {
+                        String ID = itemList.child(id).getValue().toString();
+                        String CategoryID = itemList.child(id).child("categoryID").getValue().toString();
+
+                        String Name= itemList.child(id).child("name").getValue().toString();
+                        long Price = itemList.child(id).child("price").getValue(Long.class);
+
+                        int Quantity = itemList.child(id).child("quantity").getValue(Long.class).intValue();
+                        String Description= (String) itemList.child(id).child("description").getValue();
+                        ArrayList<String> tmp = new ArrayList<>();
+                        for(DataSnapshot x: itemList.child(id).child("imageArrayList").getChildren())
+                            tmp.add(x.getValue().toString());
+                        Item addItem= new Item(ID, CategoryID, Name, Price, null, Quantity, Description);
+
+                        listOrderItem.add(addItem);
+
+                    } else {
+                        CharSequence s = "Item out of stock";
+                        Toast toast = Toast.makeText(context, s, Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
     public void loadImageItem(String id) {
 
@@ -426,5 +521,8 @@ public class GetItem implements FirebaseGetBehaviour {
                 });
     }
 
+    void doTransaction(String id)
+    {
 
+    }
 }
