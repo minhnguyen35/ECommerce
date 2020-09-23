@@ -45,6 +45,28 @@ public class AdminItemInfoActivity extends AppCompatActivity {
         mapping();
         catchIntent();
         init();
+        removeClick();
+        editClick();
+    }
+
+    private void editClick() {
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AdminItemInfoActivity.this, AdminActivity.class);
+                intent.putExtra("ItemInfo", item);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void removeClick() {
+        remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                removeItem();
+            }
+        });
     }
 
     @Override
@@ -107,8 +129,8 @@ public class AdminItemInfoActivity extends AppCompatActivity {
                 }
             }
 
-            suggestionAdapter.setItemArrayList(suggestionItemList);
-            suggestionAdapter.notifyDataSetChanged();
+            //suggestionAdapter.setItemArrayList(suggestionItemList);
+            //suggestionAdapter.notifyDataSetChanged();
         }
 
         @Override
@@ -146,11 +168,11 @@ public class AdminItemInfoActivity extends AppCompatActivity {
         recyclerViewArrayImage.setAdapter(imageAdapter);
         //imageAdapter.notifyDataSetChanged();
 
-        recyclerViewArraySuggestion.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
-        recyclerViewArraySuggestion.setHasFixedSize(true);
-        suggestionItemList = new ArrayList<>();
-        suggestionAdapter = new ItemAdapter(this, suggestionItemList);
-        recyclerViewArraySuggestion.setAdapter(suggestionAdapter);
+        //recyclerViewArraySuggestion.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
+        //recyclerViewArraySuggestion.setHasFixedSize(true);
+        //suggestionItemList = new ArrayList<>();
+        //suggestionAdapter = new ItemAdapter(this, suggestionItemList, true);
+        //recyclerViewArraySuggestion.setAdapter(suggestionAdapter);
         //suggestionAdapter.notifyDataSetChanged();
 
         updateItemInfo();

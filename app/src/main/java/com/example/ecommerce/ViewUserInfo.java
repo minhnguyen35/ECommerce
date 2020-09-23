@@ -50,9 +50,6 @@ public class ViewUserInfo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_user_info);
 
-        //Intent getAccount = getIntent();
-        //userID = getAccount.getStringExtra("account");
-
         getData();
         initBtn();
         clickEdit();
@@ -75,11 +72,10 @@ public class ViewUserInfo extends AppCompatActivity {
         address = findViewById(R.id.userAddress);
     }
 
-
-
     @Override
     protected void onResume() {
         super.onResume();
+        //final String id = "anotheradmin";
 
         getDataFromDB(userID);
     }
@@ -115,10 +111,8 @@ public class ViewUserInfo extends AppCompatActivity {
 
 
 
-
     private void adaptInfo() {
         Picasso.get().load(userInfo.getUserImage()).fit().into(userImage);
-
         username.setText(userInfo.getUsername());
         //password.setText(userInfo.getPassword());
         password.setText("*******");

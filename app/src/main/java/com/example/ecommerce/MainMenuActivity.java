@@ -69,12 +69,12 @@ public class MainMenuActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.userInfo:
+                //todo: please intent here
 
                 //Toast.makeText(MainMenuActivity.this, acc,Toast.LENGTH_LONG).show();
                 Intent intentInfo = new Intent(MainMenuActivity.this, ViewUserInfo.class);
                 intentInfo.putExtra("account",acc);
                 startActivity(intentInfo);
-
                 return true;
             case R.id.inCart:
                 Toast.makeText(MainMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG);
@@ -97,6 +97,11 @@ public class MainMenuActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
     }
 
     ValueEventListener newEvent = new ValueEventListener() {
