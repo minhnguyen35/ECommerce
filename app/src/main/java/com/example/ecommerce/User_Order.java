@@ -3,9 +3,9 @@ package com.example.ecommerce;
 import java.util.ArrayList;
 
 public class User_Order {
-    private String superMarketLogo;
+    //private String superMarketLogo;
     private String id;
-    private String superMarketName;
+    private String supermarketName;
     private String date;
     private int checkOutType; /* 1 for COD, 2 for Bank */
     private int shipType; /* 1 for take over, 2 for delivery */
@@ -16,11 +16,14 @@ public class User_Order {
 
     /****************************************************************************************/
 
+    public User_Order()
+    {}
 
-    public User_Order(String superMarketLogo, String id, String superMarketName, String date, int checkOutType, int shipType, long total, boolean status, String account) {
-        this.superMarketLogo = superMarketLogo;
+    public User_Order(String id, String superMarketName, String date, int checkOutType, int shipType, long total, boolean status, String account) {
+        /*String superMarketLogo,*/
+        //this.superMarketLogo = superMarketLogo;
         this.id = id;
-        this.superMarketName = superMarketName;
+        this.supermarketName = superMarketName;
         this.date = date;
         this.checkOutType = checkOutType;
         this.shipType = shipType;
@@ -36,9 +39,10 @@ public class User_Order {
     public void setAccount(String account) {
         this.account = account;
     }
-/*public void addItem(Order_Item newItem){
+
+    /*public void addItem(Order_Item newItem){
         itemArrayList.add(newItem);
-    }*/
+    }
 
     public String getSuperMarketLogo() {
         return superMarketLogo;
@@ -46,7 +50,7 @@ public class User_Order {
 
     public void setSuperMarketLogo(String superMarketLogo) {
         this.superMarketLogo = superMarketLogo;
-    }
+    }*/
 
     public String getId() {
         return id;
@@ -57,11 +61,11 @@ public class User_Order {
     }
 
     public String getSuperMarketName() {
-        return superMarketName;
+        return supermarketName;
     }
 
     public void setSuperMarketName(String superMarketName) {
-        this.superMarketName = superMarketName;
+        this.supermarketName = superMarketName;
     }
 
     public String getDate() {

@@ -33,6 +33,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.ecommerce.MainMenuActivity" />
         </activity>
+
+        <activity android:name=".ViewUserOrder"
+            android:label="Your orders"
+            android:parentActivityName=".ViewUserOrder">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ecommerce.MainMenuActivity" />
+        </activity>
+
+        <activity android:name=".ViewUserOrderItem"
+            android:label="Your items"
+            android:parentActivityName=".ViewUserOrderItem">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ecommerce.MainMenuActivity" />
+        </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

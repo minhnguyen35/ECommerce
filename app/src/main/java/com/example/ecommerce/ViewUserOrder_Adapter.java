@@ -3,14 +3,19 @@ package com.example.ecommerce;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 
+import static android.widget.Toast.LENGTH_LONG;
 import static com.example.ecommerce.R.color.colorStatus_finished;
 import static com.example.ecommerce.R.color.colorStatus_processing;
 
@@ -29,12 +34,12 @@ public class ViewUserOrder_Adapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        return userOrderList.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return null;
+        return userOrderList.get(i);
     }
 
     @Override
@@ -52,10 +57,13 @@ public class ViewUserOrder_Adapter extends BaseAdapter {
         private TextView status;
     }
 
-    @SuppressLint("ResourceAsColor")
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        if (userOrderList.size() <= 0) return view;
+        Log.d("AAA", "ADAPTER CAME HERE");
+        if (userOrderList.size() <= 0) {
+            Toast.makeText(context, "adapt fail: userOrderList null", Toast.LENGTH_SHORT).show();
+            return view;
+        }
 
         ViewUserOrder_Adapter.userOrderViewHolder holder;
 
@@ -67,8 +75,8 @@ public class ViewUserOrder_Adapter extends BaseAdapter {
             holder.id = view.findViewById(R.id.supermarketID);
             holder.superMarketName = view.findViewById(R.id.supermarketName);
             holder.date = view.findViewById(R.id.orderDate);
-            holder.checkOutType = view.findViewById(R.id.checkOutType); /* 1 for COD, 2 for Bank */
-            holder.shipType = view.findViewById(R.id.shipType); /* 1 for take over, 2 for delivery */
+            holder.checkOutType = view.findViewById(R.id.checkOutType);
+            holder.shipType = view.findViewById(R.id.shipType);
             holder.total = view.findViewById(R.id.orderTotal);
             holder.status = view.findViewById(R.id.status);
 
@@ -77,7 +85,6 @@ public class ViewUserOrder_Adapter extends BaseAdapter {
         else {
             holder = (userOrderViewHolder) view.getTag();
         }
-
 
         User_Order userOrder = userOrderList.get(i);
 
@@ -95,12 +102,48 @@ public class ViewUserOrder_Adapter extends BaseAdapter {
 
         if (userOrder.isStatus()) {
             holder.status.setText("Finished");
-            holder.status.setBackgroundColor(colorStatus_finished);
+            holder.status.setBackgroundColor(ContextCompat.getColor(context.getApplicationContext(), colorStatus_finished));
         }
         else {
             holder.status.setText("Processing");
-            holder.status.setBackgroundColor(colorStatus_processing);
+            holder.status.setBackgroundColor(ContextCompat.getColor(context.getApplicationContext(), colorStatus_processing));
         }
+
+        /*LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+         view = inflater.inflate(layout_element, null);
+
+
+        TextView id = view.findViewById(R.id.supermarketID);
+        TextView superMarketName = view.findViewById(R.id.supermarketName);
+        TextView date = view.findViewById(R.id.orderDate);
+        TextView checkOutType = view.findViewById(R.id.checkOutType);
+        TextView shipType = view.findViewById(R.id.shipType);
+        TextView total = view.findViewById(R.id.orderTotal);
+        TextView status = view.findViewById(R.id.status);
+
+        User_Order userOrder = userOrderList.get(i);
+
+        id.setText(userOrder.getId());
+        superMarketName.setText(userOrder.getSuperMarketName());
+        date.setText(userOrder.getDate());
+
+        if (userOrder.getCheckOutType() == 1) checkOutType.setText("COD");
+        else checkOutType.setText("Bank");
+
+        if (userOrder.getShipType() == 1) shipType.setText("Take over");
+        else shipType.setText("Delivery");
+
+        total.setText(Long.toString(userOrder.getTotal()));
+
+        if (userOrder.isStatus()) {
+            status.setText("Finished");
+            status.setBackgroundColor(colorStatus_finished);
+        }
+        else {
+            status.setText("Processing");
+            status.setBackgroundColor(colorStatus_processing);
+        }*/
+
         return view;
     }
 }

@@ -71,16 +71,19 @@ public class MainMenuActivity extends AppCompatActivity {
             case R.id.userInfo:
 
                 //Toast.makeText(MainMenuActivity.this, acc,Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(MainMenuActivity.this, ViewUserInfo.class);
-                intent.putExtra("account",acc);
-                startActivity(intent);
+                Intent intentInfo = new Intent(MainMenuActivity.this, ViewUserInfo.class);
+                intentInfo.putExtra("account",acc);
+                startActivity(intentInfo);
 
                 return true;
             case R.id.inCart:
                 Toast.makeText(MainMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG);
                 return true;
             case R.id.order:
-                Toast.makeText(MainMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG);
+                //Toast.makeText(MainMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG);
+                Intent intentOrder = new Intent(MainMenuActivity.this, ViewUserOrder.class);
+                intentOrder.putExtra("account",acc);
+                startActivity(intentOrder);
                 return true;
             case R.id.logout:
                 SharedPreferences sharedPref = getSharedPreferences("checkbox", Context.MODE_PRIVATE); // cai nay la de bo cai ghi nho dang nhap
