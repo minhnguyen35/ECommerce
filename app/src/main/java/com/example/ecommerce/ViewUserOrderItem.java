@@ -116,16 +116,16 @@ public class ViewUserOrderItem extends AppCompatActivity {
                     });
                     /*TODO:
                     *  update status in userOrder to TRUE in database*/
-
                     finish();
                 }
+                else Toast.makeText(ViewUserOrderItem.this, "You confirmed this order !", Toast.LENGTH_SHORT).show();
             }
         });
     }
   //tu`
     private void adaptView() {
         oTotal.setText(Long.toString(orderTotal));
-        Toast.makeText(ViewUserOrderItem.this, "ItemID = " + userOrderItemList.get(0).getId() + "  logo = " + userOrderItemList.get(0).getItemLogo(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(ViewUserOrderItem.this, "ItemID = " + userOrderItemList.get(0).getId() + "  logo = " + userOrderItemList.get(0).getItemLogo(), Toast.LENGTH_LONG).show();
         adapter = new ViewUserOrderItem_Adapter(ViewUserOrderItem.this, R.layout.order_item_element, userOrderItemList);
         gridView.setAdapter(adapter);
     }
