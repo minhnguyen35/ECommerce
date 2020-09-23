@@ -50,6 +50,8 @@ public class PaymentActivity extends AppCompatActivity {
     private boolean itemCheckOk = false;
     private ValueEventListener checkItem;
     private DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+    private ProgressDialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +102,7 @@ public class PaymentActivity extends AppCompatActivity {
                     {
                         Toast.makeText(PaymentActivity.this, "Item " + id + " is out of stock!", Toast.LENGTH_SHORT).show();
                         isValidOrder = false;
+
                         return;
                     }
                     listQuantity.add(quantityReal-quantityOrd);
@@ -109,6 +112,7 @@ public class PaymentActivity extends AppCompatActivity {
                     {
                         Toast.makeText(PaymentActivity.this, "Item " + id + " is out of stock!", Toast.LENGTH_SHORT).show();
                         isValidOrder = false;
+
                         return;
                     }
 
@@ -122,19 +126,6 @@ public class PaymentActivity extends AppCompatActivity {
             }
         };
     }
-    /*
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initListener();
-        db.addListenerForSingleValueEvent(checkItem);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        db.removeEventListener(checkItem);
-    }*/
 
     private void catchIntent() {
         Intent intent = getIntent();
@@ -193,71 +184,77 @@ public class PaymentActivity extends AppCompatActivity {
             calculateTotal();
         }
     };
-    private boolean doTransaction(User_Order newOrd, final ArrayList<Integer> listQuant)
-    {
-        for(int i = 0; i < orderItemArrayList.size(); i++) {
 
-            final String id = orderItemArrayList.get(i).getId();
+
+    private boolean doTransaction(final User_Order newOrd, final ArrayList<Integer> listQuant) {
+        final boolean[] abort = {false};
+        for (int i = 0; i< orderItemArrayList.size(); i++) {
             final int cnt = i;
-            final Order_Item curItem = orderItemArrayList.get(i);
+            final String id = orderItemArrayList.get(cnt).getId();
+            final Order_Item curItem = orderItemArrayList.get(cnt);
             final DatabaseReference itemObject = db.child("Items").child(id);
-            if(itemObject != null) {
+            if (itemObject != null) {
                 itemObject.runTransaction(new Transaction.Handler() {
                     @NonNull
                     @Override
                     public Transaction.Result doTransaction(@NonNull MutableData currentData) {
                         currentData.child("quantity").setValue(listQuant.get(cnt));
 
+                        Log.d("AAA",orderItemArrayList.get(cnt).getItemName());
                         return Transaction.success(currentData);
                     }
 
                     @Override
                     public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-
+                        if(error!=null){
+                            dialog.setMessage("Error... Reloading");
+                            getOrderItem(orderItemArrayList);
+                            abort[0]=true;
+                        }
+                        if(cnt==orderItemArrayList.size()-1){
+                            createOrderItemDB(newOrd);
+                        }
                     }
                 });
 
+            } else {
+                abort[0]=true;
             }
-            else{
-                Toast.makeText(PaymentActivity.this, "Item " + id + " is out of stocks!", Toast.LENGTH_LONG).show();
-                break;
-            }
-
+            if(abort[0])
+                return false;
         }
-
-            for(int i = 0; i < orderItemArrayList.size(); i++){
-                Order_Item curItem = orderItemArrayList.get(i);
-                String idOrdItem = newOrd.getId() + curItem.getId();
-                HashMap<String, Object> newOrdItem = new HashMap<>();
-                newOrdItem.put("itemLogo", curItem.getItemLogo());
-                newOrdItem.put("orderItemID", idOrdItem);
-                newOrdItem.put("itemName", curItem.getItemName());
-                newOrdItem.put("price", curItem.getPrice());
-                newOrdItem.put("quantityPurchase", curItem.getQuantityPurchase());
-                newOrdItem.put("total", curItem.getTotal());
-                newOrdItem.put("itemID", curItem.getId());
-                newOrdItem.put("orderID", newOrd.getId());
-                final int cnt = i;
-                db.child("OrderItem").child(idOrdItem).updateChildren(newOrdItem).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        if(cnt == orderItemArrayList.size() - 1)
-                            Toast.makeText(PaymentActivity.this, "Your Order is Success", Toast.LENGTH_LONG).show();
-                    }
-                });
-
-             }
-            db.child("Orders").child(newOrd.getId()).setValue(newOrd).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-
-                }
-            });
-
-
 
         return true;
     }
+
+    private void createOrderItemDB(User_Order newOrd) {
+        for (int i = 0; i < orderItemArrayList.size(); i++) {
+            Order_Item curItem = orderItemArrayList.get(i);
+            String idOrdItem = newOrd.getId() + curItem.getId();
+            HashMap<String, Object> newOrdItem = new HashMap<>();
+            newOrdItem.put("itemLogo", curItem.getItemLogo());
+            newOrdItem.put("orderItemID", idOrdItem);
+            newOrdItem.put("itemName", curItem.getItemName());
+            newOrdItem.put("price", curItem.getPrice());
+            newOrdItem.put("quantityPurchase", curItem.getQuantityPurchase());
+            newOrdItem.put("total", curItem.getTotal());
+            newOrdItem.put("itemID", curItem.getId());
+            newOrdItem.put("orderID", newOrd.getId());
+            final int cnt = i;
+            db.child("OrderItem").child(idOrdItem).updateChildren(newOrdItem);
+        }
+
+        db.child("Orders").child(newOrd.getId()).setValue(newOrd).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                db.removeEventListener(checkItem);
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
+
+    }
+
     private Button.OnClickListener confirmHelper = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -277,34 +274,23 @@ public class PaymentActivity extends AppCompatActivity {
                     Toast.makeText(PaymentActivity.this,"No Items",Toast.LENGTH_LONG).show();
                 return;
             }
+            else if (dialog==null){
+                Date calendar = Calendar.getInstance().getTime();
+                String date = calendar.toString();
+                long timeCurrent = System.currentTimeMillis();
+                String name = branch.getName() + " " + branch.getAddress();
+                String id = acc + String.valueOf(timeCurrent);
+                User_Order userOrder = new User_Order(id, name, date, COD, take, total, false, acc);
 
+                initListener(userOrder);
+                db.addListenerForSingleValueEvent(checkItem);
 
+                dialog = ProgressDialog.show(PaymentActivity.this, "",
+                        "Creating Order. Please wait...", true);
 
-            Date calendar = Calendar.getInstance().getTime();
-            String date=calendar.toString();
-            long timeCurrent = System.currentTimeMillis();
-            String name = branch.getName()+" "+branch.getAddress();
-            String id = branch.getSupermarketID() + branch.getBranchID()+String.valueOf(timeCurrent);
-            User_Order userOrder = new User_Order(id,name,date,COD,take,total,false, acc);
-            initListener(userOrder);
-            db.addListenerForSingleValueEvent(checkItem);
-            if(!isValidOrder) {
-                getOrderItem(orderItemArrayList);
-                db.removeEventListener(checkItem);
-                setResult(RESULT_OK);
-                finish();
-
+                payGroup.setEnabled(false);
+                receiveGroup.setEnabled(false);
             }
-
-//
-//            /*
-//            todo: thay đổi data trên firebase ->>>> còn bug vui lòng ko ai dụng vào thay đổi trên activity này
-//             */
-//
-
-            Toast.makeText(PaymentActivity.this, "Confirmed",Toast.LENGTH_LONG).show();
-
-
         }
     };
 
@@ -326,83 +312,6 @@ public class PaymentActivity extends AppCompatActivity {
     }
 
 
-    /*
-    public boolean updateItem(final ArrayList<Order_Item> orderItems)
-    {
-        final boolean[] ret = {true};
-        final DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference itemObject = db.child("Items");
-        if(itemObject != null)
-        {
-            itemObject.runTransaction(new Transaction.Handler() {
-                @NonNull
-                @Override
-                public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-
-                    boolean isAbort = false;
-                    ArrayList<Integer> listQuantityInDB = new ArrayList<>();
-                    for(int i = 0; i < orderItems.size(); i++)
-                    {
-                        Order_Item newItem = orderItems.get(i);
-
-                        Log.d("AAA","getItem");
-                        int quantityOrd = newItem.getQuantityPurchase();
-                        String id = newItem.getId();
-                        Log.d("AAA",id);
-
-                        int quantityReal=0;
-                        quantityReal = (int) currentData.child(id).child("quantity").getValue(Long.class).intValue();
-
-                        Log.d("AAA","get quantity");
-                        listQuantityInDB.add(quantityReal);
-                        if(quantityOrd > quantityReal)
-                        {
-//                            Toast.makeText(PaymentActivity.this, "Quantity is not enough for the item " +
-//                                    newItem.getItemName(), Toast.LENGTH_LONG).show();
-                            Log.d("AAA",String.valueOf(quantityReal) + " lack quantity " + String.valueOf(quantityOrd));
-
-                            return Transaction.abort();
-                        }
-
-                        Log.d("AAA","get price");
-
-                        long priceOrd = newItem.getPrice();
-                        long priceReal = (long) currentData.child(id).child("price").getValue();
-                        if(priceOrd != priceReal)
-                        {
-                            Toast.makeText(PaymentActivity.this, "Sorry there's something wrong with Item "
-                                    + newItem.getItemName(), Toast.LENGTH_LONG).show();
-                            Log.d("AAA","different price");
-
-                            return Transaction.abort();
-                        }
-                    }
-                    Log.d("AAA","b4 update");
-                    for(int i = 0; i < orderItems.size();i++)
-                    {
-                        String id = orderItems.get(i).getId();
-                        int quantityOrd = orderItems.get(i).getQuantityPurchase();
-                        int quantityReal = listQuantityInDB.get(i);
-                        HashMap<String, Object> itemAfter = new HashMap<>();
-                        itemAfter.put("quantity", quantityReal - quantityOrd);
-                        //db.child("Items").child().updateChildren(itemAfter);
-                    }
-                    Log.d("AAA","update");
-
-                    ret[0]=false;
-                    Toast.makeText(PaymentActivity.this, "Success Transaction", Toast.LENGTH_SHORT).show();
-                    return  Transaction.success(currentData);
-                }
-
-                @Override
-                public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-
-                }
-            });
-        }
-        return ret[0];
-    }
-*/
     public void getOrderItem(final ArrayList<Order_Item> items)
     {
         final ArrayList<Order_Item> listOrderItem = new ArrayList<>();
@@ -434,12 +343,9 @@ public class PaymentActivity extends AppCompatActivity {
                                 Price*purchaseQuantity);
                         listOrderItem.add(addItem);
 
-                    } else {
-//                        CharSequence s = "Item out of stock";
-//                        Toast toast = Toast.makeText(PaymentActivity.this, s, Toast.LENGTH_SHORT);
-//                        toast.show();
                     }
                 }
+
                 orderItemArrayList = listOrderItem;
                 reload();
             }
@@ -450,12 +356,15 @@ public class PaymentActivity extends AppCompatActivity {
     }
 
     private void reload() {
+
         itemCheckOk=false;
-        createRecyclerView();
+        adapter=new PurchaseAdapter(this,orderItemArrayList,itemCheckOk);
+        recyclerView.setAdapter(adapter);
         RelativeLayout layout = findViewById(R.id.relativeLayoutOrderMoney);
         layout.setAlpha(0);
         confirmButton.setText("CONFIRM ITEMS");
         initPrice();
+        dialog.cancel();
     }
 
 }

@@ -53,9 +53,6 @@ public class ViewUserInfo extends AppCompatActivity {
     final DatabaseReference db = FirebaseDatabase.getInstance().getReference();
     ValueEventListener user;
 
-    private final int REQUEST_CODE_CART = 10000, REQUEST_CODE_ACCOUNT = 20000, REQUEST_CODE_ORDERS = 30000;
-    private final int REQUEST_CODE_ITEM = 789;
-    private final int RESULT_LOGOUT = 88888;
 
 
     @Override
