@@ -58,7 +58,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder>{
             public void onClick(View view) {
 
                 Intent intent = new Intent(context,ItemInfoActivity.class);
-                if(!isAdmin)
+                if(isAdmin)
                     intent = new Intent(context, AdminItemInfoActivity.class);
                 intent.putExtra("item",itemArrayList.get(position));
                 ((Activity)context).startActivityForResult(intent, REQUEST_CODE_ITEM);

@@ -1,6 +1,7 @@
 package com.example.ecommerce;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,7 +25,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -148,10 +149,11 @@ public class PaymentActivity extends AppCompatActivity {
                 return;
             }
 
-            if(!updateItem(orderItemArrayList)) {
-                getOrderItem(orderItemArrayList);
-                return;
-            }
+
+//            if(!updateItem(orderItemArrayList)) {
+//                getOrderItem(orderItemArrayList);
+//                return;
+//            }
 
 //            Date calendar = Calendar.getInstance().getTime();
 //            String date=calendar.toString();
@@ -161,10 +163,10 @@ public class PaymentActivity extends AppCompatActivity {
 //            User_Order userOrder = new User_Order(id,name,date,COD,take,total,false,orderItemArrayList);
 //
 //            /*
-//            todo: thay đổi data trên firebase
+//            todo: thay đổi data trên firebase ->>>> còn bug vui lòng ko ai dụng vào thay đổi trên activity này
 //             */
 //
-//            Toast.makeText(PaymentActivity.this, "Confirmed",Toast.LENGTH_LONG).show();
+            Toast.makeText(PaymentActivity.this, "Confirmed",Toast.LENGTH_LONG).show();
 
             setResult(RESULT_OK);
             finish();
@@ -188,13 +190,13 @@ public class PaymentActivity extends AppCompatActivity {
         textViewTotal.setText(String.valueOf(total));
     }
 
+
+
     public boolean updateItem(final ArrayList<Order_Item> orderItems)
     {
-        final boolean[] ret = {false};
+        final boolean[] ret = {true};
         final DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-
         DatabaseReference itemObject = db.child("Items");
-
         if(itemObject != null)
         {
             itemObject.runTransaction(new Transaction.Handler() {
@@ -207,17 +209,22 @@ public class PaymentActivity extends AppCompatActivity {
                     for(int i = 0; i < orderItems.size(); i++)
                     {
                         Order_Item newItem = orderItems.get(i);
+
                         Log.d("AAA","getItem");
                         int quantityOrd = newItem.getQuantityPurchase();
-                        int quantityReal = (int) currentData.child(newItem.getId()).child("quantity").getValue(Long.class).intValue();
+                        String id = newItem.getId();
+                        Log.d("AAA",id);
+
+                        int quantityReal=0;
+                        quantityReal = (int) currentData.child(id).child("quantity").getValue(Long.class).intValue();
 
                         Log.d("AAA","get quantity");
                         listQuantityInDB.add(quantityReal);
                         if(quantityOrd > quantityReal)
                         {
-                            Toast.makeText(PaymentActivity.this, "Quantity is not enough for the item " +
-                                    newItem.getItemName(), Toast.LENGTH_LONG).show();
-                            Log.d("AAA","lack quantity");
+//                            Toast.makeText(PaymentActivity.this, "Quantity is not enough for the item " +
+//                                    newItem.getItemName(), Toast.LENGTH_LONG).show();
+                            Log.d("AAA",String.valueOf(quantityReal) + " lack quantity " + String.valueOf(quantityOrd));
 
                             return Transaction.abort();
                         }
@@ -225,7 +232,7 @@ public class PaymentActivity extends AppCompatActivity {
                         Log.d("AAA","get price");
 
                         long priceOrd = newItem.getPrice();
-                        long priceReal = (long) currentData.child(newItem.getId()).child("price").getValue();
+                        long priceReal = (long) currentData.child(id).child("price").getValue();
                         if(priceOrd != priceReal)
                         {
                             Toast.makeText(PaymentActivity.this, "Sorry there's something wrong with Item "
@@ -235,6 +242,7 @@ public class PaymentActivity extends AppCompatActivity {
                             return Transaction.abort();
                         }
                     }
+                    Log.d("AAA","b4 update");
                     for(int i = 0; i < orderItems.size();i++)
                     {
                         String id = orderItems.get(i).getId();
@@ -242,19 +250,18 @@ public class PaymentActivity extends AppCompatActivity {
                         int quantityReal = listQuantityInDB.get(i);
                         HashMap<String, Object> itemAfter = new HashMap<>();
                         itemAfter.put("quantity", quantityReal - quantityOrd);
-                        db.child("Items").child(id).updateChildren(itemAfter);
+                        //db.child("Items").child().updateChildren(itemAfter);
                     }
                     Log.d("AAA","update");
 
-                    ret[0]=true;
+                    ret[0]=false;
                     Toast.makeText(PaymentActivity.this, "Success Transaction", Toast.LENGTH_SHORT).show();
                     return  Transaction.success(currentData);
                 }
 
                 @Override
-                public void onComplete(@Nullable DatabaseError error, boolean committed,
-                                       @Nullable DataSnapshot currentData) {
-                    Toast.makeText(PaymentActivity.this, String.valueOf(ret[0]),Toast.LENGTH_LONG).show();
+                public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+
                 }
             });
         }
@@ -288,7 +295,7 @@ public class PaymentActivity extends AppCompatActivity {
                         int purchaseQuantity = items.get(i).getQuantityPurchase();
                         if(purchaseQuantity>Quantity)
                             purchaseQuantity=Quantity;
-                        Order_Item addItem= new Order_Item(tmp, ID, Name, Quantity, purchaseQuantity,Price,
+                        Order_Item addItem= new Order_Item(tmp, null,ID, Name, Quantity, purchaseQuantity,Price,
                                 Price*purchaseQuantity);
                         listOrderItem.add(addItem);
 

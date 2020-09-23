@@ -27,15 +27,6 @@
             />
 
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/categoryName"
-            android:layout_marginLeft="30dp"
-            android:id="@+id/seeMoreItemButton"
-            android:background="@drawable/ic_baseline_arrow_forward_24"
-            />
-
 
     </RelativeLayout>
 

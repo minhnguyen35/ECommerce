@@ -1,5 +1,6 @@
 package com.example.ecommerce;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
@@ -23,8 +24,9 @@ import java.util.ArrayList;
 
 public class SupermarketAdapter extends RecyclerView.Adapter<SupermarketAdapter.ViewHolder> {
 
-    Context context;
-    ArrayList<Supermarket> supermarketArrayList;
+    private Context context;
+    private ArrayList<Supermarket> supermarketArrayList;
+    private final int REQUEST_CODE_BRANCH = 123;
 
     public SupermarketAdapter(Context context, ArrayList<Supermarket> supermarketArrayList) {
         this.context = context;
@@ -54,7 +56,7 @@ public class SupermarketAdapter extends RecyclerView.Adapter<SupermarketAdapter.
             public void onClick(View view) {
                 Intent intent = new Intent(context,BranchMenuActivity.class);
                 intent.putExtra("supermarketID",supermarketArrayList.get(position).getSupermarketID());
-                context.startActivity(intent);
+                ((Activity)context).startActivityForResult(intent,REQUEST_CODE_BRANCH);
             }
         });
     }

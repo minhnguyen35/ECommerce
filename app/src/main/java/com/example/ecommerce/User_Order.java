@@ -11,7 +11,6 @@ public class User_Order {
     private long total;
     private boolean status;
     private String account;
-    //private ArrayList<Order_Item> itemArrayList;
 
     /****************************************************************************************/
 

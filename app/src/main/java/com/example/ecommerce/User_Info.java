@@ -14,11 +14,8 @@ public class User_Info implements Serializable {
     private String address;
 
 
-    /****************************************************************************************/
-    public User_Info()
-    {
+    public User_Info() { }
 
-    }
     public User_Info(String username, String password, String phone) {
         this.userImage = null;
         this.username = username;

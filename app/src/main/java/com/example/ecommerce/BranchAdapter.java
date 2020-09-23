@@ -24,11 +24,14 @@ import java.util.ArrayList;
 import static com.example.ecommerce.BranchMenuActivity.cart;
 
 public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder> {
-    Context context;
-    ArrayList<Branch> branchArrayList;
-    boolean isAdminSite;
+    private Context context;
+    private ArrayList<Branch> branchArrayList;
+    private boolean isAdminSite;
+    private String avatar="";
 
-    public BranchAdapter(Context context, ArrayList<Branch> branchArrayList) {
+    private final int REQUEST_CODE_CATEGORY = 456;
+
+    public BranchAdapter(Context context, ArrayList<Branch> branchArrayList, boolean isAdminSite) {
         this.context = context;
         this.branchArrayList = branchArrayList;
         this.isAdminSite = isAdminSite;
@@ -36,6 +39,10 @@ public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder
 
     public void setBranchArrayList(ArrayList<Branch> branchArrayList) {
         this.branchArrayList = branchArrayList;
+    }
+
+    public void setAvatar(String avatar){
+        this.avatar=avatar;
     }
 
     @NonNull
@@ -61,9 +68,10 @@ public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder
                     intent = new Intent(context, MainScreenActivity.class);
                 else
                     intent = new Intent(context, AdminCategoryActivity.class);
+                cart.putSerializable("branch",branchArrayList.get(position));
                 intent.putExtra("category", branchArrayList.get(position).getCategoryArrayList());
                 intent.putExtra("branchID", branchArrayList.get(position).getBranchID());
-                context.startActivity(intent);
+                ((Activity)context).startActivityForResult(intent, REQUEST_CODE_CATEGORY);
             }
         });
 
@@ -74,6 +82,7 @@ public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder
                     Intent intent = new Intent(context, MapsActivity.class);
                     intent.putExtra("branch", branchArrayList);
                     intent.putExtra("from", branchArrayList.get(position).getLatLng());
+                    intent.putExtra("avatar",avatar);
                     context.startActivity(intent);
                 }
             });

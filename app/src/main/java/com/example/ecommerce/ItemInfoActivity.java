@@ -3,17 +3,16 @@ package com.example.ecommerce;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import static com.example.ecommerce.BranchMenuActivity.cart;
+import static com.example.ecommerce.MainMenuActivity.acc;
 
 public class ItemInfoActivity extends AppCompatActivity {
     Item item;
@@ -43,6 +43,7 @@ public class ItemInfoActivity extends AppCompatActivity {
 
     private int REQUEST_CODE_CART = 10000, REQUEST_CODE_ACCOUNT = 20000, REQUEST_CODE_ORDERS = 30000;
     private int REQUEST_CODE_ITEM = 789;
+    private int RESULT_LOGOUT = 88888;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +62,15 @@ public class ItemInfoActivity extends AppCompatActivity {
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    Intent intent;
                     switch (item.getItemId()) {
-                        case R.id.back:
-                            finish();
                         case R.id.userInfo:
-                            Toast.makeText(ItemInfoActivity.this, item.getTitle(), Toast.LENGTH_LONG).show();
+                            intent = new Intent(ItemInfoActivity.this, ViewUserInfo.class);
+                            intent.putExtra("account",acc);
+                            startActivity(intent);
                             return true;
                         case R.id.inCart:
-                            Intent intent = new Intent(ItemInfoActivity.this,PaymentActivity.class);
+                            intent = new Intent(ItemInfoActivity.this,PaymentActivity.class);
                             intent.putExtra("bundle",cart);
                             startActivityForResult(intent,REQUEST_CODE_CART);
                             return true;
@@ -76,12 +78,21 @@ public class ItemInfoActivity extends AppCompatActivity {
                             Toast.makeText(ItemInfoActivity.this, item.getTitle(), Toast.LENGTH_LONG).show();
                             return true;
                         case R.id.logout:
-                            Toast.makeText(ItemInfoActivity.this, item.getTitle(), Toast.LENGTH_LONG).show();
+                            logout();
                             return true;
                     }
                     return false;
                 }
             };
+
+    private void logout() {
+        SharedPreferences sharedPref = getSharedPreferences("checkbox", Context.MODE_PRIVATE); // cai nay la de bo cai ghi nho dang nhap
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("remember", "false");
+        editor.apply();
+        setResult(RESULT_LOGOUT);
+        finish();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -89,6 +100,9 @@ public class ItemInfoActivity extends AppCompatActivity {
             setResult(RESULT_OK);
             finish();
         }
+        else if(resultCode== RESULT_LOGOUT)
+            logout();
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -212,7 +226,7 @@ public class ItemInfoActivity extends AppCompatActivity {
                 }
             }
 
-            Order_Item orderItem = new Order_Item(imageUri,item.getID(),item.getName(),item.getQuantity(),1,item.getPrice(),item.getPrice());
+            Order_Item orderItem = new Order_Item(imageUri,null,item.getID(),item.getName(),item.getQuantity(),1,item.getPrice(),item.getPrice());
             orderItemArrayList.add(orderItem);
             cart.putSerializable("orderItems",orderItemArrayList);
         }

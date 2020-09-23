@@ -14,9 +14,6 @@ public class Order_Item implements Serializable {
     private long total;
 
 
-    /****************************************************************************************/
-
-
     public Order_Item(String itemLogo, String orderId, String id, String itemName, int quantity, int quantityPurchase, long price, long total) {
         this.orderItemID = id + "o" + orderId;
         this.itemLogo = itemLogo;
