@@ -70,7 +70,10 @@ public class MainScreenActivity extends AppCompatActivity {
                     startActivityForResult(intent,REQUEST_CODE_CART);
                     return true;
                 case R.id.order:
-                    Toast.makeText(MainScreenActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
+                    intent = new Intent(MainScreenActivity.this, ViewUserOrder.class);
+                    intent.putExtra("account",acc);
+                    startActivity(intent);
+                    //Toast.makeText(MainScreenActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
                     return true;
                 case R.id.logout:
                     logout();

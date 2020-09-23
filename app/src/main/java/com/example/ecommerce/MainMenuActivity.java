@@ -58,15 +58,19 @@ public class MainMenuActivity extends AppCompatActivity {
             new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            Intent intent;
             switch (item.getItemId()){
 
                 case R.id.userInfo:
-                    Intent intent = new Intent(MainMenuActivity.this, ViewUserInfo.class);
+                    intent = new Intent(MainMenuActivity.this, ViewUserInfo.class);
                     intent.putExtra("account",acc);
                     startActivity(intent);
                     return true;
                 case R.id.order:
-                    Toast.makeText(MainMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
+                    intent = new Intent(MainMenuActivity.this, ViewUserOrder.class);
+                    intent.putExtra("account",acc);
+                    startActivity(intent);
+                    //Toast.makeText(MainMenuActivity.this,item.getTitle(),Toast.LENGTH_LONG).show();
                     return true;
                 case R.id.logout:
                     logout();
