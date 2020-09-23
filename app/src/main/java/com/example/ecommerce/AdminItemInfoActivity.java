@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -37,6 +40,11 @@ public class AdminItemInfoActivity extends AppCompatActivity {
     private String categoryID;
     DatabaseReference db = FirebaseDatabase.getInstance().getReference();
 
+
+    private Button BtnRemoveYes;
+    private Button BtnRemoveNo;
+    private Dialog PopUpRemoveConfirm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,9 +72,37 @@ public class AdminItemInfoActivity extends AppCompatActivity {
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                removeConfirm();
+
+                //removeItem();
+            }
+        });
+    }
+
+    private void removeConfirm() {
+        PopUpRemoveConfirm = new Dialog(this);
+        PopUpRemoveConfirm.setContentView(R.layout.dialog_resure);
+        BtnRemoveYes = PopUpRemoveConfirm.findViewById(R.id.btn_confirm);
+        BtnRemoveNo = PopUpRemoveConfirm.findViewById(R.id.btn_not_confirm);
+
+        BtnRemoveYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopUpRemoveConfirm.dismiss();
                 removeItem();
             }
         });
+
+        BtnRemoveNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopUpRemoveConfirm.dismiss();
+            }
+        });
+
+        PopUpRemoveConfirm.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        PopUpRemoveConfirm.show();
     }
 
     @Override
