@@ -86,7 +86,9 @@ public class BranchMenuActivity extends AppCompatActivity {
                             startActivity(intent);
                             return true;
                         case R.id.order:
-                            Toast.makeText(BranchMenuActivity.this, item.getTitle(), Toast.LENGTH_LONG).show();
+                            intent = new Intent(BranchMenuActivity.this, ViewUserOrder.class);
+                            intent.putExtra("account",acc);
+                            startActivity(intent);
                             return true;
                         case R.id.logout:
                             logout();
@@ -142,7 +144,7 @@ public class BranchMenuActivity extends AppCompatActivity {
 
 
 
-    void createListener() {
+    private void createListener() {
         spinner.setOnItemSelectedListener(spinnerHelper);
         mapButton.setOnClickListener(mapHelper);
     }
@@ -210,7 +212,6 @@ public class BranchMenuActivity extends AppCompatActivity {
                     Intent intent = new Intent(BranchMenuActivity.this, MapsActivity.class); //map
                     intent.putExtra("branch", branchArrayList);
                     startActivity(intent);
-
                 }
             }
         }

@@ -60,13 +60,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.listItem.setAdapter(itemAdapter);
 
         if(isAdminSite) {
-            holder.removeButton.setAlpha(1);
+            LinearLayout linearLayout = holder.itemView.findViewById(R.id.llremove);
+            linearLayout.setAlpha(1);
             holder.removeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    /*
-                    todo: remove cái category đi huynh
-                     */
                     removeCategory(categoryArrayList.get(position));
                     /* ko cần remove nó ra khỏi array vì data thay đổi thì bên act chính nhận ra và load lại*/
                 }

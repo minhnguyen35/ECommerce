@@ -8,9 +8,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -18,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +29,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+
+import static com.example.ecommerce.BranchMenuActivity.cart;
+import static com.example.ecommerce.MainMenuActivity.acc;
 
 public class AdminBranchMenuActivity extends AppCompatActivity {
 
@@ -42,17 +49,47 @@ public class AdminBranchMenuActivity extends AppCompatActivity {
     DatabaseReference db = FirebaseDatabase.getInstance().getReference();
 
     private final int PERMISSION_REQUEST_CODE = 12345;
+    private int RESULT_LOGOUT = 88888;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_branch_menu);
         catchIntent();
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavBar);
+        bottomNavigationView.setOnNavigationItemSelectedListener(botNavBarListener);
+
         mapping();
         addBranch();
         createRecyclerView();
         createListener();
+
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener botNavBarListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    Intent intent;
+                    switch (item.getItemId()) {
+                        case R.id.logout:
+                            logout();
+                            return true;
+                    }
+                    return false;
+                }
+            };
+
+    private void logout() {
+        SharedPreferences sharedPref = getSharedPreferences("checkbox", Context.MODE_PRIVATE); // cai nay la de bo cai ghi nho dang nhap
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("remember", "false");
+        editor.apply();
+        setResult(RESULT_LOGOUT);
+        finish();
+    }
+
 
     void mapping() {
         spinner = findViewById(R.id.spinnerCity);
@@ -76,6 +113,7 @@ public class AdminBranchMenuActivity extends AppCompatActivity {
         adapter = new BranchAdapter(this, selectedBranchArrayList, true);
         recyclerView.setAdapter(adapter);
     }
+
 
     void createListener() {
         spinner.setOnItemSelectedListener(spinnerHelper);

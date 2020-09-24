@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -59,19 +60,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private final String token = "pk.eyJ1IjoiY3M0MjYiLCJhIjoiY2tmYjY1cWkyMTJ2ZzMwbzc3czhveWFwYSJ9.hpBZHxDgg33rs9TnkeM6Kw";
     public static Polyline path=null;
     private Marker mMarker;
+
+    private final int PERMISSION_REQUEST_CODE = 12345;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-
         catchIntent();
-
+        checkPermisson();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        setLocation();
+    }
 
+    private void setLocation(){
         mlocationManager = (LocationManager) MapsActivity.this.getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -85,8 +91,40 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             String provider = mlocationManager.getBestProvider(new Criteria(),true);
             if(provider!=null)
                 mlocationManager.requestLocationUpdates(provider,5000,5,mLocationListener);
+        }
+    }
+
+    private boolean checkPermisson() {
+        if (ContextCompat.checkSelfPermission(
+                MapsActivity.this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION},
+                    PERMISSION_REQUEST_CODE);
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case PERMISSION_REQUEST_CODE:{
+                if(grantResults.length>0 &&
+                        (grantResults[0] == PackageManager.PERMISSION_GRANTED ||
+                                grantResults[1] == PackageManager.PERMISSION_GRANTED)){
+                    setLocation();
+                }
+            }
 
         }
+
     }
 
     void catchIntent() {
@@ -101,18 +139,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         ImageView imageView = findViewById(R.id.imageTemp);
-        for(int i=0; i<mBranchArrayList.size();++i){
+        for (int i = 0; i < mBranchArrayList.size(); ++i) {
             Picasso.get().load(Uri.parse(mBranchArrayList.get(i).getLogo())).into(imageView);
-            Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-                mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(mBranchArrayList.get(i).getLatLng()[0],mBranchArrayList.get(i).getLatLng()[1]))
-                        .title(mBranchArrayList.get(i).getName())
-                        .title("Chi nhánh: " + mBranchArrayList.get(i).getAddress())
-                        .icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap,120,100,false)))
-                );
+            Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(mBranchArrayList.get(i).getLatLng()[0], mBranchArrayList.get(i).getLatLng()[1]))
+                    .title(mBranchArrayList.get(i).getName())
+                    .title("Chi nhánh: " + mBranchArrayList.get(i).getAddress())
+                    .icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, 120, 100, false)))
+            );
         }
         mMap.setOnMarkerClickListener(this);
+        if (mLocation==null&&from!=null&&from.length == 2) {
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(from[0], from[1]))
+                    .zoom(15)
+                    .bearing(90)
+                    .tilt(30)
+                    .build();
 
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }
     }
 
 
@@ -217,6 +264,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+        if(marker==null)
+            return false;
+        if(mMarker==null)
+        {
+            if(checkPermisson())
+                setLocation();
+            else return false;
+        }
         if(marker.getPosition().equals(mMarker.getPosition()))
             return false;
         if(from==null){

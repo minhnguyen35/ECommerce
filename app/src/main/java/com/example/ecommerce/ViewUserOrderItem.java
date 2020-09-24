@@ -56,8 +56,6 @@ public class ViewUserOrderItem extends AppCompatActivity {
     }
 
 
-    /*TODO:
-    *  get list of order item from database by orderID*/
 
     @Override
     protected void onResume() {

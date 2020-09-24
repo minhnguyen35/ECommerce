@@ -1,8 +1,10 @@
 package com.example.ecommerce;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.Image;
 import android.net.Uri;
@@ -16,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
@@ -79,17 +83,19 @@ public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder
             holder.imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, MapsActivity.class);
-                    intent.putExtra("branch", branchArrayList);
-                    intent.putExtra("from", branchArrayList.get(position).getLatLng());
-                    context.startActivity(intent);
+                        Intent intent = new Intent(context, MapsActivity.class);
+                        intent.putExtra("branch", branchArrayList);
+                        intent.putExtra("from", branchArrayList.get(position).getLatLng());
+                        context.startActivity(intent);
+
                 }
             });
         }
-
-
-
+        else holder.imageButton.setAlpha(0.0f);
     }
+
+
+
 
     @Override
     public int getItemCount() {
