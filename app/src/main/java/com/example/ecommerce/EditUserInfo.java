@@ -123,8 +123,7 @@ public class EditUserInfo extends AppCompatActivity {
                             CharSequence announce = "Update Successfully!";
                             Toast toast = Toast.makeText(EditUserInfo.this, announce, Toast.LENGTH_SHORT);
                             toast.show();
-                            loadingBar.dismiss();
-                            finish();
+
                         }
                     });
                 }
@@ -182,7 +181,8 @@ public class EditUserInfo extends AppCompatActivity {
                             //Toast.makeText(EditUserInfo.this, downloadUri[0], Toast.LENGTH_LONG).show();
                             saveInfo(downloadUri[0]);
                             db.addListenerForSingleValueEvent(update);
-
+                            loadingBar.dismiss();
+                            finish();
                         }
                     }
                 });
@@ -192,23 +192,23 @@ public class EditUserInfo extends AppCompatActivity {
     public void updateUser(final String id)
     {
         final FirebaseStorage storage = FirebaseStorage.getInstance();
-        String mImageUrl = userInfo.getUserImage();
-        StorageReference photoRef = null;
-        if(mImageUrl!=null)
-            photoRef = storage.getReferenceFromUrl(mImageUrl);
+//        String mImageUrl = userInfo.getUserImage();
+//        StorageReference photoRef = null;
+//        if(mImageUrl!=null)
+//            photoRef = storage.getReferenceFromUrl(mImageUrl);
         if(imageUri!=null) {
 
             loadingBar.setCanceledOnTouchOutside(false);
             loadingBar.show();
-            if(mImageUrl != null) {
-                photoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        uploadImage(storage);
-                    }
-                });
-            }
-            else
+//            if(mImageUrl != null) {
+//                photoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        uploadImage(storage);
+//                    }
+//                });
+//            }
+//            else
                 uploadImage(storage);
         }
         else{

@@ -111,7 +111,7 @@ public class RegisterActivity extends AppCompatActivity {
 //            orderID.add("123389");
             String bankNumber = " ";
             String address = " ";
-            String userImage = "https://firebasestorage.googleapis.com/v0/b/ecommerce-c3c8f.appspot.com/o/avt.png?alt=media&token=92057ded-2f01-416e-a15d-a26a36362c45";
+            String userImage = "https://firebasestorage.googleapis.com/v0/b/ecommerce-c3c8f.appspot.com/o/363639-200.png?alt=media&token=73e07687-7c6b-4afd-858b-fe66c73e3881";
             User_Info newUser = new User_Info(userImage, u, p, pnum, mail, bankNumber, address);
             final UserAccount user = new UserAccount(newUser, date);
             db = FirebaseDatabase.getInstance().getReference();

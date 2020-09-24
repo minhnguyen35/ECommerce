@@ -122,7 +122,7 @@ public class MainScreenActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        db.addListenerForSingleValueEvent(newEvent);
+        db.addValueEventListener(newEvent);
     }
 
     @Override
