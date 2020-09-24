@@ -223,7 +223,8 @@ public class PaymentActivity extends AppCompatActivity {
 
                     @Override
                     public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                        Log.d("announce", String.valueOf(isValidOrder));
+                        if (error != null) {
+                            Log.d("announce", String.valueOf(isValidOrder));
                             for (int i = 0; i < orderItemArrayList.size(); i++) {
                                 Order_Item curItem = orderItemArrayList.get(i);
                                 String idOrdItem = newOrd.getId() + curItem.getId();
@@ -259,7 +260,7 @@ public class PaymentActivity extends AppCompatActivity {
                             });
 
                         }
-
+                    }
                 });
 
         }
