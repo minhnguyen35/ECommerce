@@ -92,6 +92,12 @@ public class AdminBranchMenuActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+
+    }
+
     private boolean checkPermisson() {
         if (ContextCompat.checkSelfPermission(
                 AdminBranchMenuActivity.this,

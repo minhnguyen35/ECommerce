@@ -42,7 +42,7 @@ public class PaymentActivity extends AppCompatActivity {
     private TextView textViewSupermarket, textViewAddress;
     private RecyclerView recyclerView;
     private PurchaseAdapter adapter;
-    private boolean isValidOrder = false;
+    private boolean isValidOrder = true;
     private Branch branch;
     private ArrayList<Order_Item> orderItemArrayList;
     private long subtotal=0, shipFee=0, total=0;
@@ -113,7 +113,8 @@ public class PaymentActivity extends AppCompatActivity {
                     }
 
                 }
-                isValidOrder = doTransaction(newOrd, listQuantity);
+                if(isAccessTrans == 0 && isValidOrder)
+                    isValidOrder = doTransaction(newOrd, listQuantity);
             }
 
             @Override
@@ -194,37 +195,72 @@ public class PaymentActivity extends AppCompatActivity {
         }
     };
     boolean isEveryThingOk;
-    private boolean doTransaction(User_Order newOrd, final ArrayList<Integer> listQuant)
+    int isAccessTrans = 0;
+    private boolean doTransaction(final User_Order newOrd, final ArrayList<Integer> listQuant)
     {
         isEveryThingOk = false;
         final DatabaseReference itemObject = db.child("Items");
         if(itemObject != null) {
-            itemObject.runTransaction(new Transaction.Handler() {
-                @NonNull
-                @Override
-                public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                    for(int i = 0; i < orderItemArrayList.size(); i++) {
-                        final String id = orderItemArrayList.get(i).getId();
-                        if(currentData.child(id) == null)
-                        {
-                            isValidOrder = false;
-                            return Transaction.abort();
-                        }
-                        final int cnt = i;
-                        final Order_Item curItem = orderItemArrayList.get(i);
-                        currentData.child("quantity").setValue(listQuant.get(cnt));
-                    }
-                    return Transaction.success(currentData);
-                }
 
-                @Override
-                public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                    if(error == null && committed && isValidOrder)
-                    {
-                        isEveryThingOk = true;
+                itemObject.runTransaction(new Transaction.Handler() {
+                    @NonNull
+                    @Override
+                    public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                        Log.d("announce", "Run Transaction");
+                        isAccessTrans += 1;
+                        for (int i = 0; i < orderItemArrayList.size(); i++) {
+                            String id = orderItemArrayList.get(i).getId();
+                            if (currentData.child(id) == null) {
+                                isValidOrder = false;
+                                return Transaction.abort();
+                            }
+                            int cnt = i;
+                            final Order_Item curItem = orderItemArrayList.get(i);
+                            currentData.child(id).child("quantity").setValue(listQuant.get(cnt));
+                        }
+                        return Transaction.success(currentData);
                     }
-                }
-            });
+
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                        Log.d("announce", String.valueOf(isValidOrder));
+                            for (int i = 0; i < orderItemArrayList.size(); i++) {
+                                Order_Item curItem = orderItemArrayList.get(i);
+                                String idOrdItem = newOrd.getId() + curItem.getId();
+                                HashMap<String, Object> newOrdItem = new HashMap<>();
+                                newOrdItem.put("itemLogo", curItem.getItemLogo());
+                                newOrdItem.put("orderItemID", idOrdItem);
+                                newOrdItem.put("itemName", curItem.getItemName());
+                                newOrdItem.put("price", curItem.getPrice());
+                                newOrdItem.put("quantityPurchase", curItem.getQuantityPurchase());
+                                newOrdItem.put("total", curItem.getTotal());
+                                newOrdItem.put("itemID", curItem.getId());
+                                newOrdItem.put("orderID", newOrd.getId());
+                                final int cnt = i;
+                                db.child("OrderItem").child(idOrdItem).updateChildren(newOrdItem).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        if (cnt == orderItemArrayList.size() - 1)
+                                            Toast.makeText(PaymentActivity.this, "Your Order is Success", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+                            }
+                            db.child("Orders").child(newOrd.getId()).setValue(newOrd).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    isEveryThingOk = true;
+                                    Log.d("announce", "Finish Transaction");
+                                    getOrderItem(orderItemArrayList);
+                                    db.removeEventListener(checkItem);
+                                    setResult(RESULT_OK);
+                                    finish();
+                                }
+                            });
+
+                        }
+
+                });
 
         }
         else{
@@ -232,39 +268,9 @@ public class PaymentActivity extends AppCompatActivity {
             isValidOrder = false;
         }
 
-        if(isEveryThingOk) {
-            for (int i = 0; i < orderItemArrayList.size(); i++) {
-                Order_Item curItem = orderItemArrayList.get(i);
-                String idOrdItem = newOrd.getId() + curItem.getId();
-                HashMap<String, Object> newOrdItem = new HashMap<>();
-                newOrdItem.put("itemLogo", curItem.getItemLogo());
-                newOrdItem.put("orderItemID", idOrdItem);
-                newOrdItem.put("itemName", curItem.getItemName());
-                newOrdItem.put("price", curItem.getPrice());
-                newOrdItem.put("quantityPurchase", curItem.getQuantityPurchase());
-                newOrdItem.put("total", curItem.getTotal());
-                newOrdItem.put("itemID", curItem.getId());
-                newOrdItem.put("orderID", newOrd.getId());
-                final int cnt = i;
-                db.child("OrderItem").child(idOrdItem).updateChildren(newOrdItem).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        if (cnt == orderItemArrayList.size() - 1)
-                            Toast.makeText(PaymentActivity.this, "Your Order is Success", Toast.LENGTH_LONG).show();
-                    }
-                });
 
-            }
-            db.child("Orders").child(newOrd.getId()).setValue(newOrd).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
 
-                }
-            });
-
-        }
-
-        return isEveryThingOk;
+        return isValidOrder;
     }
     private Button.OnClickListener confirmHelper = new View.OnClickListener() {
         @Override
@@ -292,15 +298,12 @@ public class PaymentActivity extends AppCompatActivity {
             String date=calendar.toString();
             long timeCurrent = System.currentTimeMillis();
             String name = branch.getName()+" "+branch.getAddress();
-            String id = branch.getSupermarketID() + branch.getBranchID()+String.valueOf(timeCurrent);
+            String id = acc+String.valueOf(timeCurrent);
             User_Order userOrder = new User_Order(id,name,date,COD,take,total,false, acc);
             initListener(userOrder);
             db.addListenerForSingleValueEvent(checkItem);
             if(!isValidOrder) {
-                getOrderItem(orderItemArrayList);
-                db.removeEventListener(checkItem);
-                setResult(RESULT_OK);
-                finish();
+
 
             }
 

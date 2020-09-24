@@ -82,9 +82,9 @@ public class AdminItemInfoActivity extends AppCompatActivity {
 
     private void removeConfirm() {
         PopUpRemoveConfirm = new Dialog(this);
-        PopUpRemoveConfirm.setContentView(R.layout.dialog_resure);
-        BtnRemoveYes = PopUpRemoveConfirm.findViewById(R.id.btn_confirm);
-        BtnRemoveNo = PopUpRemoveConfirm.findViewById(R.id.btn_not_confirm);
+        PopUpRemoveConfirm.setContentView(R.layout.dialog_remove_item);
+        BtnRemoveYes = PopUpRemoveConfirm.findViewById(R.id.btn_remove_yes);
+        BtnRemoveNo = PopUpRemoveConfirm.findViewById(R.id.btn_remove_no);
 
         BtnRemoveYes.setOnClickListener(new View.OnClickListener() {
             @Override
