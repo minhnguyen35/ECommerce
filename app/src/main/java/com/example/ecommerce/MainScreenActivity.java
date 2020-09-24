@@ -136,7 +136,6 @@ public class MainScreenActivity extends AppCompatActivity {
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             categoryArrayList = new ArrayList<>();
             DataSnapshot categoryList = snapshot.child("Category");
-
             for(DataSnapshot cate: categoryList.getChildren())
             {
                 String brID = cate.child("branchID").getValue().toString();
@@ -144,11 +143,11 @@ public class MainScreenActivity extends AppCompatActivity {
                     Category newCate;
                     String categoryID = cate.child("id").getValue().toString();
                     String name = cate.child("name").getValue().toString();
-
                     ArrayList<Item>  itemArrayList = new ArrayList<>();
                     DataSnapshot itemList = snapshot.child("Items");
                     for(DataSnapshot it: itemList.getChildren())
                     {
+                        //Toast.makeText(MainScreenActivity.this, it.getKey(), Toast.LENGTH_LONG).show();
                         String catID = it.child("categoryID").getValue().toString();
                         if(categoryID.equals(catID)) {
                             String ID = it.child("id").getValue().toString();

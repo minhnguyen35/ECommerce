@@ -102,7 +102,6 @@ public class PaymentActivity extends AppCompatActivity {
                     {
                         Toast.makeText(PaymentActivity.this, "Item " + id + " is out of stock!", Toast.LENGTH_SHORT).show();
                         isValidOrder = false;
-
                         return;
                     }
                     listQuantity.add(quantityReal-quantityOrd);
@@ -112,12 +111,12 @@ public class PaymentActivity extends AppCompatActivity {
                     {
                         Toast.makeText(PaymentActivity.this, "Item " + id + " is out of stock!", Toast.LENGTH_SHORT).show();
                         isValidOrder = false;
-
                         return;
                     }
 
                 }
-                isValidOrder = doTransaction(newOrd, listQuantity);
+                if(isAccessTrans == 0 && isValidOrder)
+                    isValidOrder = doTransaction(newOrd, listQuantity);
             }
 
             @Override
@@ -126,6 +125,19 @@ public class PaymentActivity extends AppCompatActivity {
             }
         };
     }
+    /*
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initListener();
+        db.addListenerForSingleValueEvent(checkItem);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        db.removeEventListener(checkItem);
+    }*/
 
     private void catchIntent() {
         Intent intent = getIntent();
@@ -184,23 +196,31 @@ public class PaymentActivity extends AppCompatActivity {
             calculateTotal();
         }
     };
+    private boolean isEveryThingOk;
+    private int isAccessTrans = 0;
 
+    private boolean doTransaction(final User_Order newOrd, final ArrayList<Integer> listQuant)
+    {
+        isEveryThingOk = false;
+        final DatabaseReference itemObject = db.child("Items");
+        if(itemObject != null) {
 
-    private boolean doTransaction(final User_Order newOrd, final ArrayList<Integer> listQuant) {
-        final boolean[] abort = {false};
-        for (int i = 0; i< orderItemArrayList.size(); i++) {
-            final int cnt = i;
-            final String id = orderItemArrayList.get(cnt).getId();
-            final Order_Item curItem = orderItemArrayList.get(cnt);
-            final DatabaseReference itemObject = db.child("Items").child(id);
-            if (itemObject != null) {
                 itemObject.runTransaction(new Transaction.Handler() {
                     @NonNull
                     @Override
                     public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                        currentData.child("quantity").setValue(listQuant.get(cnt));
-
-                        Log.d("AAA",orderItemArrayList.get(cnt).getItemName());
+                        Log.d("announce", "Run Transaction");
+                        isAccessTrans += 1;
+                        for (int i = 0; i < orderItemArrayList.size(); i++) {
+                            String id = orderItemArrayList.get(i).getId();
+                            if (currentData.child(id) == null) {
+                                isValidOrder = false;
+                                return Transaction.abort();
+                            }
+                            int cnt = i;
+                            final Order_Item curItem = orderItemArrayList.get(i);
+                            currentData.child(id).child("quantity").setValue(listQuant.get(cnt));
+                        }
                         return Transaction.success(currentData);
                     }
 
@@ -209,23 +229,24 @@ public class PaymentActivity extends AppCompatActivity {
                         if(error!=null){
                             dialog.setMessage("Error... Reloading");
                             getOrderItem(orderItemArrayList);
-                            abort[0]=true;
                         }
-                        if(cnt==orderItemArrayList.size()-1){
+                        else {
                             createOrderItemDB(newOrd);
                         }
                     }
                 });
 
-            } else {
-                abort[0]=true;
             }
-            if(abort[0])
-                return false;
-        }
+        else{
 
-        return true;
+            isValidOrder = false;
+        }
+        return isValidOrder;
     }
+
+
+
+
 
     private void createOrderItemDB(User_Order newOrd) {
         for (int i = 0; i < orderItemArrayList.size(); i++) {
@@ -247,6 +268,7 @@ public class PaymentActivity extends AppCompatActivity {
         db.child("Orders").child(newOrd.getId()).setValue(newOrd).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+                isEveryThingOk=true;
                 db.removeEventListener(checkItem);
                 setResult(RESULT_OK);
                 finish();
@@ -356,7 +378,6 @@ public class PaymentActivity extends AppCompatActivity {
     }
 
     private void reload() {
-
         itemCheckOk=false;
         adapter=new PurchaseAdapter(this,orderItemArrayList,itemCheckOk);
         recyclerView.setAdapter(adapter);

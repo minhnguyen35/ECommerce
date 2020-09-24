@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center">
 
@@ -10,14 +8,14 @@
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="360dp"
+        android:layout_height="227dp"
         card_view:cardCornerRadius="20dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        card_view:cardBackgroundColor="#FFD600">
+        card_view:cardBackgroundColor="#FFD600"
+        >
 
-        <!--"#4BFFAB00"-->
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -29,44 +27,45 @@
                 android:id="@+id/info_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Please re-enter your password for verivication !"
+
+                android:text="Are you sure to remove this item ?"
                 android:textSize="26sp"
                 android:textStyle="bold"
-
                 android:gravity="center"
                 />
 
             <ImageView
-                android:id="@+id/symbol"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_below="@+id/info_text"
+                android:layout_below="@id/info_text"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/warning_shield_icon_11_256"
+                android:src="@drawable/ic_baseline_close_36"
                 />
 
-            <EditText
-                android:id="@+id/passCheck"
-                android:layout_below="@+id/symbol"
-                android:layout_width="match_parent"
+
+            <Button
+                android:id="@+id/btn_remove_yes"
+                android:layout_alignParentBottom="true"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="#FFF200"
-                android:hint="Password"
-                android:textSize="26sp"
-                android:gravity="center"
+                android:text="Yes"
+                android:layout_marginLeft="3dp"
+                android:textSize="16dp"
+                android:background="#FFAB40"
                 />
 
             <Button
-                android:id="@+id/btn_check_pass"
-                android:layout_below="@+id/passCheck"
-                android:layout_width="wrap_content"
+                android:id="@+id/btn_remove_no"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@id/btn_remove_yes"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="OK"
+                android:text="NO"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+
                 android:textSize="16dp"
-                android:layout_marginTop="20dp"
+
                 android:background="#FFAB40"
                 />
 
@@ -74,6 +73,5 @@
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
-
 
 </RelativeLayout>

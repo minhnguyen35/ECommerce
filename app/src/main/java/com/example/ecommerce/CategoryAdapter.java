@@ -56,7 +56,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.listItem.setLayoutManager(layoutManager);
         holder.listItem.setHasFixedSize(true);
 
-        ItemAdapter itemAdapter = new ItemAdapter(context, categoryArrayList.get(position).getItemArrayList(), false);
+        ItemAdapter itemAdapter = new ItemAdapter(context, categoryArrayList.get(position).getItemArrayList(), isAdminSite);
         holder.listItem.setAdapter(itemAdapter);
 
         if(isAdminSite) {

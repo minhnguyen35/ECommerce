@@ -62,11 +62,13 @@ public class BranchAdapter extends RecyclerView.Adapter<BranchAdapter.ViewHolder
             @Override
             public void onClick(View view) {
                 Intent intent;
-                if(!isAdminSite)
+                if(!isAdminSite){
                     intent = new Intent(context, MainScreenActivity.class);
+                    cart.putSerializable("branch",branchArrayList.get(position));
+                }
                 else
                     intent = new Intent(context, AdminCategoryActivity.class);
-                cart.putSerializable("branch",branchArrayList.get(position));
+
                 intent.putExtra("category", branchArrayList.get(position).getCategoryArrayList());
                 intent.putExtra("branchID", branchArrayList.get(position).getBranchID());
                 ((Activity)context).startActivityForResult(intent, REQUEST_CODE_CATEGORY);

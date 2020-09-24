@@ -3,7 +3,10 @@ package com.example.ecommerce;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -33,6 +36,14 @@ public class ViewUserOrderItem extends AppCompatActivity {
     private Button BtnConfirm;
     private DatabaseReference db = FirebaseDatabase.getInstance().getReference();
     private ValueEventListener getOrderItem;
+
+    private Button BtnConfirmYes;
+    private Button BtnConfirmNo;
+    private Dialog PopUpResure;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,21 +119,53 @@ public class ViewUserOrderItem extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (status == false) {
-                    db.child("Orders").child(OrderID).child("status").setValue(true).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Toast.makeText(ViewUserOrderItem.this, "Success Updated", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    /*TODO:
-                    *  update status in userOrder to TRUE in database*/
-                    finish();
+
+                    askConfirm();
+
                 }
                 else Toast.makeText(ViewUserOrderItem.this, "You confirmed this order !", Toast.LENGTH_SHORT).show();
             }
         });
     }
-  //tu`
+
+    private void askConfirm() {
+        PopUpResure = new Dialog(this);
+        PopUpResure.setContentView(R.layout.dialog_resure);
+        BtnConfirmYes = PopUpResure.findViewById(R.id.btn_confirm);
+        BtnConfirmNo = PopUpResure.findViewById(R.id.btn_not_confirm);
+
+        BtnConfirmYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopUpResure.dismiss();
+                updateStatus();
+            }
+        });
+
+        BtnConfirmNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopUpResure.dismiss();
+            }
+        });
+
+        PopUpResure.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        PopUpResure.show();
+    }
+
+    private void updateStatus() {
+        /*  update status in userOrder to TRUE in database*/
+
+        db.child("Orders").child(OrderID).child("status").setValue(true).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(ViewUserOrderItem.this, "Success Updated", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        finish();
+    }
+
     private void adaptView() {
         oTotal.setText(Long.toString(orderTotal));
         //Toast.makeText(ViewUserOrderItem.this, "ItemID = " + userOrderItemList.get(0).getId() + "  logo = " + userOrderItemList.get(0).getItemLogo(), Toast.LENGTH_LONG).show();
