@@ -45,6 +45,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.squareup.picasso.Target;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 
@@ -70,11 +71,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         catchIntent();
         checkPermisson();
+        setLocation();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        setLocation();
     }
 
     private void setLocation(){
@@ -137,18 +138,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        new LoadImageTask(mBranchArrayList,mMap).execute();
 
-        ImageView imageView = findViewById(R.id.imageTemp);
-        for (int i = 0; i < mBranchArrayList.size(); ++i) {
-            Picasso.get().load(Uri.parse(mBranchArrayList.get(i).getLogo())).into(imageView);
-            Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-            mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(mBranchArrayList.get(i).getLatLng()[0], mBranchArrayList.get(i).getLatLng()[1]))
-                    .title(mBranchArrayList.get(i).getName())
-                    .title("Chi nhánh: " + mBranchArrayList.get(i).getAddress())
-                    .icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, 120, 100, false)))
-            );
-        }
         mMap.setOnMarkerClickListener(this);
         if (mLocation==null&&from!=null&&from.length == 2) {
             CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -157,7 +148,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .bearing(90)
                     .tilt(30)
                     .build();
-
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
     }
@@ -270,9 +260,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         {
             if(checkPermisson())
                 setLocation();
-            else return false;
+            return false;
         }
-        if(marker.getPosition().equals(mMarker.getPosition()))
+        if(marker.getPosition()==null||mMarker.getPosition()==null||marker.getPosition().equals(mMarker.getPosition()))
             return false;
         if(from==null){
             from = new double[2];

@@ -80,11 +80,6 @@ public class BranchMenuActivity extends AppCompatActivity {
                             intent.putExtra("account",acc);
                             startActivity(intent);
                             return true;
-                        case R.id.inCart:
-                            intent = new Intent(BranchMenuActivity.this,PaymentActivity.class);
-                            intent.putExtra("bundle",cart);
-                            startActivity(intent);
-                            return true;
                         case R.id.order:
                             intent = new Intent(BranchMenuActivity.this, ViewUserOrder.class);
                             intent.putExtra("account",acc);

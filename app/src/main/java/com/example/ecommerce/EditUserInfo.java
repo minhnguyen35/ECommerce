@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -122,6 +123,8 @@ public class EditUserInfo extends AppCompatActivity {
                             CharSequence announce = "Update Successfully!";
                             Toast toast = Toast.makeText(EditUserInfo.this, announce, Toast.LENGTH_SHORT);
                             toast.show();
+                            loadingBar.dismiss();
+                            finish();
                         }
                     });
                 }
@@ -136,58 +139,81 @@ public class EditUserInfo extends AppCompatActivity {
         db.addListenerForSingleValueEvent(update);
         finish();
     }
+    private void uploadImage(FirebaseStorage storage)
+    {
+        final String[] downloadUri = new String[1];
+        final StorageReference savePath = storage.getReference().child("Users").child(userID).child(imageUri.getLastPathSegment() + ".jpg");
+        final UploadTask uploadTask = savePath.putFile(imageUri);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(EditUserInfo.this, e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(EditUserInfo.this, "Image Upload Successfully", Toast.LENGTH_LONG).show();
+                Task<Uri> uriTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    @Override
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if (!task.isSuccessful()) {
+                            throw task.getException();
+                        }
+                        savePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                downloadUri[0] = uri.toString();
+
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                // Handle any errors
+                                Toast.makeText(EditUserInfo.this,exception.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });;
+                        return savePath.getDownloadUrl();
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if(task.isSuccessful())
+                        {
+                            //Toast.makeText(EditUserInfo.this, downloadUri[0], Toast.LENGTH_LONG).show();
+                            saveInfo(downloadUri[0]);
+                            db.addListenerForSingleValueEvent(update);
+
+                        }
+                    }
+                });
+            }
+        });
+    }
     public void updateUser(final String id)
     {
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        final String[] downloadUri = new String[1];
+        final FirebaseStorage storage = FirebaseStorage.getInstance();
+        String mImageUrl = userInfo.getUserImage();
+        StorageReference photoRef = null;
+        if(mImageUrl!=null)
+            photoRef = storage.getReferenceFromUrl(mImageUrl);
         if(imageUri!=null) {
-            final StorageReference savePath = storage.getReference().child("Users").child(userID).child(imageUri.getLastPathSegment() + ".jpg");
-            final UploadTask uploadTask = savePath.putFile(imageUri);
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(EditUserInfo.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(EditUserInfo.this, "Image Upload Successfully", Toast.LENGTH_LONG).show();
-                    Task<Uri> uriTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                        @Override
-                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                            if (!task.isSuccessful()) {
-                                throw task.getException();
-                            }
-                            savePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    downloadUri[0] = uri.toString();
 
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception exception) {
-                                    // Handle any errors
-                                    Toast.makeText(EditUserInfo.this,exception.getMessage(), Toast.LENGTH_LONG).show();
-                                }
-                            });;
-                            return savePath.getDownloadUrl();
-                        }
-                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            if(task.isSuccessful())
-                            {
-                                //Toast.makeText(EditUserInfo.this, downloadUri[0], Toast.LENGTH_LONG).show();
-                                saveInfo(downloadUri[0]);
-                            }
-                        }
-                    });
-                }
-            });
+            loadingBar.setCanceledOnTouchOutside(false);
+            loadingBar.show();
+            if(mImageUrl != null) {
+                photoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        uploadImage(storage);
+                    }
+                });
+            }
+            else
+                uploadImage(storage);
         }
         else{
             saveInfo(null);
+            db.addListenerForSingleValueEvent(update);
         }
 
 
@@ -195,17 +221,21 @@ public class EditUserInfo extends AppCompatActivity {
 
 
 
+    ProgressDialog loadingBar;
     private void clickSave() {
         BtnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                loadingBar = new ProgressDialog(EditUserInfo.this);
+                loadingBar.setCanceledOnTouchOutside(false);
+                loadingBar.show();
                 updateUser(userID);
                /* try {
                     Thread.sleep(1500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }*/
-                finish();
+
             }
         });
     }

@@ -77,7 +77,6 @@ public class MainMenuActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             Intent intent;
             switch (item.getItemId()){
-
                 case R.id.userInfo:
                     intent = new Intent(MainMenuActivity.this, ViewUserInfo.class);
                     intent.putExtra("account",acc);

@@ -175,6 +175,7 @@ public class LoginActivity extends AppCompatActivity {
                 adminText.setVisibility(View.INVISIBLE);
                 getData = "Admins";
                 userText.setVisibility(View.VISIBLE);
+                register.setVisibility(View.INVISIBLE);
             }
         });
         userText.setOnClickListener(new View.OnClickListener() {
@@ -183,6 +184,7 @@ public class LoginActivity extends AppCompatActivity {
                 userText.setVisibility(View.INVISIBLE);
                 getData = "Users";
                 adminText.setVisibility(View.VISIBLE);
+                register.setVisibility(View.VISIBLE);
             }
         });
     }
