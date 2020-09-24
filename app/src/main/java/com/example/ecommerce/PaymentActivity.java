@@ -42,7 +42,7 @@ public class PaymentActivity extends AppCompatActivity {
     private TextView textViewSupermarket, textViewAddress;
     private RecyclerView recyclerView;
     private PurchaseAdapter adapter;
-    private boolean isValidOrder = false;
+    private boolean isValidOrder = true;
     private Branch branch;
     private ArrayList<Order_Item> orderItemArrayList;
     private long subtotal=0, shipFee=0, total=0;
@@ -90,8 +90,10 @@ public class PaymentActivity extends AppCompatActivity {
                     String id = curItem.getId();
                     if(!items.child(id).exists())
                     {
-                        Toast.makeText(PaymentActivity.this, "Item " + id + " is out of stock!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PaymentActivity.this, "Item " + id + " is out of stock!", Toast.LENGTH_LONG).show();
+                        dialog.setMessage("Error... Reloading");
                         isValidOrder = false;
+                        getOrderItem(orderItemArrayList);
                         return;
                     }
                     int quantityOrd = curItem.getQuantityPurchase();
@@ -100,8 +102,10 @@ public class PaymentActivity extends AppCompatActivity {
 
                     if(quantityOrd > quantityReal)
                     {
-                        Toast.makeText(PaymentActivity.this, "Item " + id + " is out of stock!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PaymentActivity.this, "Item " + id + " is out of stock!", Toast.LENGTH_LONG).show();
+                        dialog.setMessage("Error... Reloading");
                         isValidOrder = false;
+                        getOrderItem(orderItemArrayList);
                         return;
                     }
                     listQuantity.add(quantityReal-quantityOrd);
@@ -109,8 +113,9 @@ public class PaymentActivity extends AppCompatActivity {
                     long priceReal = (long) items.child(id).child("price").getValue();
                     if(priceOrd != priceReal)
                     {
-                        Toast.makeText(PaymentActivity.this, "Item " + id + " is out of stock!", Toast.LENGTH_SHORT).show();
+                        dialog.setMessage("Error... Reloading");
                         isValidOrder = false;
+                        getOrderItem(orderItemArrayList);
                         return;
                     }
 
@@ -125,19 +130,7 @@ public class PaymentActivity extends AppCompatActivity {
             }
         };
     }
-    /*
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initListener();
-        db.addListenerForSingleValueEvent(checkItem);
-    }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        db.removeEventListener(checkItem);
-    }*/
 
     private void catchIntent() {
         Intent intent = getIntent();
@@ -218,7 +211,7 @@ public class PaymentActivity extends AppCompatActivity {
                                 return Transaction.abort();
                             }
                             int cnt = i;
-                            final Order_Item curItem = orderItemArrayList.get(i);
+                            //final Order_Item curItem = orderItemArrayList.get(i);
                             currentData.child(id).child("quantity").setValue(listQuant.get(cnt));
                         }
                         return Transaction.success(currentData);
@@ -238,7 +231,6 @@ public class PaymentActivity extends AppCompatActivity {
 
             }
         else{
-
             isValidOrder = false;
         }
         return isValidOrder;
